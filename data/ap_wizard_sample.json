@@ -1,0 +1,17 @@
+[
+    {
+        "instruction": "We need an Azure Function in C# that listens to a Service Bus topic 'user-events' and logs the message ID.",
+        "input": "",
+        "output": "Here is the C# Azure Function implementation:\n\n```csharp\nusing System;\nusing Microsoft.Azure.Functions.Worker;\nusing Microsoft.Extensions.Logging;\n\nnamespace ApWizard.Functions\n{\n    public class UserEventProcessor\n    {\n        private readonly ILogger _logger;\n\n        public UserEventProcessor(ILoggerFactory loggerFactory)\n        {\n            _logger = loggerFactory.CreateLogger<UserEventProcessor>();\n        }\n\n        [Function(\"ProcessUserEvent\")]\n        public void Run([ServiceBusTrigger(\"user-events\", \"subscription-name\", Connection = \"ServiceBusConnection\")] string mySbMsg, FunctionContext context)\n        {\n            _logger.LogInformation($\"C# ServiceBus topic trigger function processed message: {mySbMsg}\");\n            _logger.LogInformation($\"Message ID: {context.BindingContext.BindingData[\"MessageId\"]}\");\n        }\n    }\n}\n```"
+    },
+    {
+        "instruction": "Create a Supabase query in C# using Postgrest-csharp to fetch all active users from the 'users' table.",
+        "input": "Table name: users, Column: is_active",
+        "output": "```csharp\nusing System.Collections.Generic;\nusing System.Threading.Tasks;\nusing Supabase;\n\npublic class UserService\n{\n    private readonly Client _supabase;\n\n    public UserService(Client supabase)\n    {\n        _supabase = supabase;\n    }\n\n    public async Task<List<User>> GetActiveUsersAsync()\n    {\n        var result = await _supabase.From<User>()\n            .Where(u => u.IsActive == true)\n            .Get();\n\n        return result.Models;\n    }\n}\n\n[Table(\"users\")]\npublic class User : BaseModel\n{\n    [Column(\"id\")]\n    public int Id { get; set; }\n\n    [Column(\"is_active\")]\n    public bool IsActive { get; set; }\n}\n```"
+    },
+    {
+        "instruction": "Write a prompt for the forensic analysis tool to verify if a Jira ticket about 'Login Bug' has been implemented in the code.",
+        "input": "Ticket: VIS-123 (Login fails on timeouts)",
+        "output": "Please analyze the codebase for evidence of the implementation of **VIS-123: Login fails on timeouts**.\n\nSearches to perform:\n1.  Search for `VIS-123` in comments to see if it was explicitly tagged.\n2.  Search for `login` and `timeout` in `LoginService.cs` or `AuthController.cs`.\n\nVerification Steps:\n-   Check if the default timeout was increased in the HTTP client configuration.\n-   Look for new try-catch blocks handling `TaskCanceledException` during login."
+    }
+]

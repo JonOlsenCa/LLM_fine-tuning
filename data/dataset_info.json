@@ -2,6 +2,9 @@
   "identity": {
     "file_name": "identity.json"
   },
+  "ap_wizard_sample": {
+    "file_name": "ap_wizard_sample.json"
+  },
   "alpaca_en_demo": {
     "file_name": "alpaca_en_demo.json"
   },

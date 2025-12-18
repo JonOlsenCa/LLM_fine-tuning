@@ -64,6 +64,15 @@ Read technical notes:
 > [!NOTE]
 > Except for the above links, all other websites are unauthorized third-party websites. Please carefully use them.
 
+> [!IMPORTANT]
+> **Windows Firewall Fix**: You must force the Web UI to use `127.0.0.1` or the browser will time out.
+> **Launch Command**: Use `python -m llamafactory.cli` to ensure the correct environment.
+>
+> ⚡ **Quick Start (Windows)**:
+> 1. Activate your environment: `.\venv\Scripts\activate` (if using venv)
+> 2. Launch Web UI: `set GRADIO_SERVER_NAME=127.0.0.1 && python -m llamafactory.cli webui`
+> 3. Open your browser to: http://127.0.0.1:7860
+
 ## Table of Contents
 
 - [Features](#features)
