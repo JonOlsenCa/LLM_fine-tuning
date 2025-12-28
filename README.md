@@ -73,6 +73,13 @@ Read technical notes:
 > 2. Launch Web UI: `set GRADIO_SERVER_NAME=127.0.0.1 && python -m llamafactory.cli webui`
 > 3. Open your browser to: http://127.0.0.1:7860
 
+> [!WARNING]
+> **Windows/VGPT2 Setup**: See **[SETUP.md](SETUP.md)** for complete Windows installation guide including:
+> - Python 3.12 requirement (NOT 3.14 - breaks dill serialization)
+> - Dependency install order (`numpy<2.0.0`, `cffi`, `python-dateutil` first!)
+> - Checkpoint/crash recovery instructions
+> - Actual training performance metrics (7.3 hours on RTX A6000)
+
 ## Table of Contents
 
 - [Features](#features)

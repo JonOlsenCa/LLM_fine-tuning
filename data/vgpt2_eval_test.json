@@ -1,0 +1,1602 @@
+[
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspPRPayStubNotifyList do?"
+      },
+      {
+        "from": "gpt",
+        "value": "The vspPRPayStubNotifyList stored procedure retrieves a list of employees eligible for electronic pay stub notifications for a specified company, payroll group, end date, optional pay sequence, and employee. It joins payroll square (PRSQ), employee history (PREH), and company (PRCO) tables to select employee IDs, emails, delivery methods (excluding 'N'), attachment IDs, email password options, and generated PDF passwords, filtering for non-null CMRef references. Used in Viewpoint Vista payroll processing to facilitate automated emailing of pay stubs to qualifying employees.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPR_CA_NBT09 do?"
+      },
+      {
+        "from": "gpt",
+        "value": "bspPR_CA_NBT09 calculates the per-pay-period Quebec provincial income tax withholding amount for Viewpoint Vista Payroll, based on annual income (@A) and input credits/deductions. It selects bracket-based tax rates (10.12%-17.95%) and personal amounts (KP), computes credits for TCP (K1P), capped CPP/EI contributions (K2P), input K3P, and labour-sponsored fund credit (LCP up to $750), then derives gross tax (T4), net tax (T2 floored at 0), and divides by pay periods (@ppds) for the output @calcamt. Used to ensure accurate Quebec tax withholding on employee paychecks, validating required pay period input.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vpspEmailTemplateNameVal do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure validates an email template name by checking its existence in the pEmailTemplate table. It returns a success code (0) if valid, or an error code (1) with a message if the name is missing or invalid. Primarily used to prevent errors in email-related processes by confirming template availability before use.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspVPGridQueriesIsAssignableInWorkCenterVal do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure validates parameters for assigning a grid query to a work center in Viewpoint Vista ERP. It checks for null @QueryType and @IsAssignableInWorkCenter values, and ensures that only query types 0 (SQL) and 1 (View) can be marked assignable ('Y') in a work center, rejecting other types with an error message. On failure, it sets @msg with the reason and returns 1; otherwise, it returns 0 for success.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What is the purpose of the VPGridQueryLinks view?"
+      },
+      {
+        "from": "gpt",
+        "value": "This view combines standard and custom configuration data for links between VP grid queries, specifying related queries, display order, default drill-through options, and link counts. It enables navigation and drill-through functionality across query results in VP grids via a simple UNION ALL of base and custom link views."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspJCPPBatchDelete do?"
+      },
+      {
+        "from": "gpt",
+        "value": "The bspJCPPBatchDelete stored procedure removes a specific batch of Job Cost Posting (JCPP) data for a given company, month, and batch ID from the Viewpoint Vista ERP system. It performs DELETE operations on bJCPP, bJCPPPhases, and bJCPPCostTypes tables matching the input criteria, then updates the Status to 6 in bHQBC to reflect the deletion. This is used to safely eliminate erroneous or unwanted batch postings while maintaining data integrity.\n\nThe bspJCPPBatchDelete stored procedure removes a specific Job Cost Payment Processing (JCPP) batch by deleting records from bJCPP, bJCPPPhases, and bJCPPCostTypes tables, filtered by company, month, and batch ID. It also updates the batch status to 6 in the bHQBC table, marking it as deleted or cancelled. This is used in Viewpoint Vista ERP to clean up unposted or erroneous batches before final processing.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPMSLFirmContactInit do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure initializes a firm and primary contact linkage for a vendor on a specific PM project, ensuring foundational data exists across firm master (bPMFM), firm personnel master (bPMPM), and project firm (bPMPF) tables. It validates the vendor-firm relationship, creates a default \"Not Specified\" contact if missing, and assigns the firm with its minimum contact code to the project using a sequential ID. The process supports quick setup of vendor contacts without duplicates, outputting any error messages via @msg."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPROHT19 do?"
+      },
+      {
+        "from": "gpt",
+        "value": "bspPROHT19 calculates state income tax withholding for a pay period by annualizing the subject pay amount, subtracting exemption allowances ($650 each), and applying a progressive bracket-based tax rate structure. It determines the annual tax liability using predefined wage brackets, rates (0.5% to 5%), and fixed additions, then prorates the result by pay periods per year and multiplies by 1.075 for the final withholding amount. Used in Viewpoint Vista payroll to compute accurate per-paycheck withholdings simulating annual tax liability, with error handling for missing pay periods.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What fields are available on the PRMyTimesheet form?"
+      },
+      {
+        "from": "gpt",
+        "value": "The PRMyTimesheet form includes these fields: Entry Employee, Start Date, Sheet, Status, Status_Visible, Created On, Created By, Personal Timesheet, Total Hours, Regular Hours"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Write a SQL query to: AP Transaction Detail\n\nContext: Viewpoint Vista database, view APTD"
+      },
+      {
+        "from": "gpt",
+        "value": "SELECT bAPTD.*\nFROM dbo.bAPTD;"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What is the purpose of the RPRQ view?"
+      },
+      {
+        "from": "gpt",
+        "value": "RP Report Query Text"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPMStatusCodeValBeg do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure validates a provided PM Status Code to confirm it is a \"Beginning\" type (CodeType 'B') active for all forms (ActiveAllYN 'Y'). It performs a lookup in the PMSC table, checks for existence and required attributes, and outputs an error message with return code 1 on failure or 0 on success. It is used in Viewpoint ERP to enforce valid default beginning statuses in project management workflows.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "How do I join ARTL with INLM in Viewpoint Vista?"
+      },
+      {
+        "from": "gpt",
+        "value": "To join ARTL with INLM, use:\n\n```sql\nFROM ARTL\nINNER JOIN INLM\n  ON ARTL.INCo = INLM.INCo AND ARTL.Loc = INLM.Loc\n```\n\nThis pattern is used in the vrvARInvoiceDetails view."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Write a SQL query to: Dimension view for Project Management (PM) companies, linking PM company IDs and codes to headquarters company names for only those companies recognized in the BI company list. Appends a default unkno\n\nContext: Viewpoint Vista database, view viDim_PMCompany"
+      },
+      {
+        "from": "gpt",
+        "value": "SELECT bPMCO.KeyID AS PMCoID, bPMCO.PMCo, bHQCO.Name\nFROM bPMCO\nJOIN bHQCO ON bHQCO.HQCo=bPMCO.PMCo\nJOIN vDDBICompanies ON vDDBICompanies.Co=bPMCO.PMCo\nUNION ALL\nSELECT 0,\n    NULL,\n    NULL;"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What is the purpose of the DDUT view?"
+      },
+      {
+        "from": "gpt",
+        "value": "View exposing data from vDDUT."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in VPCanvasGridGroupedColumnsTemplate"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in VPCanvasGridGroupedColumnsTemplate: ColumnId (int, not null); GridConfigurationId (int, nullable); Name (varchar, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the SMPartType view?"
+      },
+      {
+        "from": "gpt",
+        "value": "The SMPartType view (Module: SM) contains: SMPartTypeID, SMCo, SMPartType, Description, UniqueAttchID, Notes"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What fields are available on the VCReportParameters form?"
+      },
+      {
+        "from": "gpt",
+        "value": "The VCReportParameters form includes these fields: Report ID, Report Parameter, Current Default Value, Default Value, Access, Override Status"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the IDSRV.ApiClaims table?"
+      },
+      {
+        "from": "gpt",
+        "value": "The IDSRV.ApiClaims table (Module: Other) contains: Id, Type, ApiResourceId"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What is the purpose of the APReleaseRetentionInfo view?"
+      },
+      {
+        "from": "gpt",
+        "value": "Provides batch-level details on Accounts Payable retention releases, enriched with per-invoice and per-line summaries of totals for invoiced, released, held, and paid amounts, plus gross retainage and vendor information. Combines retention batch records with transaction-specific aggregates via a lookup function for precise release tracking."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPRNDT02 do?"
+      },
+      {
+        "from": "gpt",
+        "value": "bspPRNDT02 calculates per-pay-period North Dakota state income tax withholding based on subject gross amount, pay periods per year, filing status ('S' for Single or 'M' for Married), and exemptions. It annualizes taxable income by multiplying gross by pay periods and subtracting a $3000 per exemption allowance, then applies progressive tax brackets with predefined base taxes, limits, and rates (2.1% to 5.54%) to compute annual tax before dividing by pay periods. Used in Viewpoint Vista payroll to ensure accurate ND state tax deductions compliant with state withholding tables.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspSMServiceItemSerialNumberVal do?"
+      },
+      {
+        "from": "gpt",
+        "value": "> =============================================\n> Author:\t\tLane Gresham\n> Create date: 08/02/11\n> Description:\tValidation for SM Service Item Serial Number.\n> Modified:\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the ARAA view?"
+      },
+      {
+        "from": "gpt",
+        "value": "The ARAA view (Module: AR) contains: VPUserName, TransDate, Invoice, ARCo, Mth, ARTrans"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspStoredProcedureVal do?"
+      },
+      {
+        "from": "gpt",
+        "value": "vspStoredProcedureVal validates the existence of a specified stored procedure in the database. It checks if the input @storedproc parameter is provided and exists in sys.procedures, returning 0 on success or 1 with an error message via @msg output if missing or not found. Used as a utility in Viewpoint Vista ERP workflows to ensure procedural dependencies before execution, preventing runtime errors.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Optimize this Viewpoint Vista SQL query. Scenario: Using vrv* views instead of custom JOINs\n\nSELECT h.*, d.*\nFROM APTH h WITH (NOLOCK)\nJOIN APTL d WITH (NOLOCK) ON h.APCo = d.APCo AND h.Mth = d.Mth AND h.APTrans = d.APTrans\nJOIN JCCD j WITH (NOLOCK) ON d.JCCo = j.JCCo AND d.Job = j.Job"
+      },
+      {
+        "from": "gpt",
+        "value": "Optimized SQL:\n```sql\nSELECT *\nFROM vrvAPJobCost WITH (NOLOCK)\nWHERE APCo = @APCo AND Mth = @Mth\n```\n\nOptimization tip: Check for existing vrv* (Viewpoint Report Views) before writing complex JOINs. They're pre-optimized."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the DDCS view?"
+      },
+      {
+        "from": "gpt",
+        "value": "The DDCS view (Module: DD) contains: ColorSchemeID, Description, SmartCursorColor, ReqFieldColor, AccentColor1, AccentColor2, UseColorGrad, FormColor1, FormColor2, GradDirection, LabelBackgroundColor, LabelTextColor, LabelBorderStyle"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "How do I join SMInvoice with SMInvoiceDetail in Viewpoint Vista?"
+      },
+      {
+        "from": "gpt",
+        "value": "To join SMInvoice with SMInvoiceDetail, use:\n\n```sql\nFROM SMInvoice\nINNER JOIN SMInvoiceDetail\n  ON SMInvoice.SMCo = SMInvoiceDetail.SMCo AND SMInvoice.Invoice = SMInvoiceDetail.Invoice\n```\n\nThis pattern is used in the vrvSMWorkOrderProfitReports view."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What is the purpose of the brvPMBuyOutACO view?"
+      },
+      {
+        "from": "gpt",
+        "value": "Combines job cost estimates with committed buy-out costs from interfaced PM subcontract and miscellaneous transactions into a unified ACO-level summary. Aggregates estimated costs from job cost company details (with committed costs zeroed) and sums committed amounts from PMSL/PMMF (with estimates zeroed), grouped by company/job, phase group/phase, cost type, ACO, and item."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Write a SQL query to: IM  Work Master\n\nContext: Viewpoint Vista database, view IMWM"
+      },
+      {
+        "from": "gpt",
+        "value": "SELECT bIMWM.*\nFROM dbo.bIMWM;"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What fields are available on the JCJPStatusChange form?"
+      },
+      {
+        "from": "gpt",
+        "value": "The JCJPStatusChange form includes these fields: Phase Group, Job, Option to change by, Beginning Phase, Ending Phase, Option"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPRProcessCraftCalcPrep do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This SP prepares payroll data for craft-specific calculations by clearing and repopulating a temporary table (#PRPE) with filtered time header (bPRTH) and adjustment (bPRTA) records matching the input payroll period, employee, craft, class, earning code (DLCode), and craft template from jobs (JCJM) or service work orders (SM). It outputs configuration values like effective date, old/new cap limits (likely for OT/premiums), reciprocity option, job craft, and error messages to support downstream pay computations. This enables precise craft-based payroll adjustments in construction environments where trade skills dictate rates and limits."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPROST982 do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure calculates Ohio state income tax withholding for a specific payroll period. It retrieves the federal taxable amount from payroll detail, applies employee exemptions against a fixed $650 allowance, annualizes/de-annualizes the subject wages based on pay periods per year, multiplies by the tax rate, and outputs the withholding amount (@amt), subject amount (@subjamt/@subjaccm), or error messages if setups are missing. It enforces a floor of zero on the calculated tax."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What fields are available on the VCControlReportParameterDetail form?"
+      },
+      {
+        "from": "gpt",
+        "value": "The VCControlReportParameterDetail form includes these fields: Parameter Name, Current Default Value, Current Default Desc, Default Value, Current Access, Access, Status, Report ID from Header, Portal Control ID from Header, User Is VCS Account"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPRNYC01 do?"
+      },
+      {
+        "from": "gpt",
+        "value": "bspPRNYC01 calculates New York City personal income tax withholding for payroll. It annualizes the subject pay amount by pay periods, subtracts standard deductions (based on single/married status) and exemption allowances for residents, then applies progressive brackets with base tax additions and marginal rates; non-residents use a simpler flat 0.25% rate above thresholds without deductions. The procedure outputs the per-pay-period tax amount and is used in Vista payroll to ensure compliant NYC tax withholding based on employee residency, status, exemptions, and frequency.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the RPTP view?"
+      },
+      {
+        "from": "gpt",
+        "value": "The RPTP view (Module: RP) contains: ReportID, ViewName"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPRNYY152 do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure calculates New York State (NYS) income tax withholding for payroll based on annualized wages, adjusted for filing status (single/married), exemptions, pay periods per year, and residency. It applies progressive tax brackets to determine the withholding rate, bracket base, and tax addition, outputting the per-pay-period tax amount (@amt) and any error messages (@msg). Returns 0 for no tax due or 1 for validation errors."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in PMTC"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in PMTC: PMCo (bCompany, not null); Project (bJob, not null); Transmittal (bDocument, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What is the purpose of the JCProjectionCodePhaseCT view?"
+      },
+      {
+        "from": "gpt",
+        "value": "JCProjectionCodePhaseCT"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in IMWH"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in IMWH: ImportId (varchar, not null); ImportTemplate (varchar, not null); TextFile (varchar, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the PRPS view?"
+      },
+      {
+        "from": "gpt",
+        "value": "The PRPS view (Module: PR) contains: PRCo, PRGroup, PREndDate, PaySeq, Description, Bonus, OverrideDirDep, UniqueAttchID, KeyID"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in RPUP"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in RPUP: VPUserName (bVPUserName, not null); ReportID (int, not null); PrinterName (varchar, nullable)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspHQFormatMultiPart do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure is a utility for parsing and formatting multi-part input strings (e.g., addresses, phone numbers, or identifiers) based on a compact format specification. The format spec starts with a numeric width (1-2 digits), followed by justification flag (@just), separator character (or 'N' for fixed-width), and recursive sub-format. It iteratively extracts portions of the input string up to the specified width or separator, applies basic trimming/slicing, and builds a formatted output string (logic for justification/concatenation likely in truncated code)."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPRDET12 do?"
+      },
+      {
+        "from": "gpt",
+        "value": "bspPRDET12 calculates periodic state income tax withholding in Viewpoint Vista ERP payroll by annualizing the subject pay amount over pay periods per year, subtracting a standard deduction based on filing status (S=Single/Filing, M=Married), and applying progressive tax brackets to determine annual tax liability. It adjusts the result for personal exemptions ($110 each) and divides by pay periods to output the per-period withholding amount, ensuring accurate deductions. Key operations include validation of inputs, tiered basetax/rate computation (e.g., 2.2% to 6.75%), and error handling for missing parameters.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in DDSF"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in DDSF: Co (bCompany, not null); VPUserName (bVPUserName, not null); Mod (char, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure uspudUpdatePCOAddOns do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This SP recalculates and updates addon costs for a specific PCO (Potential Change Order) item in Vista's PM module by summing base estimate costs from PMOL lines, adding estimate-type addons (udAddOnType='E') from PMOA/PMPA, and computing base-type addons (udAddOnType='B') as a percentage of the total cost. It generates temporary tables (udPCOBaseAddons for base addons and udPCOCircularData for handling circular addon dependencies) to support accurate PCO costing, likely preventing recursive calculation issues in addon hierarchies."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What fields are available on the APEntry form?"
+      },
+      {
+        "from": "gpt",
+        "value": "The APEntry form includes these fields: Month, BatchID, BatchSeq, BatchTransType, DisplayAddress, GLCo, APTrans, VendorGroup, Vendor, PayTerms"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspARGLClosedMthSubVal do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure validates if a specified month for an AR company is closed in the associated GL company, preventing operations on unclosed periods. It retrieves the GL company from AR company setup (bARCO), fetches the last closed AR month (LastMthARClsd) from GL company records (bGLCO), and compares it against the input month. If invalid (missing setup, invalid GL company, or month not closed), it sets an error message and returns a non-zero code; otherwise, it returns 0 for success.\n\nThis stored procedure validates if a specified month for an AR company is closed in the linked GL company, preventing submissions to open periods. It retrieves the GL company from the AR company setup, fetches the last closed AR month from the GL company record, and compares it against the input month. If the input month exceeds the last closed month or setup is invalid, it returns an error code (1) with a message; otherwise, it returns success (0).\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPRProcessEmpl do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure processes payroll calculations for a specific employee in a given payroll group and pay period within Viewpoint Vista's Payroll (PR) module. It aggregates earnings data from time headers (bPRTH), predefined earnings/deductions (bPREC/bPRED), and tax adjustments (bPRTA), populating a temporary table (#PRPE) for hours, rates, and amounts while handling factors like direct deposits, garnishments, allocations, and annual accumulations. It performs validations for pay sequence, bonuses, and posting options, returning errors via @errmsg if issues arise."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the bPRGG table?"
+      },
+      {
+        "from": "gpt",
+        "value": "The bPRGG table (Module: PR) contains: PRCo, GarnGroup, Description, Notes, UniqueAttchID, KeyID"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the PMDHDrawingRev view?"
+      },
+      {
+        "from": "gpt",
+        "value": "The PMDHDrawingRev view (Module: PM) contains: DrawingType, Drawing, PMCo, Project, DocType, Document, Seq, ActionDateTime, Action, UniqueAttchID, DocCategory, FieldType, FieldName, OldValue, NewValue... (22 total columns)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPRILT18 do?"
+      },
+      {
+        "from": "gpt",
+        "value": "bspPRILT18 calculates Illinois state income tax withholding for a 2018 pay period using an annualization method. It annualizes the subject pay amount by multiplying by pay periods per year, subtracts fixed allowances ($2000 per regular exemption, $1000 per additional), applies a flat 4.95% rate to the taxable income (floored at zero), and divides by pay periods to yield the per-period tax amount (also floored at zero). Used in payroll systems for accurate IL tax deductions, it returns an error message and code 1 if pay periods are missing.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspMSTBValProd do?"
+      },
+      {
+        "from": "gpt",
+        "value": "Validates a specific product/material line (by seq) in a Material Sales Ticket Batch, computing unit/total costs, ECM-adjusted values, and GL accounts based on cost methods (e.g., average, standard). Handles assemblies via BOM explosion, summing component costs/prices while respecting location-specific overrides. Sets @errmsg for validation failures (e.g., invalid material, cost mismatches) and adjusts units for adds/deletes (@oldnew flag)."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What is the purpose of the HQSAExclusions view?"
+      },
+      {
+        "from": "gpt",
+        "value": "This view retrieves AuditIDs from HQSA for records tied to secure ('Y') and in-use ('Y') data dictionary tables where an Instance exists but the current user (via SUSER_NAME()) has no matching permission entry in DDDU. It identifies security audit exclusions by confirming datatype-level security flags and absence of user-specific qualifiers/instances."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspHQResponseValueDesc do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure retrieves the description for a given ValueCode from the HQResponseValue table in Viewpoint Vista ERP, outputting it via the @msg parameter. It validates that @ValueCode is not null, returning an error message and code 1 if missing, or code 0 on success. Used to provide human-readable descriptions for response values in business processes like reporting or user interfaces.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in PMDHOther"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in PMDHOther: PMCo (bCompany, not null); Project (bJob, not null); DocType (bDocType, nullable)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in vRPRQc"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in vRPRQc: ReportID (int, not null); DataSetName (varchar, not null); QueryText (varchar, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the vrvSMWorkOrderOnHold view?"
+      },
+      {
+        "from": "gpt",
+        "value": "The vrvSMWorkOrderOnHold view (Module: SM) contains: SMWorkOrderID, OnHold"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Write a SQL query to: Provides unposted Service Management work completed transactions linked to Payroll ledger update distributions, capturing actual labor wages from completions with payroll sequences, employee details, \n\nContext: Viewpoint Vista database, view PRSM"
+      },
+      {
+        "from": "gpt",
+        "value": "SELECT\n    vSMDetailTransaction.SMWorkCompletedID,\n    vPRLedgerUpdateDistribution.PRCo,\n    vPRLedgerUpdateDistribution.PRGroup,\n    CAST(vPRLedgerUpdateDistribution.PREndDate AS DATETIME) PREndDate,\n    vSMDetailTransaction.Mth,\n    SMWorkCompleted.PRPaySeq PaySeq,\n    SMWorkCompleted.PRPostSeq PostSeq,\n    SMWorkCompleted.PRPostDate,\n    SMWorkCompleted.PREmployee Employee,\n    vSMDetailTransaction.Amount ActualLaborWages,\n    CAST(0 AS NUMERIC(12, 2)) ActualLaborBurden,\n    CAST(0 AS NUMERIC(12, 2)) OldActualLaborWages,\n    CAST(0 AS NUMERIC(12, 2)) OldActualLaborBurden,\n    SMWorkCompleted.SMCo,\n    SMWorkCompleted.[Date] AS WorkCompleted_Date,\n    SMWorkCompleted.SMCostType,\n    SMWorkCompleted.CostQuantity,\n    SMWorkCompleted.PayType,\n    SMWorkCompleted.WorkOrder,\n    SMWorkCompleted.Scope,\n    SMWorkCompleted.WorkCompleted\nFROM dbo.vPRLedgerUpdateDistribution\nINNER JOIN dbo.vSMDetailTransaction\n    ON vPRLedgerUpdateDistribution.PRLedgerUpdateDistributionID = vSMDetailTransaction.PRLedgerUpdateDistributionID\nINNER JOIN dbo.SMWorkCompleted\n    ON vSMDetailTransaction.SMWorkCompletedID = SMWorkCompleted.SMWorkCompletedID\nWHERE vSMDetailTransaction.IsReversing = 0\n    AND vSMDetailTransaction.Posted = 0\n    AND vSMDetailTransaction.TransactionType = 'C';"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the DDUI view?"
+      },
+      {
+        "from": "gpt",
+        "value": "The DDUI view (Module: DD) contains: VPUserName, Form, Seq, DefaultType, DefaultValue, InputSkip, InputReq, GridCol, ColWidth, ShowGrid, ShowForm, DescriptionColWidth, ShowDesc"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What fields are available on the PMImportUpLoad form?"
+      },
+      {
+        "from": "gpt",
+        "value": "The PMImportUpLoad form includes these fields: Import Id, Import Template, Import Error Flag, AR Company, Customer Group, Tax Group, PM Company INCo, IN In Use, Country, Project"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Write a SQL query to: This batch report view provides payroll attachment details linked to job cost code transactions for employees, including company, cost transaction, liability type, payroll group, period end date, and \n\nContext: Viewpoint Vista database, view brvPRAttachments"
+      },
+      {
+        "from": "gpt",
+        "value": "SELECT\n    JCCD.PRCo,\n    JCCD.JCCo,\n    JCCD.CostTrans,\n    JCCD.LiabilityType,\n    PRTH.PRGroup,\n    PRTH.PREndDate,\n    Date= (CASE WHEN PRCO.JCIPostingDate = 'N' THEN JCCD.ActualDate ELSE PRTH.PostDate END ),\n    JCCD.Employee,\n    PRTH.UniqueAttchID\nFROM dbo.JCCD\nLEFT JOIN dbo.PRTH ON PRTH.PRCo=JCCD.PRCo AND PRTH.Employee=JCCD.Employee\nINNER JOIN PRCO ON PRTH.PRCo=PRCO.PRCo\nWHERE PRTH.UniqueAttchID IS NOT NULL;"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspIMBidtekDefaultsEMBFUsage do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This SP sets default values for Equipment Management (EM) records during Bidtek data import into Vista's IM (Import) module, specifically for \"EMBF Usage\" (likely Equipment Billing Fuel Usage or similar usage tracking). It initializes flags (@yn*) to control defaulting of fields like cost codes, GL accounts, revenue rates, job/phase info, and equipment metrics (e.g., hour meters, odometers), then validates inputs like ImportId and ImportTemplate. Defaults are derived for import rows based on template rules, ensuring consistency in EM billing/usage data."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in JCIA"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in JCIA: JCCo (bCompany, not null); Mth (bMonth, not null); BatchId (bBatchID, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "How do I join vDDCI with CMCO in Viewpoint Vista?"
+      },
+      {
+        "from": "gpt",
+        "value": "To join vDDCI with CMCO, use:\n\n```sql\nFROM vDDCI\nINNER JOIN CMCO\n  ON vDDCI.DatabaseValue = CMCO.GLInterfaceLvl\n```\n\nThis pattern is used in the vrvCompanySettings view."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What fields are available on the RPTY form?"
+      },
+      {
+        "from": "gpt",
+        "value": "The RPTY form includes these fields: Report Type, Description, Active, Status, VPType"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspVPGetCanvasReports do?"
+      },
+      {
+        "from": "gpt",
+        "value": "Retrieves a secured list of Canvas reports available to a specific user in a given company, pulling details like ReportID, Title, Description, Type, and OLAP status from RPRTShared and RPTMShared. Applies complex user security logic from RPRS to compute effective Access levels, prioritizing OneCompany over AllCompany settings and user-specific permissions (SecurityGroup = -1). Likely filters or groups results by @TemplateName (usage truncated in snippet) for report canvas/template selection."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPMStatusCodeVal do?"
+      },
+      {
+        "from": "gpt",
+        "value": "bspPMStatusCodeVal validates a given PM Status code by checking its existence in the PMSC table and ensuring it is active for the specified Document Category if not set to active for all categories. It retrieves the associated CodeType and Description, populates an output message for errors (e.g., missing status, not found, or category mismatch), and returns 0 for success or 1 for failure. This procedure enforces data integrity in Viewpoint Vista ERP's Project Management module during document processing workflows.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspMSCheckDefaultRecipients do?"
+      },
+      {
+        "from": "gpt",
+        "value": "> =================================================================\n> Author:\t\tCasey Schurman\n> Create date: 04/26/2018\n> Modified:\n> -- Description:\tReturns whether the AR Customer has default recipients\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in APURApprovalStats"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in APURApprovalStats: APCo (bCompany, not null); UIMth (bMonth, not null); UISeq (smallint, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in PRPC"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in PRPC: PRCo (bCompany, not null); PRGroup (bGroup, not null); PREndDate (bDate, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in vfrl_seg_tree"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in vfrl_seg_tree: entity_num (int, not null); seg_num (tinyint, not null); parent_code (nchar, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in RQVQ"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in RQVQ: RQCo (bCompany, not null); Vendor (bVendor, not null); Quote (int, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspVPSaveAllGridColumnsAdmin do?"
+      },
+      {
+        "from": "gpt",
+        "value": "*No overview available.*\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in ARBC"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in ARBC: ARCo (bCompany, not null); Mth (bMonth, not null); BatchId (bBatchID, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspINXBPost do?"
+      },
+      {
+        "from": "gpt",
+        "value": "Posts a validated batch of Manufacturing Order (MO) close transactions from Inventory (INXB staging tables) to Job Cost Details (bJCCD). For each MO close, it records job/phase costs, committed/remaining units and dollars, material details, and sources the posting from inventory locations. Updates batch control (bHQBC) to \"posting in progress\" and handles errors via output message."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspGetMonthOldScenarios do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure retrieves scenarios from the RFScenarios table that are older than 30 days, based on the RecordingDateTime compared to the current date using DATEDIFF. It returns the ScenarioID, RecordingDateTime, and ScenarioFileName, ordered by RecordingDateTime in descending order. It is used in Viewpoint Vista ERP for identifying aged scenario data for maintenance tasks like cleanup, archiving, or deletion.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspIMBidtekDefaultsSMRequiredMaterial do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure retrieves and applies Bidtek-specific default values for required materials in Service Management (SM) during data imports. It validates the import setup in the IMTD (Import Template Defaults) table for Bidtek configurations and prepares overwrite flags for fields like materials, quantities, costs, taxes, and notes on SM required material lines. The procedure supports populating SM work orders, agreements, or quotes with standardized material data from Bidtek estimates."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspAPTHTransValInit do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This SP initializes output parameters for validating or editing an AP transaction header by retrieving core details (e.g., AP reference, description, invoice date, pay method, CM account, prepaid status) from the bAPTH table based on company, month, and transaction ID. It loads vendor, payment, and address data into variables for further processing and sets flags like no-CM-account-needed. Early validation ensures the transaction exists and blocks unprocessed prepaid transactions from initialization here."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPRMNT08 do?"
+      },
+      {
+        "from": "gpt",
+        "value": "bspPRMNT08 calculates Montana state income tax withholding amounts for payroll processing based on subject wages, annual pay periods, filing status (Single 'S' or Married 'M'), and exemptions. It annualizes wages by multiplying subject amount by pay periods and subtracting $3500 per exemption, then applies progressive tax brackets with predefined rates (5.35%-7.85%) and additions to compute annual tax before dividing by pay periods and rounding to whole dollars. Used in payroll systems to ensure accurate per-paycheck withholdings, with validation for required inputs and error messaging on failures.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in bHRHI"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in bHRHI: HRCo (bCompany, not null); Hospital (varchar, not null); Address (varchar, nullable)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What fields are available on the PCContactTypeCodes form?"
+      },
+      {
+        "from": "gpt",
+        "value": "The PCContactTypeCodes form includes these fields: Vendor Group, Contact Type Code, Description, Active Lookup, Vendor Group From Load Proc"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the bHQNT table?"
+      },
+      {
+        "from": "gpt",
+        "value": "The bHQNT table (Module: HQ) contains: StdNote, Description, CreatedBy, CreationDate, Notes, UniqueAttchID, KeyID"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspHRPRUpdateFlags do?"
+      },
+      {
+        "from": "gpt",
+        "value": "The bspHRPRUpdateFlags stored procedure retrieves HR/PR update configuration flags for a specific company from the HRCO table. It converts Y/N flags (e.g., UpdateNameYN, UpdateAddressYN, UpdateHireDateYN) into 'True' or 'False' strings and populates them into multiple OUTPUT parameters. This is used in HR/payroll processes to check which employee fields (like name, address, SSN, or W4) are allowed to be updated, respecting company-specific settings.\n\nThe bspHRPRUpdateFlags stored procedure retrieves HR/PR update flags for a specified company from the HRCO table, converting 'Y/N' values to 'True/False' strings and outputting them via parameters. It is used to check configurable permissions for updating employee fields like name, address, hire date, active status, PR group, timecard, W4, occupation, and SSN during HR processes. Key operations include a single SELECT query filtered by company code and returning a success code of 0.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspEMWOInitMatchingSMGGridFill do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This SP populates a UI grid with matching Standard Maintenance Groups (SMGs) for equipment in Equipment Management (EM), calculating due dates, intervals (hours/odometer/fixed), linkages between parent/child SMGs, and selection status based on filters like company, work order date, job, shop, equipment, and advance days/variances. It identifies overdue or upcoming preventive maintenance needs, flags failures/reasons, and supports initialization of work orders by pre-selecting linked SMGs. Temp tables aggregate equipment/SMG details for display, including last done dates and stats."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in PREAEmplMonths"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in PREAEmplMonths: PRCo (bCompany, not null); Employee (bEmployee, not null); Mth (bMonth, not null)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in vBITargetLevel"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in vBITargetLevel: TargetLevel (varchar, not null); Description (varchar, nullable); Notes (varchar, nullable)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the DDTableForms view?"
+      },
+      {
+        "from": "gpt",
+        "value": "The DDTableForms view (Module: DD) contains: KeyID, TableName, FormName"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure bspPMRFQVal do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This SP validates the existence of a specific Request for Quotation (RFQ) record in the PMRQ table, tied to a PM company, project, PCO type, and PCO. If found, it retrieves the RFQ date and description; otherwise, it returns an error. It serves as a lookup and validation utility to ensure RFQ data is on file before further PM processing."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What fields are available on the PMTestLogs form?"
+      },
+      {
+        "from": "gpt",
+        "value": "The PMTestLogs form includes these fields: Project, Default Vendor Group, Document Category Active, Document Category, Project, JCJM.JobStatus, Our Firm, PMCO Exists Flag, Notes, TestType"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspVPMenuDeleteCompanyItem do?"
+      },
+      {
+        "from": "gpt",
+        "value": "vspVPMenuDeleteCompanyItem deletes a specific menu item from the DDSI table for a given company, targeting records with empty VPUserName and Mod fields in a designated subfolder and item type. It is used in Viewpoint Vista ERP to remove company-level custom menu configurations without affecting user-specific or module-specific items. Key operations include input validation for required parameters (co, subfolder, itemtype, menuitem) and co > 0, followed by a targeted DELETE statement, with error messaging and return codes for failures.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the bAPTT table?"
+      },
+      {
+        "from": "gpt",
+        "value": "The bAPTT table (Module: AP) contains: V1099Type, Description, UniqueAttchID, KeyID"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Describe the key columns in brvPRFlash_PRRE"
+      },
+      {
+        "from": "gpt",
+        "value": "Key columns in brvPRFlash_PRRE: PRCo (bCompany, nullable); Crew (varchar, nullable); PostDate (bDate, nullable)"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What columns are in the SMAgreementServiceWorkSchedule view?"
+      },
+      {
+        "from": "gpt",
+        "value": "The SMAgreementServiceWorkSchedule view (Module: SM) contains: SMAgreementServiceWorkScheduleID, SMCo, Agreement, Version, Service, WorkScheduleSeq"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "Write a SQL query to: SM Agreement Task Schedule\n\nContext: Viewpoint Vista database, view SMAgreementTaskSchedule"
+      },
+      {
+        "from": "gpt",
+        "value": "SELECT *\nFROM dbo.vSMAgreementTaskSchedule;"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What is the purpose of the PRAUSTPPAYG view?"
+      },
+      {
+        "from": "gpt",
+        "value": "PR STP Employee PAYG Amounts"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspJCCIDesc do?"
+      },
+      {
+        "from": "gpt",
+        "value": "The vspJCCIDesc stored procedure retrieves the description, contract units, and contract amount for a specified job cost contract item (from bJCCI) in Viewpoint Vista ERP's job costing module. It checks for associated billing items (in JBIT), fetches the contract's SI region (from bJCCM), and validates if the contract item is a standard item code (SI Code in JCSI) for that region, populating output parameters accordingly. Primarily used to validate inputs and gather essential contract item details for UI display, reporting, or further job costing processes, with error handling for missing contracts or items.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspDDFIcGet do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure retrieves detailed configuration metadata for a specific form field (column) from the DDFIc table, Vista's data dictionary for form controls. It returns properties like data type, input mask, validation procedures, default values, and UI settings (e.g., labels, min/max values) to support dynamic field rendering and behavior. The output parameter @msg provides error feedback if the form or column is missing or invalid."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspVAGetReportsItemPath do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure retrieves the full file path for a specific report item by concatenating the path from the RPRL table with the filename from the RPRTShared table. It is used in Viewpoint Vista ERP to efficiently locate and access report files based on a given ReportID. The key operation is a straightforward JOIN on Location between the two tables, filtered by the @reportid parameter.\n\n---"
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What does the stored procedure vspJCJobPhaseRolesListView do?"
+      },
+      {
+        "from": "gpt",
+        "value": "This stored procedure generates a filtered list of job phases (from JCJP) for a specific job, company, and phase group in the JC (Job Cost) module, showing associated roles from JCJPRoles or highlighting phases without roles. When @FilterPhases='N', it lists unused phases (no matching roles for the specified @Process). When @FilterPhases='Y', it lists all phases with minimal role info, defaulting @PhaseGroup from HQCO if zero, to support role assignment views."
+      }
+    ]
+  },
+  {
+    "conversations": [
+      {
+        "from": "system",
+        "value": "You are VGPT, an expert SQL assistant for Viewpoint Vista construction ERP database.\n\nKey conventions:\n- Use views (APTH) not base tables (bAPTH) for SELECT queries\n- Always add WITH (NOLOCK) after table names\n- Filter by company columns (APCo, JCCo, PRCo, etc.)\n- Use exact column name case (APCo not apco)\n- Check for vrv* reporting views before writing custom SQL"
+      },
+      {
+        "from": "human",
+        "value": "What fields are available on the SLCompany form?"
+      },
+      {
+        "from": "gpt",
+        "value": "The SLCompany form includes these fields: SLCo, AuditCoParams, AuditSLs, AuditSLCompliance, Enforce catch up, Enforce Phase CT Est Limit, Notes, Attach Batch Reports YN, Allow Exceeded Claim Entry YN"
+      }
+    ]
+  }
+]

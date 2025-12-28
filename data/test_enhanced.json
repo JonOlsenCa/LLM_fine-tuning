@@ -1,0 +1,157 @@
+[
+  {
+    "instruction": "What columns are in the Analytics.vDataSyncTracking table?",
+    "input": "",
+    "output": "The Analytics.vDataSyncTracking table (Module: Other) contains: Tracking_Id, Extract_Date, Extract_Run_Id, Extract_Type, Table_Name, Start_Version, Last_Version, Incremental_Run, Run_Success, ETL_Version"
+  },
+  {
+    "instruction": "Describe the key columns in Analytics.vDataSyncTracking",
+    "input": "",
+    "output": "Key columns in Analytics.vDataSyncTracking: Tracking_Id (bigint, not null); Extract_Date (datetime, not null); Extract_Run_Id (nvarchar, not null)"
+  },
+  {
+    "instruction": "What columns are in the Batch.Document view?",
+    "input": "",
+    "output": "The Batch.Document view (Module: Other) contains: KeyID, DocumentId, Title, SenderId, DocumentTypeId, DueDate, SentDate, DocumentDisplay, CompanyId, State, CreatedByUser, UniqueAttchID, DBCreatedDate, UpdatedByUser, DBUpdatedDate... (21 total columns)"
+  },
+  {
+    "instruction": "Describe the key columns in Batch.Document",
+    "input": "",
+    "output": "Key columns in Batch.Document: KeyID (bigint, not null); DocumentId (uniqueidentifier, not null); Title (nvarchar, not null)"
+  },
+  {
+    "instruction": "What columns are in the Batch.DocumentDictionary view?",
+    "input": "",
+    "output": "The Batch.DocumentDictionary view (Module: Other) contains: KeyId, DocumentDictionaryId, DocumentId, SecondaryIdentifierTypeId, DictionaryValue, Ordinal, CreatedByUser, DBCreatedDate, UpdatedByUser, DBUpdatedDate, Version"
+  },
+  {
+    "instruction": "Describe the key columns in Batch.DocumentDictionary",
+    "input": "",
+    "output": "Key columns in Batch.DocumentDictionary: KeyId (bigint, not null); DocumentDictionaryId (uniqueidentifier, not null); DocumentId (uniqueidentifier, not null)"
+  },
+  {
+    "instruction": "What does the stored procedure bcrAPMAgedUnbilledJCCost do?",
+    "input": "",
+    "output": "This stored procedure generates data for an Accounts Payable (AP) aging report on unbilled Job Cost (JC) transactions, categorized by cost types (e.g., labor, materials) with dynamic descriptions pulled from company phase groups. It filters JC contracts and items by ranges and dates, aging costs as of `@AgeDate` into buckets spaced by `@DaysBetweenCols` (default 30 days). The output supports reporting on work-in-progress (WIP) costs not yet billed to customers, aiding AP reconciliation of vendor costs against job billing status."
+  },
+  {
+    "instruction": "What does the stored procedure bcrCBCostRevenue do?",
+    "input": "",
+    "output": "Generates a summarized report of job costs and revenues for contracts within specified ranges (company, contract numbers, departments, dates), categorized by up to 9 cost types (e.g., Labor, Material, Subcontract) with dynamic abbreviations from phase groups. Outputs data into a temporary table (#ContractStatus) for further processing or reporting, including job/phase details, customer info, and status metrics like WIP or profitability."
+  },
+  {
+    "instruction": "What does the stored procedure bcrPCIContractStatus do?",
+    "input": "",
+    "output": "This stored procedure generates a comprehensive contract status summary for Job Cost contracts, aggregating original/current contract amounts, billed/received amounts (including retainage and tax), estimated/projected/actual costs, and AP costs across contract items. It populates a temporary table with data filtered by company, contract range, department range, through-month, and posting date for profitability and performance analysis. The report supports tracking contract variances, billing status, and cost overruns."
+  },
+  {
+    "instruction": "What does the stored procedure bcrPRHrlyWageRate do?",
+    "input": "",
+    "output": "This SP calculates and consolidates hourly wage rates for union payroll employees by craft, class, and shift, incorporating basic rates from PRCP, overtime/day-specific factors from PROT/PREC/PRCM, and shift differentials. It generates temporary datasets for new/old rates, taxable fringes, and variable factors, likely to support rate comparisons or updates (e.g., via @RateOpt). The output enables reporting or processing of effective hourly rates under union contracts with day/shift variations."
+  },
+  {
+    "instruction": "What does the stored procedure bcrWLHaileyWkProjSumm do?",
+    "input": "",
+    "output": "This SP generates a customized weekly project summary report (\"Hailey Weekly Work Project Summary\") in the JC module, aggregating contract details, original/current estimates vs. actual costs/quantities/hours (overall and per phase), billing/retainage/receipts, and unpaid AP invoices/POs/subcontracts (SLs). It filters by JC company, contract range/status/dept/state, and week-end date, with toggleable sections for labor, cost type summaries, billing summaries, and unapplied AP to provide a financial snapshot of project performance."
+  },
+  {
+    "instruction": "What is the purpose of the AatrixFormsData view?",
+    "input": "",
+    "output": "View exposing data from vAatrixFormsData."
+  },
+  {
+    "instruction": "What is the purpose of the AatrixTaxTypes view?",
+    "input": "",
+    "output": "View exposing data from vAatrixTaxTypes."
+  },
+  {
+    "instruction": "What is the purpose of the Activity view?",
+    "input": "",
+    "output": "View exposing data from Document."
+  },
+  {
+    "instruction": "What is the purpose of the AP1099BoxNumber view?",
+    "input": "",
+    "output": "View exposing data from vAP1099BoxNumber."
+  },
+  {
+    "instruction": "What is the purpose of the AP1099BoxNumberLookup view?",
+    "input": "",
+    "output": "Lookup table mapping IRS 1099 form paper box numbers to database column names (e.g., Box1Amt) by tax year and 1099 type, with derived numeric box numbers extracted via substring from DBCol and PaperBoxNo parsing. Adds sequential ranking ordered by tax year, type, and box number for display purposes. Appends hardcoded standard boxes 1-12 under a generic '0000' tax year and 'NULLTYPE' for fallback use."
+  },
+  {
+    "instruction": "What fields are available on the AP1099Aatrix form?",
+    "input": "",
+    "output": "The AP1099Aatrix form includes these fields: Tax Year, State, Form Type, Description, Period, Start Date, End Date, Update Aatrix, Tax Year, State"
+  },
+  {
+    "instruction": "What fields are available on the AP1099Download form?",
+    "input": "",
+    "output": "The AP1099Download form includes these fields: Calendar Year ending month, Minimum Payment Amount, Contact Name, Contact's email, Calendar Year ending month, Minimum Payment Amount, Contact Name, Contact's email"
+  },
+  {
+    "instruction": "What fields are available on the AP1099Edit form?",
+    "input": "",
+    "output": "The AP1099Edit form includes these fields: YEMO, VendorGroup, Vendor, address label desc, city label desc, State, zip label desc, country label display, tax ID label desc, 1009 type label desc"
+  },
+  {
+    "instruction": "What fields are available on the AP1099Totals form?",
+    "input": "",
+    "output": "The AP1099Totals form includes these fields: Year Ending Month, Vendor Group, Vendor, 1099 Type, Box 1 Amt, Box 2 Amt, Box3Amt, Box4Amt, Box5Amt, Box6Amt"
+  },
+  {
+    "instruction": "What fields are available on the AP1099Type form?",
+    "input": "",
+    "output": "The AP1099Type form includes these fields: V1099Type, Description, HQCO Default Country, V1099Type, Description, HQCO Default Country"
+  },
+  {
+    "instruction": "How do I join APTL with POCT in Viewpoint Vista?",
+    "input": "",
+    "output": "To join APTL with POCT, use:\n\nINNER JOIN POCT ON APTL.APCo = POCT.POCo AND APTL.PO = POCT.PO\n\nThis pattern is used in the vrvAPCompCode view."
+  },
+  {
+    "instruction": "How do I join APTL with SLCT in Viewpoint Vista?",
+    "input": "",
+    "output": "To join APTL with SLCT, use:\n\nINNER JOIN SLCT ON APTL.APCo = SLCT.SLCo AND APTL.SL = SLCT.SL\n\nThis pattern is used in the vrvAPCompCode view."
+  },
+  {
+    "instruction": "How do I join HQCP with APVC in Viewpoint Vista?",
+    "input": "",
+    "output": "To join HQCP with APVC, use:\n\nINNER JOIN APVC ON HQCP.CompCode = APVC.CompCode\n\nThis pattern is used in the vrvAPCompCode view."
+  },
+  {
+    "instruction": "How do I join APPB with APTB in Viewpoint Vista?",
+    "input": "",
+    "output": "To join APPB with APTB, use:\n\nINNER JOIN JOIN APTB ON APPB.Co = APTB.Co AND APPB.Mth = APTB.Mth AND APPB.BatchId = APTB.BatchId AND APPB.BatchSeq = APTB.BatchSeq\n\nThis pattern is used in the vrvAPEFTRemReprint view."
+  },
+  {
+    "instruction": "How do I join APPH with APPD in Viewpoint Vista?",
+    "input": "",
+    "output": "To join APPH with APPD, use:\n\nINNER JOIN JOIN APPD ON APPH.APCo = APPD.APCo AND APPH.CMCo = APPD.CMCo AND APPH.CMAcct = APPD.CMAcct AND APPH.PayMethod = APPD.PayMethod AND APPH.CMRef = APPD.CMRef AND APPH.CMRefSeq = APPD.CMRefSeq AND APPH.EFTSeq = APPD.EFTSeq\n\nThis pattern is used in the vrvAPEFTRemReprint view."
+  },
+  {
+    "instruction": "Write a SQL query to: View exposing data from vAatrixFormsData.",
+    "input": "Context: Viewpoint Vista database, view AatrixFormsData",
+    "output": "SELECT *\nFROM dbo.vAatrixFormsData;"
+  },
+  {
+    "instruction": "Write a SQL query to: View exposing data from vAatrixTaxTypes.",
+    "input": "Context: Viewpoint Vista database, view AatrixTaxTypes",
+    "output": "SELECT *\nFROM dbo.vAatrixTaxTypes;"
+  },
+  {
+    "instruction": "Write a SQL query to: View exposing data from Document.",
+    "input": "Context: Viewpoint Vista database, view Activity",
+    "output": "SELECT\n    [ActivityId],\n    [ActivityName],\n    [ActivityDate],\n    [ParticipantId],\n    [DocumentId],\n    [CommentId],\n    [CreatedByUser],\n    [DBCreatedDate],\n    [UpdatedByUser],\n    [DBUpdatedDate],\n    [Version]\nFROM Document.Activity;"
+  },
+  {
+    "instruction": "Write a SQL query to: View exposing data from vAP1099BoxNumber.",
+    "input": "Context: Viewpoint Vista database, view AP1099BoxNumber",
+    "output": "SELECT *\nFROM dbo.vAP1099BoxNumber;"
+  },
+  {
+    "instruction": "Write a SQL query to: AP Additional Addresses",
+    "input": "Context: Viewpoint Vista database, view APAA",
+    "output": "SELECT bAPAA.*\nFROM dbo.bAPAA;"
+  }
+]

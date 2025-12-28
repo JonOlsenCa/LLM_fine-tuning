@@ -1,0 +1,59 @@
+{
+  "vgpt2_train": {
+    "file_name": "vgpt2_train_sharegpt.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations"
+    },
+    "tags": {
+      "role_tag": "from",
+      "content_tag": "value",
+      "user_tag": "human",
+      "assistant_tag": "gpt",
+      "system_tag": "system"
+    }
+  },
+  "vgpt2_eval": {
+    "file_name": "vgpt2_eval_sharegpt.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations"
+    },
+    "tags": {
+      "role_tag": "from",
+      "content_tag": "value",
+      "user_tag": "human",
+      "assistant_tag": "gpt",
+      "system_tag": "system"
+    }
+  },
+  "vgpt2_train_test": {
+    "file_name": "vgpt2_train_test.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations"
+    },
+    "tags": {
+      "role_tag": "from",
+      "content_tag": "value",
+      "user_tag": "human",
+      "assistant_tag": "gpt",
+      "system_tag": "system"
+    }
+  },
+  "vgpt2_eval_test": {
+    "file_name": "vgpt2_eval_test.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations"
+    },
+    "tags": {
+      "role_tag": "from",
+      "content_tag": "value",
+      "user_tag": "human",
+      "assistant_tag": "gpt",
+      "system_tag": "system"
+    }
+  }
+}
+

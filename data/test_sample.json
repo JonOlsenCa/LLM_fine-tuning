@@ -1,0 +1,202 @@
+[
+  {
+    "instruction": "What columns are in the Analytics.vDataSyncTracking table?",
+    "input": "",
+    "output": "The Analytics.vDataSyncTracking table (Module: Other) contains: Tracking_Id, Extract_Date, Extract_Run_Id, Extract_Type, Table_Name, Start_Version, Last_Version, Incremental_Run, Run_Success, ETL_Version"
+  },
+  {
+    "instruction": "Describe the key columns in Analytics.vDataSyncTracking",
+    "input": "",
+    "output": "Key columns in Analytics.vDataSyncTracking: Tracking_Id (bigint, not null); Extract_Date (datetime, not null); Extract_Run_Id (nvarchar, not null)"
+  },
+  {
+    "instruction": "What columns are in the Batch.Document view?",
+    "input": "",
+    "output": "The Batch.Document view (Module: Other) contains: KeyID, DocumentId, Title, SenderId, DocumentTypeId, DueDate, SentDate, DocumentDisplay, CompanyId, State, CreatedByUser, UniqueAttchID, DBCreatedDate, UpdatedByUser, DBUpdatedDate... (21 total columns)"
+  },
+  {
+    "instruction": "Describe the key columns in Batch.Document",
+    "input": "",
+    "output": "Key columns in Batch.Document: KeyID (bigint, not null); DocumentId (uniqueidentifier, not null); Title (nvarchar, not null)"
+  },
+  {
+    "instruction": "What columns are in the Batch.DocumentDictionary view?",
+    "input": "",
+    "output": "The Batch.DocumentDictionary view (Module: Other) contains: KeyId, DocumentDictionaryId, DocumentId, SecondaryIdentifierTypeId, DictionaryValue, Ordinal, CreatedByUser, DBCreatedDate, UpdatedByUser, DBUpdatedDate, Version"
+  },
+  {
+    "instruction": "Describe the key columns in Batch.DocumentDictionary",
+    "input": "",
+    "output": "Key columns in Batch.DocumentDictionary: KeyId (bigint, not null); DocumentDictionaryId (uniqueidentifier, not null); DocumentId (uniqueidentifier, not null)"
+  },
+  {
+    "instruction": "What columns are in the Batch.DocumentSlideShow view?",
+    "input": "",
+    "output": "The Batch.DocumentSlideShow view (Module: Other) contains: DocumentSlideShowId, DocumentId, Ordinal, SlideShowImage, Caption, CreatedByUser, DBCreatedDate, UpdatedByUser, DBUpdatedDate, Version"
+  },
+  {
+    "instruction": "Describe the key columns in Batch.DocumentSlideShow",
+    "input": "",
+    "output": "Key columns in Batch.DocumentSlideShow: DocumentSlideShowId (bigint, not null); DocumentId (uniqueidentifier, not null); Ordinal (int, not null)"
+  },
+  {
+    "instruction": "What columns are in the Batch.DocumentV6TableRow view?",
+    "input": "",
+    "output": "The Batch.DocumentV6TableRow view (Module: Other) contains: DocumentV6TableRowId, DocumentId, TableName, TableKeyId, CreatedByUser, DBCreatedDate, UpdatedByUser, DBUpdatedDate, Version"
+  },
+  {
+    "instruction": "Describe the key columns in Batch.DocumentV6TableRow",
+    "input": "",
+    "output": "Key columns in Batch.DocumentV6TableRow: DocumentV6TableRowId (bigint, not null); DocumentId (uniqueidentifier, not null); TableName (nvarchar, not null)"
+  },
+  {
+    "instruction": "What does the stored procedure bcrAPMAgedUnbilledJCCost do?",
+    "input": "",
+    "output": "This stored procedure generates data for an Accounts Payable (AP) aging report on unbilled Job Cost (JC) transactions, categorized by cost types (e.g., labor, materials) with dynamic descriptions pulled from company phase groups. It filters JC contracts and items by ranges and dates, aging costs as of `@AgeDate` into buckets spaced by `@DaysBetweenCols` (default 30 days). The output supports reporting on work-in-progress (WIP) costs not yet billed to customers, aiding AP reconciliation of vendor costs against job billing status."
+  },
+  {
+    "instruction": "What does the stored procedure bcrCBCostRevenue do?",
+    "input": "",
+    "output": "Generates a summarized report of job costs and revenues for contracts within specified ranges (company, contract numbers, departments, dates), categorized by up to 9 cost types (e.g., Labor, Material, Subcontract) with dynamic abbreviations from phase groups. Outputs data into a temporary table (#ContractStatus) for further processing or reporting, including job/phase details, customer info, and status metrics like WIP or profitability."
+  },
+  {
+    "instruction": "What does the stored procedure bcrPCIContractStatus do?",
+    "input": "",
+    "output": "This stored procedure generates a comprehensive contract status summary for Job Cost contracts, aggregating original/current contract amounts, billed/received amounts (including retainage and tax), estimated/projected/actual costs, and AP costs across contract items. It populates a temporary table with data filtered by company, contract range, department range, through-month, and posting date for profitability and performance analysis. The report supports tracking contract variances, billing status, and cost overruns."
+  },
+  {
+    "instruction": "What does the stored procedure bcrPRHrlyWageRate do?",
+    "input": "",
+    "output": "This SP calculates and consolidates hourly wage rates for union payroll employees by craft, class, and shift, incorporating basic rates from PRCP, overtime/day-specific factors from PROT/PREC/PRCM, and shift differentials. It generates temporary datasets for new/old rates, taxable fringes, and variable factors, likely to support rate comparisons or updates (e.g., via @RateOpt). The output enables reporting or processing of effective hourly rates under union contracts with day/shift variations."
+  },
+  {
+    "instruction": "What does the stored procedure bcrWLHaileyWkProjSumm do?",
+    "input": "",
+    "output": "This SP generates a customized weekly project summary report (\"Hailey Weekly Work Project Summary\") in the JC module, aggregating contract details, original/current estimates vs. actual costs/quantities/hours (overall and per phase), billing/retainage/receipts, and unpaid AP invoices/POs/subcontracts (SLs). It filters by JC company, contract range/status/dept/state, and week-end date, with toggleable sections for labor, cost type summaries, billing summaries, and unapplied AP to provide a financial snapshot of project performance."
+  },
+  {
+    "instruction": "What does the stored procedure bcrWLHaileyWkProjSummEndDate do?",
+    "input": "",
+    "output": "This SP generates a customized weekly project summary report (likely \"WL Hailey\" report) for Job Cost (JC) contracts as of a specified week-end date. It aggregates key metrics like original/current contract amounts, cost estimates vs. actuals (including labor, quantities, hours), billing/receipts/retainage, and optionally unapplied AP, PO/SL remaining costs. Data is consolidated into a temp table (#ContractInfo) for reporting, filtered by company, contract range, status, dept, and state."
+  },
+  {
+    "instruction": "What does the stored procedure bfixJCCommittedCost do?",
+    "input": "",
+    "output": "This SP aggregates and compares committed units/costs (total and remaining) from Sales Ledger (SL - likely subcontracts), Purchase Orders (PO), and Job Cost Committed Phases (JCCP) by job/phase/cost type/UM for a company. It populates a temp table for reconciliation, likely to detect/fix discrepancies in JC committed costs (e.g., via later updates not shown in snippet). Purpose is to ensure JC reflects accurate future obligations from source docs."
+  },
+  {
+    "instruction": "What does the stored procedure bnp_APUnappNotify do?",
+    "input": "",
+    "output": "This stored procedure scans for pending Accounts Payable (AP) invoice lines awaiting first-level approval (unapproved, not rejected) across headers (bAPUI), lines (bAPUL), and approval records (bAPUR). It retrieves key details like company, vendor, invoice totals, line amounts, and reviewer info (from bHQRV/bAPVM), then prepares email notifications using workflow task settings from bWDJB. The process uses a cursor to handle multiple pending items, skipping restricted companies."
+  },
+  {
+    "instruction": "What does the stored procedure bnp_HREBEligDate do?",
+    "input": "",
+    "output": "This SP calculates or retrieves the eligibility date (`@EligDate`) for employee benefits in the HR module, using employee hire date, employment status, and related criteria. It populates numerous HR variables (e.g., `@HireDate`, `@TermDate`, `@EffectDate`) to evaluate benefit eligibility rules, such as waiting periods post-hire. Likely invoked via `@taskname` to support standardized benefit activation logic."
+  },
+  {
+    "instruction": "What does the stored procedure brptAPTax do?",
+    "input": "",
+    "output": "This stored procedure generates a detailed Accounts Payable (AP) tax report, listing tax transactions from AP invoice lines filtered by company, tax code range, and posting month range. It includes key details like vendor, job, invoice date, tax basis/amount, base/local tax codes/descriptions, GL accounts, and calculated effective tax rates (handling old/new rates based on invoice date and multi-level tax flags). The report supports tax auditing by linking AP data to HQ tax tables and resolving multi-level taxes via tax links."
+  },
+  {
+    "instruction": "What is the purpose of the AatrixFormsData view?",
+    "input": "",
+    "output": "View exposing data from vAatrixFormsData."
+  },
+  {
+    "instruction": "What is the purpose of the AatrixTaxTypes view?",
+    "input": "",
+    "output": "View exposing data from vAatrixTaxTypes."
+  },
+  {
+    "instruction": "What is the purpose of the Activity view?",
+    "input": "",
+    "output": "View exposing data from Document."
+  },
+  {
+    "instruction": "What is the purpose of the AP1099BoxNumber view?",
+    "input": "",
+    "output": "View exposing data from vAP1099BoxNumber."
+  },
+  {
+    "instruction": "What is the purpose of the AP1099BoxNumberLookup view?",
+    "input": "",
+    "output": "Lookup table mapping IRS 1099 form paper box numbers to database column names (e.g., Box1Amt) by tax year and 1099 type, with derived numeric box numbers extracted via substring from DBCol and PaperBoxNo parsing. Adds sequential ranking ordered by tax year, type, and box number for display purposes. Appends hardcoded standard boxes 1-12 under a generic '0000' tax year and 'NULLTYPE' for fallback use."
+  },
+  {
+    "instruction": "What is the purpose of the APAA view?",
+    "input": "",
+    "output": "AP Additional Addresses"
+  },
+  {
+    "instruction": "What is the purpose of the APAUPayeeTaxPaymentATO view?",
+    "input": "",
+    "output": "AP AU ATO Payee Tax Payment"
+  },
+  {
+    "instruction": "What is the purpose of the APAUPayerTaxPaymentATO view?",
+    "input": "",
+    "output": "AP AU ATO Payer Tax Payment"
+  },
+  {
+    "instruction": "What is the purpose of the APCD view?",
+    "input": "",
+    "output": "AP Clear Distributions"
+  },
+  {
+    "instruction": "What is the purpose of the APCO view?",
+    "input": "",
+    "output": "AP Company Parameters"
+  },
+  {
+    "instruction": "What fields are available on the AP1099Aatrix form?",
+    "input": "",
+    "output": "The AP1099Aatrix form includes these fields: Tax Year, State, Form Type, Description, Period, Start Date, End Date, Update Aatrix, Tax Year, State"
+  },
+  {
+    "instruction": "What fields are available on the AP1099Download form?",
+    "input": "",
+    "output": "The AP1099Download form includes these fields: Calendar Year ending month, Minimum Payment Amount, Contact Name, Contact's email, Calendar Year ending month, Minimum Payment Amount, Contact Name, Contact's email"
+  },
+  {
+    "instruction": "What fields are available on the AP1099Edit form?",
+    "input": "",
+    "output": "The AP1099Edit form includes these fields: YEMO, VendorGroup, Vendor, address label desc, city label desc, State, zip label desc, country label display, tax ID label desc, 1009 type label desc"
+  },
+  {
+    "instruction": "What fields are available on the AP1099Totals form?",
+    "input": "",
+    "output": "The AP1099Totals form includes these fields: Year Ending Month, Vendor Group, Vendor, 1099 Type, Box 1 Amt, Box 2 Amt, Box3Amt, Box4Amt, Box5Amt, Box6Amt"
+  },
+  {
+    "instruction": "What fields are available on the AP1099Type form?",
+    "input": "",
+    "output": "The AP1099Type form includes these fields: V1099Type, Description, HQCO Default Country, V1099Type, Description, HQCO Default Country"
+  },
+  {
+    "instruction": "What fields are available on the APAUATOEFileGenerate form?",
+    "input": "",
+    "output": "The APAUATOEFileGenerate form includes these fields: Tax Year, Amended Date Default, Amended Report, Amended Date, Tax Year, Amended Date Default, Amended Report, Amended Date"
+  },
+  {
+    "instruction": "What fields are available on the APAUPayeeTaxPaymentATO form?",
+    "input": "",
+    "output": "The APAUPayeeTaxPaymentATO form includes these fields: Creditor, Vendor Group, Creditor Name, Business # (ABN), Phone, Address, City, State, Postal Code, No ABN Tax"
+  },
+  {
+    "instruction": "What fields are available on the APAUPayerTaxPaymentATO form?",
+    "input": "",
+    "output": "The APAUPayerTaxPaymentATO form includes these fields: Vendor Group, Tax Year, ABN, Branch No, Company Name, Address, Address 2, City, State, Postal Code"
+  },
+  {
+    "instruction": "What fields are available on the APAddtlAddr form?",
+    "input": "",
+    "output": "The APAddtlAddr form includes these fields: VendorGroup, Vendor, AddressSeq, Type, Description, Address, City, State, Zip, Country"
+  },
+  {
+    "instruction": "What fields are available on the APBTCHTR form?",
+    "input": "",
+    "output": "The APBTCHTR form includes these fields: Month, Batch ID, Trans#, Vendor Group, Source Batch ID, Vendor, Pay Control, Pay Category, Mark as Delete, Begin Invoice Date"
+  }
+]

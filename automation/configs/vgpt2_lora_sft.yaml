@@ -1,0 +1,64 @@
+# VGPT2 LoRA SFT Training Configuration v2.2
+# OPTIMIZED FOR: RTX A6000 (48GB) + 128GB RAM + Threadripper 7960X
+# Dataset: 23,742 records from 14 sources
+#
+# Usage:
+#   1. Run: .\scripts\maximize_gpu.ps1   (optional - frees GPU memory)
+#   2. Run: llamafactory-cli train automation/configs/vgpt2_lora_sft.yaml
+#
+# Expected training time: ~2-3 hours for 5 epochs
+
+### Model Settings ###
+model_name_or_path: Qwen/Qwen2.5-7B-Instruct
+trust_remote_code: true
+
+### Fine-tuning Method ###
+finetuning_type: lora
+lora_rank: 128                       # High rank for 48GB VRAM - better knowledge retention
+lora_alpha: 256                      # 2x lora_rank
+lora_dropout: 0.05
+lora_target: all                     # Target all linear layers
+
+### Dataset Settings ###
+dataset: vgpt2_v2                    # 23,742 training records
+template: qwen
+cutoff_len: 4096                     # Full context for complex SQL
+max_samples: 50000                   # Use all data
+overwrite_cache: true
+preprocessing_num_workers: 16        # Utilize Threadripper cores
+dataloader_num_workers: 0            # Must be 0 on Windows (CUDA multiprocessing bug)
+packing: false                       # Disabled - was slower due to O(n²) attention on packed 4096 sequences
+
+### Training Settings ###
+stage: sft
+do_train: true
+per_device_train_batch_size: 4       # Safe for 48GB with packing
+gradient_accumulation_steps: 4       # Effective batch size = 16
+learning_rate: 2.0e-4                # Standard for LoRA
+num_train_epochs: 5.0                # 5 epochs for thorough learning
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+
+### Output Settings ###
+output_dir: saves/vgpt2_v2_lora_sft
+logging_steps: 10
+save_steps: 200                      # Save every 200 steps (~35 checkpoints total)
+save_total_limit: 5                  # Keep only last 5 checkpoints to save disk space
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: none                      # Set to tensorboard for monitoring
+
+### Resume Training (uncomment if resuming after crash) ###
+# resume_from_checkpoint: true       # Auto-find latest checkpoint
+# resume_from_checkpoint: saves/vgpt2_v2_lora_sft/checkpoint-1000  # Or specify exact path
+
+### Evaluation ###
+val_size: 0.05                       # 5% holdout for validation (~1,187 samples)
+do_eval: true
+eval_strategy: steps
+eval_steps: 500
+per_device_eval_batch_size: 4
+

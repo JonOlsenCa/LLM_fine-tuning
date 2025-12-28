@@ -5,6 +5,14 @@
   "ap_wizard_sample": {
     "file_name": "ap_wizard_sample.json"
   },
+  "vgpt2_v2": {
+    "file_name": "vgpt2_training_v2.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
   "alpaca_en_demo": {
     "file_name": "alpaca_en_demo.json"
   },
