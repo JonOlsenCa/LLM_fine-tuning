@@ -81,10 +81,17 @@ function Invoke-DataGeneration {
 
     # Generate negative examples
     Write-Host "Generating negative examples..." -ForegroundColor Yellow
-    $NegOutput = Join-Path $DataDir "vgpt2_v3_negative.json"
+    $NegOutput = Join-Path $DataDir "vgpt2_v3_negatives.json"
     python "$ScriptDir\generate_negative_examples.py" --vgpt2 $VGPT2Path --output $NegOutput
     if ($LASTEXITCODE -ne 0) { throw "Negative example generation failed" }
     Write-Success "Generated negative examples: $NegOutput"
+
+    # Generate KTO data
+    Write-Host "Generating KTO binary feedback data..." -ForegroundColor Yellow
+    $KtoOutput = Join-Path $DataDir "vgpt2_v3_kto.json"
+    python "$ScriptDir\generate_kto_data.py" --vgpt2 $VGPT2Path --output $KtoOutput
+    if ($LASTEXITCODE -ne 0) { throw "KTO data generation failed" }
+    Write-Success "Generated KTO data: $KtoOutput"
 
     # Generate DPO pairs
     Write-Host "Generating DPO preference pairs..." -ForegroundColor Yellow
@@ -108,6 +115,11 @@ with open('$($MergedOutput -replace '\\', '/')', 'w', encoding='utf-8') as f:
 print(f'Merged {len(sft)} SFT + {len(neg)} negative = {len(merged)} total')
 "@
     Write-Success "Merged data saved: $MergedOutput"
+
+    # Run data validation
+    Write-Host "Validating generated data..." -ForegroundColor Yellow
+    python "$ScriptDir\validate_data.py"
+    if ($LASTEXITCODE -ne 0) { throw "Data validation failed" }
 
     Write-Success "Data generation complete!"
 }

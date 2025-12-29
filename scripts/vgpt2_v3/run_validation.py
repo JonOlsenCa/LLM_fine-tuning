@@ -21,9 +21,10 @@ import json
 import logging
 import argparse
 import time
+import re
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Set
 from datetime import datetime
 import sys
 
@@ -74,6 +75,212 @@ class ValidationReport:
 
     def to_dict(self) -> Dict:
         return asdict(self)
+
+
+class SQLValidator:
+    """
+    SQL Syntax and Schema Validator for Viewpoint Vista.
+
+    Validates:
+    1. Basic SQL syntax (balanced parentheses, valid keywords)
+    2. Table/view names against known schema
+    3. WITH (NOLOCK) usage
+    4. Company filter presence
+    5. Column case sensitivity
+    """
+
+    # SQL keywords for basic syntax validation
+    SQL_KEYWORDS = {
+        'SELECT', 'FROM', 'WHERE', 'JOIN', 'INNER', 'LEFT', 'RIGHT', 'OUTER',
+        'ON', 'AND', 'OR', 'NOT', 'IN', 'LIKE', 'BETWEEN', 'IS', 'NULL',
+        'ORDER', 'BY', 'GROUP', 'HAVING', 'LIMIT', 'OFFSET', 'TOP',
+        'INSERT', 'INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE', 'CREATE',
+        'ALTER', 'DROP', 'TABLE', 'VIEW', 'INDEX', 'AS', 'DISTINCT',
+        'COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END',
+        'UNION', 'ALL', 'EXISTS', 'ASC', 'DESC', 'WITH', 'NOLOCK', 'COALESCE'
+    }
+
+    # Company columns by module prefix
+    COMPANY_COLUMNS = {
+        'AP': 'APCo', 'AR': 'ARCo', 'GL': 'GLCo', 'JC': 'JCCo',
+        'PR': 'PRCo', 'EM': 'EMCo', 'IN': 'INCo', 'SM': 'SMCo',
+        'PM': 'PMCo', 'MS': 'MSCo', 'MR': 'MRCo', 'DC': 'DCCo',
+        'PO': 'POCo', 'SL': 'SLCo', 'WD': 'WDCo', 'HR': 'HRCo',
+    }
+
+    def __init__(self, schema_path: Optional[str] = None):
+        """Initialize with optional schema for table validation."""
+        self.valid_tables: Set[str] = set()
+        self.column_map: Dict[str, Set[str]] = {}
+
+        if schema_path:
+            self._load_schema(schema_path)
+
+    def _load_schema(self, schema_path: str):
+        """Load schema data for validation."""
+        try:
+            columns_paths = [
+                Path(schema_path) / "Viewpoint_Database" / "_MetadataV2" / "_data" / "columns.json",
+                Path(schema_path) / "Viewpoint_Database" / "_Metadata" / "columns.json",
+            ]
+
+            for path in columns_paths:
+                if path.exists():
+                    with open(path, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+
+                    if isinstance(data, list):
+                        for item in data:
+                            table = item.get('ObjectName', '')
+                            col = item.get('ColumnName', '')
+                            if table:
+                                self.valid_tables.add(table.upper())
+                                if table not in self.column_map:
+                                    self.column_map[table] = set()
+                                if col:
+                                    self.column_map[table].add(col)
+                    else:
+                        self.valid_tables = set(k.upper() for k in data.keys())
+                        self.column_map = {k: set(c.get('column_name', '') for c in v) for k, v in data.items()}
+
+                    logger.info(f"Loaded schema: {len(self.valid_tables)} tables")
+                    break
+        except Exception as e:
+            logger.warning(f"Could not load schema for validation: {e}")
+
+    def validate_sql(self, sql: str) -> Tuple[bool, List[str], List[str]]:
+        """
+        Validate SQL syntax and schema.
+
+        Returns:
+            (is_valid, errors, warnings)
+        """
+        errors = []
+        warnings = []
+
+        if not sql or not sql.strip():
+            return True, [], []  # Empty SQL is valid (response may not contain SQL)
+
+        # Extract SQL from code blocks
+        sql_blocks = self._extract_sql_blocks(sql)
+
+        if not sql_blocks:
+            return True, [], []  # No SQL blocks found
+
+        for sql_block in sql_blocks:
+            block_errors, block_warnings = self._validate_sql_block(sql_block)
+            errors.extend(block_errors)
+            warnings.extend(block_warnings)
+
+        is_valid = len(errors) == 0
+        return is_valid, errors, warnings
+
+    def _extract_sql_blocks(self, text: str) -> List[str]:
+        """Extract SQL code blocks from markdown."""
+        # Match ```sql ... ``` blocks
+        pattern = r'```sql\s*(.*?)```'
+        matches = re.findall(pattern, text, re.DOTALL | re.IGNORECASE)
+        return matches
+
+    def _validate_sql_block(self, sql: str) -> Tuple[List[str], List[str]]:
+        """Validate a single SQL block."""
+        errors = []
+        warnings = []
+        sql_upper = sql.upper()
+
+        # 1. Check balanced parentheses
+        if sql.count('(') != sql.count(')'):
+            errors.append("Unbalanced parentheses in SQL")
+
+        # 2. Check for basic SELECT structure
+        if 'SELECT' in sql_upper and 'FROM' not in sql_upper:
+            errors.append("SELECT without FROM clause")
+
+        # 3. Check for WITH (NOLOCK) on FROM/JOIN tables
+        tables_in_sql = self._extract_table_references(sql)
+        for table in tables_in_sql:
+            # Skip tables in INSERT/UPDATE/DELETE (they shouldn't have NOLOCK)
+            if 'INSERT' not in sql_upper and 'UPDATE' not in sql_upper and 'DELETE' not in sql_upper:
+                # Check if NOLOCK follows the table name
+                pattern = rf'\b{re.escape(table)}\b\s+WITH\s*\(\s*NOLOCK\s*\)'
+                if not re.search(pattern, sql, re.IGNORECASE):
+                    warnings.append(f"Table '{table}' missing WITH (NOLOCK)")
+
+        # 4. Validate table names against schema (if loaded)
+        if self.valid_tables:
+            for table in tables_in_sql:
+                if table.upper() not in self.valid_tables:
+                    # Check for common fake table patterns
+                    if table.upper() in self._get_known_fake_tables():
+                        errors.append(f"Hallucinated table: '{table}' does not exist in Viewpoint")
+                    else:
+                        warnings.append(f"Unknown table: '{table}' not in schema")
+
+        # 5. Check for company filter
+        has_where = 'WHERE' in sql_upper
+        has_company_filter = any(
+            col in sql_upper for col in self.COMPANY_COLUMNS.values()
+        )
+        if has_where and not has_company_filter:
+            # Only warn if there's a WHERE clause but no company filter
+            warnings.append("SQL may be missing company filter (APCo, JCCo, etc.)")
+
+        # 6. Check for incomplete JOINs (missing key columns)
+        if 'JOIN' in sql_upper:
+            # Look for simple JOIN patterns that might be incomplete
+            join_pattern = r'JOIN\s+(\w+)\s+.*?ON\s+([^)]+?)(?:WHERE|GROUP|ORDER|$)'
+            join_matches = re.findall(join_pattern, sql, re.IGNORECASE | re.DOTALL)
+            for table, on_clause in join_matches:
+                and_count = on_clause.upper().count(' AND ')
+                if and_count < 1:
+                    # Most Viewpoint JOINs need multiple conditions
+                    warnings.append(f"JOIN on '{table}' may be incomplete (usually needs multiple key columns)")
+
+        return errors, warnings
+
+    def _extract_table_references(self, sql: str) -> List[str]:
+        """Extract table names from SQL."""
+        tables = []
+
+        # Match FROM table
+        from_pattern = r'\bFROM\s+(\w+)'
+        tables.extend(re.findall(from_pattern, sql, re.IGNORECASE))
+
+        # Match JOIN table
+        join_pattern = r'\bJOIN\s+(\w+)'
+        tables.extend(re.findall(join_pattern, sql, re.IGNORECASE))
+
+        # Match INSERT INTO table
+        insert_pattern = r'\bINSERT\s+INTO\s+(\w+)'
+        tables.extend(re.findall(insert_pattern, sql, re.IGNORECASE))
+
+        # Match UPDATE table
+        update_pattern = r'\bUPDATE\s+(\w+)'
+        tables.extend(re.findall(update_pattern, sql, re.IGNORECASE))
+
+        # Deduplicate while preserving order
+        seen = set()
+        unique = []
+        for t in tables:
+            if t.upper() not in seen:
+                seen.add(t.upper())
+                unique.append(t)
+
+        return unique
+
+    def _get_known_fake_tables(self) -> Set[str]:
+        """Return set of known fake/hallucinated table names."""
+        return {
+            'INVOICE', 'INVOICES', 'CUSTOMER', 'CUSTOMERS', 'VENDOR', 'VENDORS',
+            'EMPLOYEE', 'EMPLOYEES', 'JOB', 'JOBS', 'PROJECT', 'PROJECTS',
+            'TRANSACTION', 'TRANSACTIONS', 'ACCOUNT', 'ACCOUNTS', 'MATERIAL',
+            'EQUIPMENT', 'TIMECARD', 'TIMECARDS', 'CONTRACT', 'CONTRACTS',
+            'PURCHASEORDER', 'WORKORDER', 'CHANGEORDER', 'COSTCODE',
+            'APINVOICE', 'ARINVOICE', 'GLTRANSACTION', 'PRTIMECARD',
+            'JCJOB', 'JCCOST', 'EMEQUIPMENT', 'INMATERIAL',
+            'INVOICEHEADER', 'CUSTOMERMASTER', 'VENDORMASTER', 'EMPLOYEEMASTER',
+            'JOBMASTER', 'PROJECTMASTER', 'USERS', 'USERACCOUNTS',
+        }
 
 
 class TestSuite:
@@ -487,6 +694,8 @@ class ModelValidator:
         self.vgpt2_path = vgpt2_path
         self.model = None
         self.tokenizer = None
+        # Initialize SQL validator with schema
+        self.sql_validator = SQLValidator(schema_path=vgpt2_path)
 
     def load_model(self):
         """Load the model and tokenizer."""
@@ -589,6 +798,18 @@ class ModelValidator:
                     warnings.append("SQL missing WITH (NOLOCK)")
                     score -= 0.1
 
+        # Run SQL validation
+        sql_valid, sql_errors, sql_warnings = self.sql_validator.validate_sql(response)
+        if not sql_valid:
+            for sql_err in sql_errors:
+                errors.append(f"SQL Error: {sql_err}")
+                score -= 0.2
+        for sql_warn in sql_warnings:
+            # Only add unique warnings (avoid duplicates with keyword checks)
+            if sql_warn not in warnings and "NOLOCK" not in sql_warn:
+                warnings.append(f"SQL Warning: {sql_warn}")
+                score -= 0.05
+
         # Ensure score is between 0 and 1
         score = max(0, min(1, score))
 
@@ -677,6 +898,25 @@ Category Scores:
         )
 
 
+def load_tests_from_json(filepath: str) -> List[TestCase]:
+    """Load test cases from a JSON file."""
+    with open(filepath, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    tests = []
+    for item in data.get('tests', []):
+        tests.append(TestCase(
+            id=item.get('id', ''),
+            category=item.get('category', ''),
+            question=item.get('question', ''),
+            expected_keywords=item.get('expected_keywords', []),
+            forbidden_keywords=item.get('forbidden_keywords', []),
+            expected_tables=item.get('expected_tables', []),
+            expect_refusal=item.get('expect_refusal', False)
+        ))
+    return tests
+
+
 def main():
     parser = argparse.ArgumentParser(description="VGPT2 v3 Validation Pipeline")
     parser.add_argument('--model', type=str, required=True,
@@ -687,11 +927,16 @@ def main():
                         help='Output report path')
     parser.add_argument('--quick', action='store_true',
                         help='Run quick validation (50 tests)')
+    parser.add_argument('--test-file', type=str, default=None,
+                        help='Load tests from JSON file (e.g., data/test_suite.json)')
 
     args = parser.parse_args()
 
     # Get test suite
-    if args.quick:
+    if args.test_file:
+        tests = load_tests_from_json(args.test_file)
+        logger.info(f"Loaded {len(tests)} tests from {args.test_file}")
+    elif args.quick:
         tests = TestSuite.get_quick_suite()
         logger.info(f"Running QUICK validation with {len(tests)} tests")
     else:

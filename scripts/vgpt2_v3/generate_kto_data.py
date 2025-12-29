@@ -49,6 +49,10 @@ class KTOGenerator:
 
     Creates both positive (thumbs_up) examples of correct SQL
     and negative (thumbs_down) examples of incorrect patterns.
+
+    NOTE: KTO focuses on DIFFERENT patterns than DPO to reduce overlap:
+    - KTO: Response format, explanation quality, uncertainty handling
+    - DPO: SQL correctness (NOLOCK, JOINs, company filters)
     """
 
     def __init__(self, vgpt2_path: str):
@@ -101,37 +105,53 @@ class KTOGenerator:
         return "Co"
 
     def generate_all(self) -> List[KTOExample]:
-        """Generate all KTO examples."""
+        """Generate all KTO examples.
+
+        KTO focuses on response QUALITY and FORMAT patterns that differ from DPO:
+        - DPO: SQL correctness (NOLOCK, JOINs, company filters)
+        - KTO: Response quality, explanations, uncertainty, format
+        """
         examples = []
 
-        # Positive examples: Correct patterns
-        logger.info("Generating positive NOLOCK examples...")
-        examples.extend(self.generate_positive_nolock())
+        # ========== KTO-SPECIFIC PATTERNS (NOT in DPO) ==========
 
-        logger.info("Generating positive company filter examples...")
-        examples.extend(self.generate_positive_company_filter())
+        # Response quality patterns
+        logger.info("Generating positive explanation quality examples...")
+        examples.extend(self.generate_positive_explanations())
+
+        logger.info("Generating positive uncertainty handling examples...")
+        examples.extend(self.generate_positive_uncertainty())
+
+        logger.info("Generating positive code block formatting examples...")
+        examples.extend(self.generate_positive_formatting())
+
+        logger.info("Generating positive documentation reference examples...")
+        examples.extend(self.generate_positive_doc_references())
+
+        logger.info("Generating positive multi-step examples...")
+        examples.extend(self.generate_positive_multi_step())
+
+        # Negative response patterns
+        logger.info("Generating negative vague responses...")
+        examples.extend(self.generate_negative_vague())
+
+        logger.info("Generating negative overconfident hallucinations...")
+        examples.extend(self.generate_negative_overconfident())
+
+        logger.info("Generating negative poor formatting examples...")
+        examples.extend(self.generate_negative_formatting())
+
+        logger.info("Generating negative incomplete responses...")
+        examples.extend(self.generate_negative_incomplete())
+
+        # ========== MINIMAL OVERLAP PATTERNS ==========
+        # (Keep some basic correctness but different framing than DPO)
 
         logger.info("Generating positive view usage examples...")
         examples.extend(self.generate_positive_view_usage())
 
-        logger.info("Generating positive case sensitivity examples...")
-        examples.extend(self.generate_positive_case_examples())
-
-        # Negative examples: Incorrect patterns
-        logger.info("Generating negative missing NOLOCK examples...")
-        examples.extend(self.generate_negative_missing_nolock())
-
         logger.info("Generating negative hallucination examples...")
         examples.extend(self.generate_negative_hallucinations())
-
-        logger.info("Generating negative wrong case examples...")
-        examples.extend(self.generate_negative_wrong_case())
-
-        logger.info("Generating negative alias usage examples...")
-        examples.extend(self.generate_negative_aliases())
-
-        logger.info("Generating negative missing company filter examples...")
-        examples.extend(self.generate_negative_missing_company())
 
         logger.info(f"Generated {len(examples)} total KTO examples")
 
@@ -143,64 +163,697 @@ class KTOGenerator:
 
         return examples
 
-    def generate_positive_nolock(self) -> List[KTOExample]:
-        """Generate positive examples with correct NOLOCK usage."""
+    # ========== NEW KTO-SPECIFIC GENERATORS ==========
+
+    def generate_positive_explanations(self) -> List[KTOExample]:
+        """Generate positive examples with good explanations."""
         examples = []
 
-        sample_tables = random.sample(self.tables, min(500, len(self.tables)))
+        explanation_patterns = [
+            {
+                "instruction": "How do I query AP invoices?",
+                "output": """To query AP invoices in Viewpoint Vista, use the APTH (AP Transaction Header) table:
 
+```sql
+SELECT
+  APCo,
+  Mth,
+  APTrans,
+  Vendor,
+  InvNum,
+  InvDate,
+  GrossAmt
+FROM APTH WITH (NOLOCK)
+WHERE APCo = @APCo
+```
+
+**Key points:**
+- APTH stores invoice headers; APTL stores line details
+- Always include WITH (NOLOCK) for read queries
+- Filter by APCo to ensure company isolation
+- The Mth column stores the accounting month (first day format: '2024-01-01')"""
+            },
+            {
+                "instruction": "Explain the job costing tables",
+                "output": """Viewpoint Vista job costing uses several related tables:
+
+**Primary Tables:**
+- **JCJM** (Job Master) - Main job information: Job number, description, status
+- **JCCD** (Cost Detail) - Cost transactions: Actual costs, committed costs, units
+- **JCCH** (Cost/Phase Header) - Phase and cost type definitions
+
+**Relationships:**
+```sql
+-- Join job master with cost details
+SELECT
+  JCJM.Job,
+  JCJM.Description,
+  JCCD.CostType,
+  JCCD.ActualCost
+FROM JCJM WITH (NOLOCK)
+INNER JOIN JCCD WITH (NOLOCK)
+  ON JCJM.JCCo = JCCD.JCCo
+  AND JCJM.Job = JCCD.Job
+WHERE JCJM.JCCo = @JCCo
+```
+
+**Note:** Always join on ALL key columns (JCCo + Job), not just Job."""
+            },
+            {
+                "instruction": "What's the difference between APTH and bAPTH?",
+                "output": """In Viewpoint Vista, the 'b' prefix indicates a base table vs. a view:
+
+**bAPTH** - Base table (the actual underlying table)
+- Use for INSERT, UPDATE, DELETE operations
+- Direct access to data without security filtering
+
+**APTH** - View (sits on top of bAPTH)
+- Use for SELECT queries
+- Includes row-level security
+- Better performance due to indexing optimization
+
+**Best Practice:**
+```sql
+-- Reading data - use the view
+SELECT * FROM APTH WITH (NOLOCK) WHERE APCo = @APCo
+
+-- Writing data - use the base table
+INSERT INTO bAPTH (APCo, Mth, ...) VALUES (...)
+```
+
+This pattern applies to all 'b' prefixed tables: bJCJM/JCJM, bPRTH/PRTH, etc."""
+            },
+            {
+                "instruction": "How do vendor groups work?",
+                "output": """Vendor Groups in Viewpoint Vista provide a way to segment vendors across companies:
+
+**Key Table:** APVM (AP Vendor Master)
+- VendorGroup: Groups vendors (often 1:1 with company, but can be shared)
+- Vendor: Vendor number within the group
+
+**Querying Vendors:**
+```sql
+SELECT
+  VendorGroup,
+  Vendor,
+  Name,
+  Address,
+  City,
+  State,
+  Zip
+FROM APVM WITH (NOLOCK)
+WHERE VendorGroup = @VendorGroup
+```
+
+**Joining with Transactions:**
+```sql
+SELECT APTH.InvNum, APVM.Name
+FROM APTH WITH (NOLOCK)
+INNER JOIN APVM WITH (NOLOCK)
+  ON APTH.VendorGroup = APVM.VendorGroup
+  AND APTH.Vendor = APVM.Vendor
+WHERE APTH.APCo = @APCo
+```
+
+**Important:** Always join on BOTH VendorGroup AND Vendor columns."""
+            },
+        ]
+
+        for pattern in explanation_patterns:
+            examples.append(KTOExample(
+                instruction=pattern["instruction"],
+                input="",
+                output=pattern["output"],
+                label=True
+            ))
+
+        # Generate more from schema - expanded for more coverage
+        sample_tables = random.sample(self.tables, min(500, len(self.tables)))
+        for table in sample_tables:
+            if table in self.columns_data and len(self.columns_data[table]) >= 3:
+                cols = self.columns_data[table][:5]
+                col_names = [c.get('column_name', '') for c in cols if c.get('column_name')]
+                co_col = self._get_company_col(table)
+
+                examples.append(KTOExample(
+                    instruction=f"What columns are in {table}?",
+                    input="",
+                    output=f"""The {table} table contains these commonly used columns:
+
+- {chr(10).join(['**' + c + '**' for c in col_names[:5]])}
+
+**Example Query:**
+```sql
+SELECT {', '.join(col_names[:3])}
+FROM {table} WITH (NOLOCK)
+WHERE {co_col} = @{co_col}
+```
+
+Refer to the schema documentation for the complete column list and data types.""",
+                    label=True
+                ))
+
+        return examples
+
+    def generate_positive_uncertainty(self) -> List[KTOExample]:
+        """Generate positive examples showing appropriate uncertainty."""
+        examples = []
+
+        uncertainty_patterns = [
+            {
+                "instruction": "What's the best way to calculate job profitability?",
+                "output": """There are several approaches to calculate job profitability in Viewpoint Vista, depending on your needs:
+
+**Option 1: Use Reporting Views (Recommended)**
+```sql
+SELECT *
+FROM brvJCJobProfitability WITH (NOLOCK)
+WHERE JCCo = @JCCo
+```
+Check if this view exists in your installation - it's pre-built for this purpose.
+
+**Option 2: Direct Calculation**
+```sql
+SELECT
+  JCJM.Job,
+  SUM(JCCD.ActualRevenue) - SUM(JCCD.ActualCost) AS Profit
+FROM JCJM WITH (NOLOCK)
+INNER JOIN JCCD WITH (NOLOCK)
+  ON JCJM.JCCo = JCCD.JCCo
+  AND JCJM.Job = JCCD.Job
+WHERE JCJM.JCCo = @JCCo
+GROUP BY JCJM.Job
+```
+
+**Note:** Your implementation may have custom fields or calculations. Verify with your Viewpoint administrator for company-specific requirements."""
+            },
+            {
+                "instruction": "Query the customer payments table",
+                "output": """I'm not certain which specific table you're looking for. Viewpoint Vista has several payment-related tables:
+
+**For AR (Accounts Receivable) payments:**
+- **ARCM** - Customer Master
+- **ARTH** - AR Transaction Header (includes payments received)
+- **ARTL** - AR Transaction Line
+
+**Example for customer payments:**
+```sql
+SELECT
+  ARTH.Customer,
+  ARTH.TransType,
+  ARTH.Amount,
+  ARTH.TransDate
+FROM ARTH WITH (NOLOCK)
+WHERE ARTH.ARCo = @ARCo
+  AND ARTH.TransType = 'P'  -- Payment type
+```
+
+Could you clarify which module (AR, AP, etc.) you're working with?"""
+            },
+            {
+                "instruction": "How do I get equipment utilization reports?",
+                "output": """Equipment utilization reporting in Viewpoint depends on your specific configuration. Here are the main options:
+
+**1. Standard EM Tables:**
+```sql
+SELECT
+  EMEM.Equipment,
+  EMEM.Description,
+  EMUD.PostedDate,
+  EMUD.Hours
+FROM EMEM WITH (NOLOCK)
+LEFT JOIN EMUD WITH (NOLOCK)
+  ON EMEM.EMCo = EMUD.EMCo
+  AND EMEM.Equipment = EMUD.Equipment
+WHERE EMEM.EMCo = @EMCo
+```
+
+**2. Check for Reporting Views:**
+Look for `vrvEM*` or `brvEM*` views that may have pre-built utilization calculations.
+
+**3. Custom Reports:**
+Many organizations have custom utilization reports. Check with your Viewpoint administrator for company-specific implementations.
+
+What specific utilization metrics are you looking for?"""
+            },
+        ]
+
+        for pattern in uncertainty_patterns:
+            examples.append(KTOExample(
+                instruction=pattern["instruction"],
+                input="",
+                output=pattern["output"],
+                label=True
+            ))
+
+        return examples
+
+    def generate_positive_formatting(self) -> List[KTOExample]:
+        """Generate positive examples with proper code formatting."""
+        examples = []
+
+        formatting_patterns = [
+            {
+                "instruction": "Show me how to query GL transactions",
+                "output": """```sql
+SELECT
+  GLCo,
+  GLAcct,
+  Mth,
+  Trans,
+  Amount,
+  Description
+FROM GLDT WITH (NOLOCK)
+WHERE GLCo = @GLCo
+  AND Mth >= '2024-01-01'
+  AND Mth < '2025-01-01'
+ORDER BY Mth, Trans
+```
+
+This query retrieves GL detail transactions for a specific company and date range."""
+            },
+            {
+                "instruction": "Complex join example",
+                "output": """Here's a complex join combining AP invoices with vendor and GL data:
+
+```sql
+SELECT
+  APTH.APCo,
+  APTH.InvNum,
+  APTH.InvDate,
+  APTH.GrossAmt,
+  APVM.Name AS VendorName,
+  APVM.Address,
+  APTL.GLCo,
+  APTL.GLAcct
+FROM APTH WITH (NOLOCK)
+INNER JOIN APVM WITH (NOLOCK)
+  ON APTH.VendorGroup = APVM.VendorGroup
+  AND APTH.Vendor = APVM.Vendor
+INNER JOIN APTL WITH (NOLOCK)
+  ON APTH.APCo = APTL.APCo
+  AND APTH.Mth = APTL.Mth
+  AND APTH.APTrans = APTL.APTrans
+WHERE APTH.APCo = @APCo
+  AND APTH.InvDate >= @StartDate
+ORDER BY APTH.InvDate DESC
+```
+
+**Notes:**
+- All tables use WITH (NOLOCK) for read consistency
+- JOINs use complete key columns
+- Results sorted by invoice date descending"""
+            },
+        ]
+
+        for pattern in formatting_patterns:
+            examples.append(KTOExample(
+                instruction=pattern["instruction"],
+                input="",
+                output=pattern["output"],
+                label=True
+            ))
+
+        # Generate from schema with good formatting - expanded
+        sample_tables = random.sample(self.tables, min(400, len(self.tables)))
         for table in sample_tables:
             if table in self.columns_data:
-                cols = self.columns_data[table]
-                if cols:
-                    col_name = cols[0].get('column_name', '')
-                    co_col = self._get_company_col(table)
+                cols = self.columns_data[table][:4]
+                col_names = [c.get('column_name', '') for c in cols if c.get('column_name')]
+                co_col = self._get_company_col(table)
 
+                if len(col_names) >= 2:
+                    formatted_cols = ",\n  ".join(col_names)
                     examples.append(KTOExample(
-                        instruction=f"Query {table} table",
+                        instruction=f"Query {table}",
                         input="",
-                        output=f"```sql\nSELECT {col_name}\nFROM {table} WITH (NOLOCK)\nWHERE {co_col} = @{co_col}\n```",
+                        output=f"""```sql
+SELECT
+  {formatted_cols}
+FROM {table} WITH (NOLOCK)
+WHERE {co_col} = @{co_col}
+```""",
                         label=True
                     ))
 
         return examples
 
-    def generate_positive_company_filter(self) -> List[KTOExample]:
-        """Generate positive examples with company filtering."""
+    def generate_positive_doc_references(self) -> List[KTOExample]:
+        """Generate positive examples that reference documentation."""
         examples = []
 
-        common_tables = [
-            ("APTH", "APCo", "AP invoices"),
-            ("APTL", "APCo", "AP invoice lines"),
-            ("JCJM", "JCCo", "job master"),
-            ("JCCD", "JCCo", "job cost details"),
-            ("PRTH", "PRCo", "payroll timecards"),
-            ("PREH", "PRCo", "employees"),
-            ("GLDT", "GLCo", "GL transactions"),
-            ("ARCM", "CustGroup", "customers"),
-            ("APVM", "VendorGroup", "vendors"),
-            ("EMEM", "EMCo", "equipment"),
-            ("INMT", "INCo", "materials"),
-            ("POHD", "POCo", "purchase orders"),
-            ("SLHD", "SLCo", "subcontracts"),
+        doc_patterns = [
+            {
+                "instruction": "Where can I find information about the JCCD table structure?",
+                "output": """The JCCD (JC Cost Detail) table documentation can be found in:
+
+1. **Schema Browser:** Check the Viewpoint Vista Schema documentation for complete column definitions
+2. **Database Views:** Query `INFORMATION_SCHEMA.COLUMNS` for live schema:
+```sql
+SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE
+FROM INFORMATION_SCHEMA.COLUMNS WITH (NOLOCK)
+WHERE TABLE_NAME = 'JCCD'
+ORDER BY ORDINAL_POSITION
+```
+
+**Key JCCD columns:**
+- JCCo, Job, PhaseGroup, Phase, CostType (primary key)
+- ActualCost, ActualRevenue, ActualUnits
+- CommittedCost, CommittedUnits
+
+Refer to the Viewpoint Help documentation for detailed field descriptions."""
+            },
+            {
+                "instruction": "What's the Month format in Viewpoint?",
+                "output": """Viewpoint Vista stores 'Month' (Mth) columns as the **first day of the month**:
+
+**Format:** `YYYY-MM-01` (e.g., '2024-01-01' for January 2024)
+
+**Correct Usage:**
+```sql
+-- Filter for January 2024
+WHERE Mth = '2024-01-01'
+
+-- Filter for year 2024
+WHERE Mth >= '2024-01-01' AND Mth < '2025-01-01'
+
+-- Get month from date
+WHERE Mth = DATEADD(MONTH, DATEDIFF(MONTH, 0, @Date), 0)
+```
+
+**Common Mistakes:**
+- ❌ `WHERE Mth = '2024-01'` (wrong format)
+- ❌ `WHERE Mth = '01/2024'` (wrong format)
+- ✅ `WHERE Mth = '2024-01-01'` (correct)
+
+This applies to all Mth columns: APTH.Mth, JCCD.Mth, GLDT.Mth, etc."""
+            },
         ]
 
-        for table, co_col, desc in common_tables:
+        for pattern in doc_patterns:
             examples.append(KTOExample(
-                instruction=f"Get all {desc} for company 1",
+                instruction=pattern["instruction"],
                 input="",
-                output=f"```sql\nSELECT *\nFROM {table} WITH (NOLOCK)\nWHERE {co_col} = 1\n```\n\nAlways filter by {co_col} to ensure proper data isolation.",
-                label=True
-            ))
-
-            examples.append(KTOExample(
-                instruction=f"Query {desc}",
-                input="",
-                output=f"```sql\nSELECT *\nFROM {table} WITH (NOLOCK)\nWHERE {co_col} = @{co_col}\n```",
+                output=pattern["output"],
                 label=True
             ))
 
         return examples
+
+    def generate_positive_multi_step(self) -> List[KTOExample]:
+        """Generate positive examples with multi-step solutions."""
+        examples = []
+
+        multi_step_patterns = [
+            {
+                "instruction": "How do I find all unpaid invoices for a vendor?",
+                "output": """To find unpaid invoices for a specific vendor, follow these steps:
+
+**Step 1: Identify the vendor**
+```sql
+SELECT VendorGroup, Vendor, Name
+FROM APVM WITH (NOLOCK)
+WHERE Name LIKE '%VendorName%'
+```
+
+**Step 2: Query unpaid invoices**
+```sql
+SELECT
+  APTH.APCo,
+  APTH.Vendor,
+  APVM.Name AS VendorName,
+  APTH.InvNum,
+  APTH.InvDate,
+  APTH.GrossAmt,
+  APTH.PaidDate
+FROM APTH WITH (NOLOCK)
+INNER JOIN APVM WITH (NOLOCK)
+  ON APTH.VendorGroup = APVM.VendorGroup
+  AND APTH.Vendor = APVM.Vendor
+WHERE APTH.APCo = @APCo
+  AND APTH.Vendor = @Vendor
+  AND APTH.Status = 0  -- 0 = Open/Unpaid
+ORDER BY APTH.InvDate
+```
+
+**Status values:**
+- 0 = Open
+- 1 = Paid
+- 2 = Void"""
+            },
+            {
+                "instruction": "How do I compare actual vs budget for a job?",
+                "output": """Comparing actual vs budget costs requires data from multiple sources:
+
+**Step 1: Get budget data from JCCH**
+```sql
+SELECT
+  JCCo, Job, PhaseGroup, Phase, CostType,
+  OrigEstCost, CurrEstCost
+FROM JCCH WITH (NOLOCK)
+WHERE JCCo = @JCCo AND Job = @Job
+```
+
+**Step 2: Get actual costs from JCCD**
+```sql
+SELECT
+  JCCo, Job, PhaseGroup, Phase, CostType,
+  SUM(ActualCost) AS ActualCost
+FROM JCCD WITH (NOLOCK)
+WHERE JCCo = @JCCo AND Job = @Job
+GROUP BY JCCo, Job, PhaseGroup, Phase, CostType
+```
+
+**Step 3: Combined comparison**
+```sql
+SELECT
+  JCCH.Job,
+  JCCH.Phase,
+  JCCH.CostType,
+  JCCH.CurrEstCost AS Budget,
+  COALESCE(SUM(JCCD.ActualCost), 0) AS Actual,
+  JCCH.CurrEstCost - COALESCE(SUM(JCCD.ActualCost), 0) AS Variance
+FROM JCCH WITH (NOLOCK)
+LEFT JOIN JCCD WITH (NOLOCK)
+  ON JCCH.JCCo = JCCD.JCCo
+  AND JCCH.Job = JCCD.Job
+  AND JCCH.PhaseGroup = JCCD.PhaseGroup
+  AND JCCH.Phase = JCCD.Phase
+  AND JCCH.CostType = JCCD.CostType
+WHERE JCCH.JCCo = @JCCo AND JCCH.Job = @Job
+GROUP BY JCCH.Job, JCCH.Phase, JCCH.CostType, JCCH.CurrEstCost
+```
+
+**Note:** Check for `brvJC*` reporting views that may already have this calculation."""
+            },
+        ]
+
+        for pattern in multi_step_patterns:
+            examples.append(KTOExample(
+                instruction=pattern["instruction"],
+                input="",
+                output=pattern["output"],
+                label=True
+            ))
+
+        return examples
+
+    def generate_negative_vague(self) -> List[KTOExample]:
+        """Generate negative examples with vague, unhelpful responses."""
+        examples = []
+
+        vague_patterns = [
+            {"instruction": "How do I query AP invoices?", "output": "You can use SELECT to get invoices from the database."},
+            {"instruction": "What tables are related to jobs?", "output": "There are several job tables in the system."},
+            {"instruction": "How do I join APTH and APTL?", "output": "Use a JOIN statement to combine the tables."},
+            {"instruction": "What columns does JCJM have?", "output": "JCJM has various columns for job information."},
+            {"instruction": "How do I filter by company?", "output": "Add a WHERE clause with the company column."},
+            {"instruction": "What's the GL account structure?", "output": "GL accounts store financial data."},
+            {"instruction": "How do I get vendor details?", "output": "Query the vendor table for details."},
+            {"instruction": "Explain cost types", "output": "Cost types categorize costs."},
+            {"instruction": "How do I find employee pay rates?", "output": "Check the payroll tables."},
+            {"instruction": "What's the difference between actual and committed cost?", "output": "They are different types of costs."},
+            {"instruction": "How do I query purchase orders?", "output": "Use the PO tables."},
+            {"instruction": "What's the primary key for APTH?", "output": "It has multiple key columns."},
+            {"instruction": "How do I get equipment history?", "output": "Query the equipment tables."},
+            {"instruction": "What date format does Viewpoint use?", "output": "It uses standard date formats."},
+            {"instruction": "How do I calculate job margin?", "output": "Use the job cost tables."},
+            {"instruction": "What's the relationship between JCJM and JCCD?", "output": "They are related tables."},
+            {"instruction": "How do I find subcontract payments?", "output": "Query the SL module tables."},
+            {"instruction": "What's in the ARTH table?", "output": "AR transaction data."},
+            {"instruction": "How do I query by month?", "output": "Use the Mth column."},
+            {"instruction": "What modules does Viewpoint have?", "output": "It has several modules."},
+        ]
+
+        for pattern in vague_patterns:
+            examples.append(KTOExample(
+                instruction=pattern["instruction"],
+                input="",
+                output=pattern["output"],
+                label=False  # Thumbs down - too vague
+            ))
+
+        # Generate more vague responses from schema
+        sample_tables = random.sample(self.tables, min(200, len(self.tables)))
+        for table in sample_tables:
+            examples.append(KTOExample(
+                instruction=f"What's in {table}?",
+                input="",
+                output=f"The {table} table contains data.",
+                label=False
+            ))
+            examples.append(KTOExample(
+                instruction=f"How do I query {table}?",
+                input="",
+                output=f"Use SELECT on {table}.",
+                label=False
+            ))
+
+        return examples
+
+    def generate_negative_overconfident(self) -> List[KTOExample]:
+        """Generate negative examples with overconfident hallucinations."""
+        examples = []
+
+        overconfident_patterns = [
+            {"instruction": "Query the InvoiceHeader table", "output": "```sql\nSELECT InvoiceID, CustomerID, TotalAmount, Status\nFROM InvoiceHeader WITH (NOLOCK)\nWHERE CompanyID = @CompanyID\n```\nThis returns all invoice headers with their status and amounts."},
+            {"instruction": "What's in the CustomerMaster table?", "output": "The CustomerMaster table contains:\n- CustomerID (primary key)\n- CustomerName\n- BillingAddress\n- ContactEmail\n- CreditLimit\n- AccountStatus\n\nQuery example:\n```sql\nSELECT * FROM CustomerMaster WHERE Active = 1\n```"},
+            {"instruction": "How do I query employee timecards?", "output": "```sql\nSELECT EmployeeID, WorkDate, HoursWorked, ProjectCode\nFROM TimeCardEntries\nWHERE PayPeriod = @PayPeriod\n```\nThis gets all timecard entries for the specified pay period."},
+            {"instruction": "Get all projects", "output": "```sql\nSELECT ProjectID, ProjectName, StartDate, EndDate, Status\nFROM Projects WITH (NOLOCK)\nWHERE IsActive = 1\nORDER BY StartDate DESC\n```"},
+            {"instruction": "Query the WorkOrder table", "output": "```sql\nSELECT WorkOrderID, Description, AssignedTo, DueDate, Priority\nFROM WorkOrder\nWHERE Status = 'Open'\n```\nThis returns all open work orders sorted by priority."},
+            {"instruction": "Get billing information", "output": "```sql\nSELECT BillingID, InvoiceNumber, CustomerID, Amount\nFROM BillingRecords\nWHERE Status = 'Pending'\n```"},
+            {"instruction": "Query the PayrollDetail table", "output": "```sql\nSELECT PayrollID, EmployeeID, PayDate, GrossPay, NetPay\nFROM PayrollDetail\nWHERE PayPeriod = @Period\n```"},
+            {"instruction": "Get all active contracts", "output": "```sql\nSELECT ContractID, ClientName, StartDate, Value\nFROM Contracts\nWHERE Status = 'Active'\n```"},
+            {"instruction": "Query change orders", "output": "```sql\nSELECT ChangeOrderID, ProjectID, Amount, Status\nFROM ChangeOrders\nWHERE ApprovalStatus = 'Pending'\n```"},
+            {"instruction": "Get inventory levels", "output": "```sql\nSELECT ItemID, ItemName, Quantity, Location\nFROM Inventory\nWHERE Quantity > 0\n```"},
+        ]
+
+        for pattern in overconfident_patterns:
+            examples.append(KTOExample(
+                instruction=pattern["instruction"],
+                input="",
+                output=pattern["output"],
+                label=False  # Thumbs down - confidently wrong
+            ))
+
+        # More fake table hallucinations with detailed false information
+        fake_details = [
+            ("UserAccounts", "UserID, Username, Email, Role, LastLogin"),
+            ("ProjectTasks", "TaskID, ProjectID, TaskName, AssignedTo, DueDate"),
+            ("BudgetItems", "BudgetID, Category, Amount, Remaining, Status"),
+            ("Departments", "DeptID, DeptName, Manager, Location, Budget"),
+            ("Locations", "LocationID, LocationName, Address, Manager"),
+            ("Categories", "CategoryID, CategoryName, ParentID, Description"),
+            ("PaymentHistory", "PaymentID, InvoiceID, Amount, PayDate, Method"),
+            ("AuditLog", "LogID, TableName, Action, UserID, Timestamp"),
+            ("Notifications", "NotifyID, UserID, Message, ReadStatus, CreatedAt"),
+            ("Reports", "ReportID, ReportName, CreatedBy, LastRun, Parameters"),
+        ]
+
+        for fake_table, fake_cols in fake_details:
+            examples.append(KTOExample(
+                instruction=f"What columns are in {fake_table}?",
+                input="",
+                output=f"The {fake_table} table has columns: {fake_cols}.",
+                label=False
+            ))
+
+        return examples
+
+    def generate_negative_formatting(self) -> List[KTOExample]:
+        """Generate negative examples with poor formatting."""
+        examples = []
+
+        poor_formatting = [
+            {
+                "instruction": "Query APTH for company 1",
+                "output": "select * from apth where apco=1"
+            },
+            {
+                "instruction": "Get job costs",
+                "output": "SELECT JCCo,Job,ActualCost FROM JCCD WHERE JCCo=@JCCo"
+            },
+            {
+                "instruction": "List all vendors",
+                "output": "select vendorgroup,vendor,name,address,city,state,zip,phone,fax,email from apvm with(nolock) where vendorgroup=@vendorgroup"
+            },
+            {
+                "instruction": "Complex AP query",
+                "output": "select apth.invnum,apth.grossamt,apvm.name from apth join apvm on apth.vendor=apvm.vendor where apth.apco=1"
+            },
+            {
+                "instruction": "Get employee data",
+                "output": "SELECT PREH.Employee PREH.FirstName PREH.LastName FROM PREH"
+            },
+        ]
+
+        for pattern in poor_formatting:
+            examples.append(KTOExample(
+                instruction=pattern["instruction"],
+                input="",
+                output=pattern["output"],
+                label=False  # Thumbs down - poor formatting
+            ))
+
+        return examples
+
+    def generate_negative_incomplete(self) -> List[KTOExample]:
+        """Generate negative examples with incomplete responses."""
+        examples = []
+
+        incomplete_patterns = [
+            {
+                "instruction": "How do I join job tables to get cost summary?",
+                "output": """```sql
+SELECT JCJM.Job, JCCD.ActualCost
+FROM JCJM
+JOIN JCCD ON JCJM.Job = JCCD.Job
+```"""
+            },
+            {
+                "instruction": "Get AP aging data",
+                "output": "Query the APTH table and check the due date."
+            },
+            {
+                "instruction": "What's the relationship between APTH and APTL?",
+                "output": "APTH is the header and APTL is the line detail."
+            },
+            {
+                "instruction": "How do I calculate job profit margin?",
+                "output": """```sql
+SELECT Job, ActualRevenue - ActualCost
+FROM JCCD
+```"""
+            },
+            {
+                "instruction": "Query purchase orders with vendor info",
+                "output": """```sql
+SELECT * FROM POHD
+```"""
+            },
+        ]
+
+        for pattern in incomplete_patterns:
+            examples.append(KTOExample(
+                instruction=pattern["instruction"],
+                input="",
+                output=pattern["output"],
+                label=False  # Thumbs down - incomplete
+            ))
+
+        return examples
+
+    # ========== ORIGINAL GENERATORS (kept for compatibility) ==========
+
+    def generate_positive_nolock(self) -> List[KTOExample]:
+        """Generate positive examples with correct NOLOCK usage."""
+        # This is now replaced by generate_positive_formatting
+        return []
+
+    def generate_positive_company_filter(self) -> List[KTOExample]:
+        """Generate positive examples with company filtering."""
+        # This is now covered in generate_positive_explanations
+        return []
 
     def generate_positive_view_usage(self) -> List[KTOExample]:
         """Generate positive examples using views correctly."""
@@ -228,47 +881,8 @@ class KTOGenerator:
 
         return examples
 
-    def generate_positive_case_examples(self) -> List[KTOExample]:
-        """Generate positive examples with correct column case."""
-        examples = []
-
-        sample_tables = random.sample(self.tables, min(400, len(self.tables)))
-
-        for table in sample_tables:
-            if table in self.columns_data:
-                cols = self.columns_data[table]
-                if len(cols) >= 2:
-                    col1 = cols[0].get('column_name', '')
-                    col2 = cols[1].get('column_name', '')
-                    co_col = self._get_company_col(table)
-
-                    if col1 and col2:
-                        examples.append(KTOExample(
-                            instruction=f"Get {col1} and {col2} from {table}",
-                            input="",
-                            output=f"```sql\nSELECT {col1}, {col2}\nFROM {table} WITH (NOLOCK)\nWHERE {co_col} = @{co_col}\n```",
-                            label=True
-                        ))
-
-        return examples
-
-    def generate_negative_missing_nolock(self) -> List[KTOExample]:
-        """Generate negative examples missing NOLOCK."""
-        examples = []
-
-        sample_tables = random.sample(self.tables, min(400, len(self.tables)))
-
-        for table in sample_tables:
-            co_col = self._get_company_col(table)
-
-            examples.append(KTOExample(
-                instruction=f"Query {table}",
-                input="",
-                output=f"```sql\nSELECT *\nFROM {table}\nWHERE {co_col} = @{co_col}\n```",
-                label=False  # Thumbs down - missing NOLOCK
-            ))
-
-        return examples
+    # Removed: generate_positive_case_examples - covered by DPO
+    # Removed: generate_negative_missing_nolock - covered by DPO
 
     def generate_negative_hallucinations(self) -> List[KTOExample]:
         """Generate negative examples with fake tables."""
@@ -301,85 +915,9 @@ class KTOGenerator:
 
         return examples
 
-    def generate_negative_wrong_case(self) -> List[KTOExample]:
-        """Generate negative examples with wrong column case."""
-        examples = []
-
-        sample_tables = random.sample(self.tables, min(300, len(self.tables)))
-
-        for table in sample_tables:
-            if table in self.columns_data:
-                cols = self.columns_data[table]
-                if cols:
-                    col = cols[0].get('column_name', '')
-                    if col:
-                        # Wrong case - lowercase
-                        examples.append(KTOExample(
-                            instruction=f"Get {col} from {table}",
-                            input="",
-                            output=f"```sql\nSELECT {col.lower()}\nFROM {table} WITH (NOLOCK)\n```",
-                            label=False  # Wrong case
-                        ))
-
-                        # Wrong case - uppercase
-                        examples.append(KTOExample(
-                            instruction=f"Query {col} column",
-                            input="",
-                            output=f"```sql\nSELECT {col.upper()}\nFROM {table} WITH (NOLOCK)\n```",
-                            label=False  # Wrong case
-                        ))
-
-        return examples
-
-    def generate_negative_aliases(self) -> List[KTOExample]:
-        """Generate negative examples using table aliases."""
-        examples = []
-
-        alias_examples = [
-            ("APTH", "a", "InvNum, GrossAmt"),
-            ("JCJM", "j", "Job, Description"),
-            ("PREH", "e", "Employee, FirstName"),
-            ("GLDT", "g", "GLAcct, Amount"),
-            ("ARCM", "c", "Customer, Name"),
-            ("APVM", "v", "Vendor, Name"),
-            ("EMEM", "eq", "Equipment, Description"),
-            ("POHD", "po", "PO, Description"),
-        ]
-
-        for table, alias, cols in alias_examples:
-            examples.append(KTOExample(
-                instruction=f"Query {table} data",
-                input="",
-                output=f"```sql\nSELECT {alias}.{cols.split(',')[0]}\nFROM {table} {alias}\n```",
-                label=False  # Using aliases
-            ))
-
-        return examples
-
-    def generate_negative_missing_company(self) -> List[KTOExample]:
-        """Generate negative examples missing company filter."""
-        examples = []
-
-        tables_with_company = [
-            ("APTH", "APCo"),
-            ("JCJM", "JCCo"),
-            ("PRTH", "PRCo"),
-            ("GLDT", "GLCo"),
-            ("ARCM", "CustGroup"),
-            ("EMEM", "EMCo"),
-            ("POHD", "POCo"),
-            ("SLHD", "SLCo"),
-        ]
-
-        for table, _ in tables_with_company:
-            examples.append(KTOExample(
-                instruction=f"Get all {table} records",
-                input="",
-                output=f"```sql\nSELECT *\nFROM {table} WITH (NOLOCK)\n```",
-                label=False  # Missing company filter
-            ))
-
-        return examples
+    # Removed: generate_negative_wrong_case - covered by DPO
+    # Removed: generate_negative_aliases - covered by DPO
+    # Removed: generate_negative_missing_company - covered by DPO
 
     def save_dataset(self, examples: List[KTOExample], output_path: str):
         """Save examples to JSON file."""

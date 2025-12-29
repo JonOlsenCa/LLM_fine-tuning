@@ -1,0 +1,333 @@
+{
+  "version": "1.0",
+  "description": "VGPT2 v3 Test Suite - Comprehensive validation questions for Viewpoint Vista SQL expert",
+  "categories": {
+    "schema": "Schema knowledge and table structure questions",
+    "sql_generation": "SQL query generation tasks",
+    "hallucination": "Tests for non-existent tables and hallucination prevention",
+    "join": "JOIN pattern and multi-table query tests",
+    "error_correction": "Error detection and correction tests",
+    "business_logic": "Viewpoint-specific business logic questions"
+  },
+  "tests": [
+    {
+      "id": "schema_001",
+      "category": "schema",
+      "question": "What columns are in the APTH table?",
+      "expected_keywords": ["APCo", "Mth", "APTrans", "Vendor", "InvNum"],
+      "expected_tables": ["APTH"]
+    },
+    {
+      "id": "schema_002",
+      "category": "schema",
+      "question": "What is the primary key of JCJM?",
+      "expected_keywords": ["JCCo", "Job"],
+      "expected_tables": ["JCJM"]
+    },
+    {
+      "id": "schema_003",
+      "category": "schema",
+      "question": "What's the difference between APTH and bAPTH?",
+      "expected_keywords": ["view", "base", "table", "SELECT", "INSERT"]
+    },
+    {
+      "id": "schema_004",
+      "category": "schema",
+      "question": "What columns are in JCCD?",
+      "expected_keywords": ["JCCo", "Job", "ActualCost", "Phase", "CostType"],
+      "expected_tables": ["JCCD"]
+    },
+    {
+      "id": "schema_005",
+      "category": "schema",
+      "question": "What is the PREH table used for?",
+      "expected_keywords": ["employee", "payroll", "PR"],
+      "expected_tables": ["PREH"]
+    },
+    {
+      "id": "schema_006",
+      "category": "schema",
+      "question": "What columns does GLDT have?",
+      "expected_keywords": ["GLCo", "GLAcct", "Mth", "Amount"],
+      "expected_tables": ["GLDT"]
+    },
+    {
+      "id": "schema_007",
+      "category": "schema",
+      "question": "What is the APVM table?",
+      "expected_keywords": ["vendor", "master", "VendorGroup"],
+      "expected_tables": ["APVM"]
+    },
+    {
+      "id": "schema_008",
+      "category": "schema",
+      "question": "What is stored in ARCM?",
+      "expected_keywords": ["customer", "AR", "CustGroup"],
+      "expected_tables": ["ARCM"]
+    },
+    {
+      "id": "schema_009",
+      "category": "schema",
+      "question": "What does EMEM contain?",
+      "expected_keywords": ["equipment", "EM", "EMCo"],
+      "expected_tables": ["EMEM"]
+    },
+    {
+      "id": "schema_010",
+      "category": "schema",
+      "question": "What is the purpose of POHD?",
+      "expected_keywords": ["purchase order", "header", "PO"],
+      "expected_tables": ["POHD"]
+    },
+    {
+      "id": "sql_001",
+      "category": "sql_generation",
+      "question": "Write SQL to get all AP invoices for company 1",
+      "expected_keywords": ["SELECT", "APTH", "NOLOCK", "APCo", "1"],
+      "expected_tables": ["APTH"]
+    },
+    {
+      "id": "sql_002",
+      "category": "sql_generation",
+      "question": "Query all jobs in JCJM for company 5",
+      "expected_keywords": ["SELECT", "JCJM", "NOLOCK", "JCCo", "5"],
+      "expected_tables": ["JCJM"]
+    },
+    {
+      "id": "sql_003",
+      "category": "sql_generation",
+      "question": "Get vendor details from APVM for vendor group 1",
+      "expected_keywords": ["SELECT", "APVM", "NOLOCK", "VendorGroup"],
+      "expected_tables": ["APVM"]
+    },
+    {
+      "id": "sql_004",
+      "category": "sql_generation",
+      "question": "Query PREH for employees in company 1",
+      "expected_keywords": ["SELECT", "PREH", "NOLOCK", "PRCo"],
+      "expected_tables": ["PREH"]
+    },
+    {
+      "id": "sql_005",
+      "category": "sql_generation",
+      "question": "Get GL transactions from GLDT for month 2024-01-01",
+      "expected_keywords": ["SELECT", "GLDT", "NOLOCK", "Mth", "2024-01-01"],
+      "expected_tables": ["GLDT"]
+    },
+    {
+      "id": "sql_006",
+      "category": "sql_generation",
+      "question": "Query APTH for unpaid invoices (Status = 0)",
+      "expected_keywords": ["SELECT", "APTH", "NOLOCK", "Status", "0"],
+      "expected_tables": ["APTH"]
+    },
+    {
+      "id": "sql_007",
+      "category": "sql_generation",
+      "question": "Get equipment from EMEM for EM company 1",
+      "expected_keywords": ["SELECT", "EMEM", "NOLOCK", "EMCo"],
+      "expected_tables": ["EMEM"]
+    },
+    {
+      "id": "sql_008",
+      "category": "sql_generation",
+      "question": "Query JCCD for actual costs on job 1000",
+      "expected_keywords": ["SELECT", "JCCD", "NOLOCK", "Job", "ActualCost"],
+      "expected_tables": ["JCCD"]
+    },
+    {
+      "id": "sql_009",
+      "category": "sql_generation",
+      "question": "Get customer list from ARCM",
+      "expected_keywords": ["SELECT", "ARCM", "NOLOCK"],
+      "expected_tables": ["ARCM"]
+    },
+    {
+      "id": "sql_010",
+      "category": "sql_generation",
+      "question": "Query purchase order headers from POHD",
+      "expected_keywords": ["SELECT", "POHD", "NOLOCK"],
+      "expected_tables": ["POHD"]
+    },
+    {
+      "id": "halluc_001",
+      "category": "hallucination",
+      "question": "Query the Invoice table",
+      "expected_keywords": ["not exist", "APTH"],
+      "forbidden_keywords": ["SELECT * FROM Invoice"],
+      "expect_refusal": true
+    },
+    {
+      "id": "halluc_002",
+      "category": "hallucination",
+      "question": "What columns are in the Customer table?",
+      "expected_keywords": ["not exist", "ARCM"],
+      "forbidden_keywords": ["CustomerID", "CustomerName"],
+      "expect_refusal": true
+    },
+    {
+      "id": "halluc_003",
+      "category": "hallucination",
+      "question": "Query the Employee table for all employees",
+      "expected_keywords": ["not exist", "PREH"],
+      "forbidden_keywords": ["SELECT * FROM Employee"],
+      "expect_refusal": true
+    },
+    {
+      "id": "halluc_004",
+      "category": "hallucination",
+      "question": "Get data from the Projects table",
+      "expected_keywords": ["not exist", "JCJM"],
+      "forbidden_keywords": ["SELECT * FROM Projects"],
+      "expect_refusal": true
+    },
+    {
+      "id": "halluc_005",
+      "category": "hallucination",
+      "question": "What is in the Vendor table?",
+      "expected_keywords": ["not exist", "APVM"],
+      "forbidden_keywords": ["VendorID", "VendorName"],
+      "expect_refusal": true
+    },
+    {
+      "id": "halluc_006",
+      "category": "hallucination",
+      "question": "Query the WorkOrder table",
+      "expected_keywords": ["not exist"],
+      "forbidden_keywords": ["SELECT * FROM WorkOrder"],
+      "expect_refusal": true
+    },
+    {
+      "id": "halluc_007",
+      "category": "hallucination",
+      "question": "Get all Timecards from the database",
+      "expected_keywords": ["PRTH"],
+      "forbidden_keywords": ["SELECT * FROM Timecards"],
+      "expect_refusal": true
+    },
+    {
+      "id": "halluc_008",
+      "category": "hallucination",
+      "question": "What's in the APInvoice table?",
+      "expected_keywords": ["not exist", "APTH"],
+      "forbidden_keywords": ["APInvoiceID"],
+      "expect_refusal": true
+    },
+    {
+      "id": "halluc_009",
+      "category": "hallucination",
+      "question": "Query the ChangeOrder table",
+      "expected_keywords": ["not exist", "JCOI"],
+      "forbidden_keywords": ["SELECT * FROM ChangeOrder"],
+      "expect_refusal": true
+    },
+    {
+      "id": "halluc_010",
+      "category": "hallucination",
+      "question": "What columns are in CustomerMaster?",
+      "expected_keywords": ["not exist", "ARCM"],
+      "forbidden_keywords": ["CustomerID"],
+      "expect_refusal": true
+    },
+    {
+      "id": "join_001",
+      "category": "join",
+      "question": "Join APTH and APTL to get invoice lines",
+      "expected_keywords": ["JOIN", "APTH", "APTL", "APCo", "Mth", "APTrans", "NOLOCK"],
+      "expected_tables": ["APTH", "APTL"]
+    },
+    {
+      "id": "join_002",
+      "category": "join",
+      "question": "Join JCJM and JCCD to get job costs",
+      "expected_keywords": ["JOIN", "JCJM", "JCCD", "JCCo", "Job", "NOLOCK"],
+      "expected_tables": ["JCJM", "JCCD"]
+    },
+    {
+      "id": "join_003",
+      "category": "join",
+      "question": "Join APTH with APVM to get vendor names",
+      "expected_keywords": ["JOIN", "APTH", "APVM", "VendorGroup", "Vendor", "NOLOCK"],
+      "expected_tables": ["APTH", "APVM"]
+    },
+    {
+      "id": "join_004",
+      "category": "join",
+      "question": "Join PREH with PRTH for employee timecards",
+      "expected_keywords": ["JOIN", "PREH", "PRTH", "PRCo", "Employee", "NOLOCK"],
+      "expected_tables": ["PREH", "PRTH"]
+    },
+    {
+      "id": "join_005",
+      "category": "join",
+      "question": "Join JCJM with JCCH for job phases",
+      "expected_keywords": ["JOIN", "JCJM", "JCCH", "JCCo", "Job", "NOLOCK"],
+      "expected_tables": ["JCJM", "JCCH"]
+    },
+    {
+      "id": "error_001",
+      "category": "error_correction",
+      "question": "Fix this query: SELECT * FROM APTH WHERE APCO = 1",
+      "expected_keywords": ["APCo", "NOLOCK"],
+      "forbidden_keywords": ["APCO"]
+    },
+    {
+      "id": "error_002",
+      "category": "error_correction",
+      "question": "Correct this: SELECT * FROM JCJM JOIN JCCD ON JCJM.Job = JCCD.Job",
+      "expected_keywords": ["JCCo", "NOLOCK"],
+      "forbidden_keywords": []
+    },
+    {
+      "id": "error_003",
+      "category": "error_correction",
+      "question": "What's wrong with: SELECT a.InvNum FROM APTH a",
+      "expected_keywords": ["alias", "full table name", "APTH.InvNum"],
+      "forbidden_keywords": []
+    },
+    {
+      "id": "error_004",
+      "category": "error_correction",
+      "question": "Fix: SELECT * FROM APTH WHERE Mth = '2024-01'",
+      "expected_keywords": ["2024-01-01", "first day"],
+      "forbidden_keywords": []
+    },
+    {
+      "id": "error_005",
+      "category": "error_correction",
+      "question": "Correct this query that misses company filter: SELECT * FROM JCCD",
+      "expected_keywords": ["JCCo", "WHERE", "NOLOCK"],
+      "forbidden_keywords": []
+    },
+    {
+      "id": "biz_001",
+      "category": "business_logic",
+      "question": "What status codes indicate an unpaid AP invoice?",
+      "expected_keywords": ["0", "Open", "Status"]
+    },
+    {
+      "id": "biz_002",
+      "category": "business_logic",
+      "question": "How does batch processing work in AP?",
+      "expected_keywords": ["batch", "APTB", "post", "header"]
+    },
+    {
+      "id": "biz_003",
+      "category": "business_logic",
+      "question": "What is the difference between ActualCost and OrigEstCost in JCCD?",
+      "expected_keywords": ["actual", "original", "estimate", "budget"]
+    },
+    {
+      "id": "biz_004",
+      "category": "business_logic",
+      "question": "How are vendors shared across companies?",
+      "expected_keywords": ["VendorGroup", "shared", "company", "master"]
+    },
+    {
+      "id": "biz_005",
+      "category": "business_logic",
+      "question": "When should I use vrv* views vs custom SQL?",
+      "expected_keywords": ["report", "Crystal", "optimized", "validated"]
+    }
+  ]
+}
