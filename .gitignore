@@ -174,10 +174,20 @@ ms_cache/
 om_cache/
 llamaboard_cache/
 llamaboard_config/
-saves/
-output/
 wandb/
 swanlog/
 generated_predictions.jsonl
 predictions_score.json
 .env.local
+
+# Large model files (too big for git)
+saves/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.gguf
+*.ggml
+
+# Keep output/ but ignore very large files
+output/vgpt2_training_data.json

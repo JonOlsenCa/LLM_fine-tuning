@@ -1,0 +1,106 @@
+{
+  "total_records": 23742,
+  "passed": true,
+  "critical_failures": [],
+  "warnings": [],
+  "sources": [
+    {
+      "source": "Schema Metadata",
+      "count": 7898,
+      "minimum": 1000,
+      "passed": true,
+      "message": "OK: 7898 records (min: 1000)"
+    },
+    {
+      "source": "SP Documentation",
+      "count": 7040,
+      "minimum": 500,
+      "passed": true,
+      "message": "OK: 7040 records (min: 500)"
+    },
+    {
+      "source": "View Documentation",
+      "count": 2350,
+      "minimum": 500,
+      "passed": true,
+      "message": "OK: 2350 records (min: 500)"
+    },
+    {
+      "source": "JOIN Patterns",
+      "count": 1033,
+      "minimum": 100,
+      "passed": true,
+      "message": "OK: 1033 records (min: 100)"
+    },
+    {
+      "source": "DDFI Forms",
+      "count": 1692,
+      "minimum": 200,
+      "passed": true,
+      "message": "OK: 1692 records (min: 200)"
+    },
+    {
+      "source": "Crystal Report SQL",
+      "count": 1217,
+      "minimum": 500,
+      "passed": true,
+      "message": "OK: 1217 records (min: 500)"
+    },
+    {
+      "source": "Canonical Rules",
+      "count": 26,
+      "minimum": 15,
+      "passed": true,
+      "message": "OK: 26 records (min: 15)"
+    },
+    {
+      "source": "Reference Documents",
+      "count": 16,
+      "minimum": 10,
+      "passed": true,
+      "message": "OK: 16 records (min: 10)"
+    },
+    {
+      "source": "Heuristics",
+      "count": 4,
+      "minimum": 3,
+      "passed": true,
+      "message": "OK: 4 records (min: 3)"
+    },
+    {
+      "source": "Workflows",
+      "count": 4,
+      "minimum": 3,
+      "passed": true,
+      "message": "OK: 4 records (min: 3)"
+    },
+    {
+      "source": "Experts V2",
+      "count": 405,
+      "minimum": 100,
+      "passed": true,
+      "message": "OK: 405 records (min: 100)"
+    },
+    {
+      "source": "Naming Conventions",
+      "count": 26,
+      "minimum": 10,
+      "passed": true,
+      "message": "OK: 26 records (min: 10)"
+    },
+    {
+      "source": "Error Corrections",
+      "count": 8,
+      "minimum": 5,
+      "passed": true,
+      "message": "OK: 8 records (min: 5)"
+    },
+    {
+      "source": "Query Optimization",
+      "count": 5,
+      "minimum": 3,
+      "passed": true,
+      "message": "OK: 5 records (min: 3)"
+    }
+  ]
+}
