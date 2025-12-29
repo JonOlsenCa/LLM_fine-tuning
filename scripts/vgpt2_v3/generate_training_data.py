@@ -177,6 +177,13 @@ class VGPT2V3DataGenerator:
             ("Constraint Metadata", self.generate_constraint_examples),
             ("SQL Patterns", self.generate_more_sql_examples),
             ("Column Usage", self.generate_column_usage_examples),
+            # New generators for v3.3 - Address NOLOCK, SQL coverage, short outputs
+            ("NOLOCK Best Practices", self.generate_nolock_examples),
+            ("SQL Generation Expanded", self.generate_expanded_sql_examples),
+            ("Extended Schema Explanations", self.generate_extended_schema_explanations),
+            # Additional generators to significantly boost NOLOCK and SQL coverage
+            ("Table Query Examples", self.generate_table_query_examples),
+            ("NOLOCK Fix Examples", self.generate_nolock_fix_examples),
         ]
 
         for name, generator in generators:
@@ -1241,6 +1248,722 @@ ORDER BY GrossAmt DESC"""
                     source="Column_Usage"
                 )
                 count += 1
+
+    def generate_nolock_examples(self, max_records: Optional[int] = None) -> Iterator[TrainingRecord]:
+        """Generate extensive NOLOCK usage examples to increase coverage from 1.5% to 10%+."""
+        # NOLOCK is critical - we need many examples showing it in different contexts
+        tables = self.load_tables_list()
+        columns = self.load_columns()
+
+        # Group columns by table
+        table_cols = {}
+        for col in columns:
+            if isinstance(col, dict):
+                tbl = col.get('ObjectName', '')
+                if tbl and tbl not in table_cols:
+                    table_cols[tbl] = []
+                if tbl:
+                    table_cols[tbl].append(col.get('ColumnName', ''))
+
+        count = 0
+
+        # Get list of core tables for SQL examples
+        core_tables = [
+            ('APTH', 'APCo', 'AP invoices'),
+            ('APTL', 'APCo', 'AP invoice lines'),
+            ('APVM', 'VendorGroup', 'vendors'),
+            ('ARTH', 'ARCo', 'AR invoices'),
+            ('ARTL', 'ARCo', 'AR invoice lines'),
+            ('ARCM', 'CustGroup', 'customers'),
+            ('JCJM', 'JCCo', 'jobs'),
+            ('JCCD', 'JCCo', 'job costs'),
+            ('JCCH', 'JCCo', 'job cost history'),
+            ('PREH', 'PRCo', 'employees'),
+            ('PRTH', 'PRCo', 'timecards'),
+            ('PRTD', 'PRCo', 'timecard details'),
+            ('GLDT', 'GLCo', 'GL transactions'),
+            ('GLAC', 'GLCo', 'GL accounts'),
+            ('EMEM', 'EMCo', 'equipment'),
+            ('EMCD', 'EMCo', 'equipment costs'),
+            ('POHD', 'POCo', 'purchase orders'),
+            ('POIT', 'POCo', 'PO items'),
+            ('INMM', 'INCo', 'inventory materials'),
+            ('INMT', 'INCo', 'inventory transactions'),
+            ('SMWH', 'SMCo', 'work orders'),
+            ('HQCO', 'HQCo', 'company setup'),
+        ]
+
+        # Pattern 1: Basic NOLOCK explanation (many variations)
+        nolock_explanations = [
+            {
+                "q": "Why do I need WITH (NOLOCK) in Viewpoint queries?",
+                "a": """WITH (NOLOCK) is REQUIRED for all SELECT queries in Viewpoint Vista because:
+
+1. **Prevents blocking**: Production transactions (AP batches, payroll, etc.) use exclusive locks. Without NOLOCK, your report query could block critical business operations.
+
+2. **Performance**: NOLOCK allows read operations without waiting for write locks to release.
+
+3. **Standard practice**: All Viewpoint Crystal Reports use NOLOCK. Custom queries should too.
+
+Example:
+```sql
+SELECT APCo, Vendor, InvNum, GrossAmt
+FROM APTH WITH (NOLOCK)
+WHERE APCo = 1 AND Status = 0
+```
+
+Only omit NOLOCK when you specifically need transactional consistency (very rare)."""
+            },
+            {
+                "q": "Show me how to use NOLOCK correctly",
+                "a": """Here's the correct NOLOCK syntax for Viewpoint:
+
+**Single table:**
+```sql
+SELECT APCo, Vendor, InvNum, GrossAmt
+FROM APTH WITH (NOLOCK)
+WHERE APCo = 1
+```
+
+**Multiple tables with JOIN:**
+```sql
+SELECT APTH.APCo, APTH.Vendor, APVM.Name
+FROM APTH WITH (NOLOCK)
+INNER JOIN APVM WITH (NOLOCK)
+  ON APTH.VendorGroup = APVM.VendorGroup
+  AND APTH.Vendor = APVM.Vendor
+WHERE APTH.APCo = 1
+```
+
+Key rules:
+- Place WITH (NOLOCK) immediately after each table name
+- Apply to ALL tables in the query
+- Never use table aliases (a, b, etc.)"""
+            },
+            {
+                "q": "What happens if I forget NOLOCK?",
+                "a": """If you omit WITH (NOLOCK) in a Viewpoint query:
+
+1. **Query may hang**: If AP/AR batch posting is in progress, your query waits for the lock to release - potentially minutes or hours.
+
+2. **Blocking cascade**: Your query takes a shared lock, which can then block batch processes waiting for exclusive locks.
+
+3. **Timeout errors**: Long-running reports may timeout while waiting for locks.
+
+**Wrong (no NOLOCK):**
+```sql
+SELECT * FROM APTH WHERE APCo = 1  -- Can block!
+```
+
+**Correct (with NOLOCK):**
+```sql
+SELECT * FROM APTH WITH (NOLOCK) WHERE APCo = 1
+```
+
+Always use NOLOCK for reporting and ad-hoc queries."""
+            },
+            {
+                "q": "Is NOLOCK the same as READ UNCOMMITTED?",
+                "a": """Yes, WITH (NOLOCK) is equivalent to setting isolation level READ UNCOMMITTED for that table.
+
+**Table hint (preferred in Viewpoint):**
+```sql
+SELECT * FROM APTH WITH (NOLOCK) WHERE APCo = 1
+```
+
+**Session-level equivalent:**
+```sql
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT * FROM APTH WHERE APCo = 1
+-- Affects all queries until changed
+```
+
+Viewpoint convention is to use the table hint WITH (NOLOCK) because:
+- It's explicit per table
+- Doesn't affect other queries in the session
+- Matches Crystal Reports standard"""
+            },
+        ]
+
+        for ex in nolock_explanations:
+            if max_records and count >= max_records:
+                break
+            yield TrainingRecord(
+                instruction=ex["q"],
+                output=ex["a"],
+                category=DataCategory.SQL_VALIDATION.value,
+                source="NOLOCK_Best_Practices"
+            )
+            count += 1
+
+        # Pattern 2: Generate SQL with NOLOCK for each core table
+        for table, co_col, desc in core_tables:
+            if max_records and count >= max_records:
+                break
+
+            # Get some columns for this table
+            cols = table_cols.get(table, [])[:6]
+            col_list = ", ".join(cols) if cols else "*"
+
+            yield TrainingRecord(
+                instruction=f"Write SQL to query all {desc} from {table}",
+                output=f"""```sql
+SELECT {col_list}
+FROM {table} WITH (NOLOCK)
+WHERE {co_col} = @{co_col}
+ORDER BY {cols[0] if cols else co_col}
+```
+
+Note: WITH (NOLOCK) prevents blocking production transactions. Always include company filter ({co_col}).""",
+                category=DataCategory.SQL_GENERATION.value,
+                source="NOLOCK_Best_Practices"
+            )
+            count += 1
+
+            # Also generate a "fix this query" example
+            if count < (max_records or float('inf')):
+                yield TrainingRecord(
+                    instruction=f"Fix this query: SELECT * FROM {table}",
+                    output=f"""The query is missing WITH (NOLOCK) and a company filter.
+
+**Corrected:**
+```sql
+SELECT {col_list}
+FROM {table} WITH (NOLOCK)
+WHERE {co_col} = @{co_col}
+```
+
+Issues fixed:
+1. Added WITH (NOLOCK) to prevent blocking
+2. Added company filter ({co_col}) for data isolation
+3. Specified columns instead of SELECT *""",
+                    category=DataCategory.ERROR_CORRECTION.value,
+                    source="NOLOCK_Best_Practices"
+                )
+                count += 1
+
+        # Pattern 3: JOIN examples with NOLOCK on both tables
+        join_pairs = [
+            ('APTH', 'APTL', 'APCo', 'Mth', 'APTrans', 'invoice header and lines'),
+            ('APTH', 'APVM', 'VendorGroup', 'Vendor', None, 'invoices and vendor names'),
+            ('JCJM', 'JCCD', 'JCCo', 'Job', None, 'jobs and cost details'),
+            ('JCJM', 'JCCH', 'JCCo', 'Job', None, 'jobs and cost history'),
+            ('PREH', 'PRTH', 'PRCo', 'Employee', None, 'employees and timecards'),
+            ('ARTH', 'ARTL', 'ARCo', 'Mth', 'ARTrans', 'AR transactions'),
+            ('ARTH', 'ARCM', 'CustGroup', 'Customer', None, 'AR transactions and customers'),
+            ('POHD', 'POIT', 'POCo', 'PO', None, 'PO headers and items'),
+            ('GLDT', 'GLAC', 'GLCo', 'GLAcct', None, 'GL transactions and accounts'),
+        ]
+
+        for t1, t2, key1, key2, key3, desc in join_pairs:
+            if max_records and count >= max_records:
+                break
+
+            join_cond = f"{t1}.{key1} = {t2}.{key1} AND {t1}.{key2} = {t2}.{key2}"
+            if key3:
+                join_cond += f" AND {t1}.{key3} = {t2}.{key3}"
+
+            yield TrainingRecord(
+                instruction=f"Write SQL to join {desc}",
+                output=f"""```sql
+SELECT {t1}.*, {t2}.*
+FROM {t1} WITH (NOLOCK)
+INNER JOIN {t2} WITH (NOLOCK)
+  ON {join_cond}
+WHERE {t1}.{key1} = @{key1}
+```
+
+Key points:
+- WITH (NOLOCK) is required on BOTH tables
+- Always include the company column ({key1}) in the JOIN condition
+- No table aliases - use full table names""",
+                category=DataCategory.JOIN_PATTERN.value,
+                source="NOLOCK_Best_Practices"
+            )
+            count += 1
+
+        # Pattern 4: Common mistakes to fix (NOLOCK related)
+        mistakes = [
+            {
+                "wrong": "SELECT a.* FROM APTH a WHERE a.APCo = 1",
+                "right": "SELECT APTH.* FROM APTH WITH (NOLOCK) WHERE APTH.APCo = 1",
+                "issues": "Missing NOLOCK, using table alias 'a'"
+            },
+            {
+                "wrong": "SELECT * FROM JCJM j JOIN JCCD c ON j.Job = c.Job",
+                "right": "SELECT JCJM.*, JCCD.* FROM JCJM WITH (NOLOCK) INNER JOIN JCCD WITH (NOLOCK) ON JCJM.JCCo = JCCD.JCCo AND JCJM.Job = JCCD.Job",
+                "issues": "Missing NOLOCK on both tables, incomplete JOIN (missing JCCo), using aliases"
+            },
+            {
+                "wrong": "FROM dbo.APTH WHERE APCo = 1",
+                "right": "FROM APTH WITH (NOLOCK) WHERE APCo = 1",
+                "issues": "Don't use 'dbo.' prefix, add WITH (NOLOCK)"
+            },
+            {
+                "wrong": "SELECT * FROM PREH, PRTH WHERE PREH.Employee = PRTH.Employee",
+                "right": "SELECT PREH.*, PRTH.* FROM PREH WITH (NOLOCK) INNER JOIN PRTH WITH (NOLOCK) ON PREH.PRCo = PRTH.PRCo AND PREH.Employee = PRTH.Employee WHERE PREH.PRCo = @PRCo",
+                "issues": "Missing NOLOCK, implicit JOIN syntax, missing company in JOIN condition"
+            },
+        ]
+
+        for m in mistakes:
+            if max_records and count >= max_records:
+                break
+            yield TrainingRecord(
+                instruction=f"Fix this Viewpoint SQL: {m['wrong']}",
+                output=f"""**Corrected SQL:**
+```sql
+{m['right']}
+```
+
+**Issues fixed:** {m['issues']}
+
+Remember: Always use WITH (NOLOCK) on every table in SELECT queries.""",
+                category=DataCategory.ERROR_CORRECTION.value,
+                source="NOLOCK_Best_Practices"
+            )
+            count += 1
+
+    def generate_expanded_sql_examples(self, max_records: Optional[int] = None) -> Iterator[TrainingRecord]:
+        """Generate many more SQL generation examples to increase SQL content from 4% to 15%+."""
+        count = 0
+
+        # Comprehensive SQL patterns organized by module and complexity
+        sql_examples = [
+            # ===== AP Module - Basic Queries =====
+            {"q": "Get all AP invoices for company 1", "sql": "SELECT APCo, Mth, APTrans, Vendor, InvNum, InvDate, GrossAmt, Status\nFROM APTH WITH (NOLOCK)\nWHERE APCo = 1\nORDER BY InvDate DESC"},
+            {"q": "Find unpaid AP invoices", "sql": "SELECT APCo, Vendor, InvNum, InvDate, GrossAmt, DueDate\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo AND Status = 0\nORDER BY DueDate"},
+            {"q": "Get AP invoices for a specific vendor", "sql": "SELECT APCo, Mth, APTrans, InvNum, InvDate, GrossAmt, Status\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo AND Vendor = @Vendor\nORDER BY InvDate DESC"},
+            {"q": "Find AP invoices over $50,000", "sql": "SELECT APCo, Vendor, InvNum, InvDate, GrossAmt\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo AND GrossAmt > 50000\nORDER BY GrossAmt DESC"},
+            {"q": "Get AP invoices by month", "sql": "SELECT APCo, Mth, COUNT(*) AS InvoiceCount, SUM(GrossAmt) AS TotalAmount\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo\nGROUP BY APCo, Mth\nORDER BY Mth"},
+            {"q": "Find AP invoices due this week", "sql": "SELECT APCo, Vendor, InvNum, GrossAmt, DueDate\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo \n  AND Status = 0\n  AND DueDate BETWEEN GETDATE() AND DATEADD(day, 7, GETDATE())\nORDER BY DueDate"},
+            {"q": "Get AP invoice line details", "sql": "SELECT APTL.APCo, APTL.Mth, APTL.APTrans, APTL.APLine,\n  APTL.GLCo, APTL.GLAcct, APTL.Amount, APTL.Description\nFROM APTL WITH (NOLOCK)\nWHERE APTL.APCo = @APCo AND APTL.Mth = @Mth AND APTL.APTrans = @APTrans\nORDER BY APTL.APLine"},
+            {"q": "Sum AP by vendor", "sql": "SELECT APCo, Vendor, COUNT(*) AS InvoiceCount,\n  SUM(GrossAmt) AS TotalGross, SUM(Retainage) AS TotalRetainage\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo\nGROUP BY APCo, Vendor\nORDER BY TotalGross DESC"},
+
+            # ===== AP Module - Advanced =====
+            {"q": "Get AP with vendor names", "sql": "SELECT APTH.APCo, APTH.Vendor, APVM.Name AS VendorName,\n  APTH.InvNum, APTH.InvDate, APTH.GrossAmt, APTH.Status\nFROM APTH WITH (NOLOCK)\nINNER JOIN APVM WITH (NOLOCK)\n  ON APTH.VendorGroup = APVM.VendorGroup AND APTH.Vendor = APVM.Vendor\nWHERE APTH.APCo = @APCo\nORDER BY APTH.InvDate DESC"},
+            {"q": "AP aging report query", "sql": "SELECT APTH.APCo, APTH.Vendor, APVM.Name,\n  APTH.InvNum, APTH.InvDate, APTH.GrossAmt,\n  DATEDIFF(day, APTH.DueDate, GETDATE()) AS DaysOverdue\nFROM APTH WITH (NOLOCK)\nINNER JOIN APVM WITH (NOLOCK)\n  ON APTH.VendorGroup = APVM.VendorGroup AND APTH.Vendor = APVM.Vendor\nWHERE APTH.APCo = @APCo AND APTH.Status = 0\nORDER BY DaysOverdue DESC"},
+            {"q": "AP invoice with GL distribution", "sql": "SELECT APTH.APCo, APTH.Vendor, APTH.InvNum, APTH.GrossAmt,\n  APTL.GLCo, APTL.GLAcct, APTL.Amount, GLAC.Description AS AcctDesc\nFROM APTH WITH (NOLOCK)\nINNER JOIN APTL WITH (NOLOCK)\n  ON APTH.APCo = APTL.APCo AND APTH.Mth = APTL.Mth AND APTH.APTrans = APTL.APTrans\nINNER JOIN GLAC WITH (NOLOCK)\n  ON APTL.GLCo = GLAC.GLCo AND APTL.GLAcct = GLAC.GLAcct\nWHERE APTH.APCo = @APCo"},
+
+            # ===== JC Module - Basic =====
+            {"q": "Get all jobs for a company", "sql": "SELECT JCCo, Job, Description, Contract, JobStatus, StartDate\nFROM JCJM WITH (NOLOCK)\nWHERE JCCo = @JCCo\nORDER BY Job"},
+            {"q": "Find active jobs", "sql": "SELECT JCCo, Job, Description, Contract, StartDate\nFROM JCJM WITH (NOLOCK)\nWHERE JCCo = @JCCo AND JobStatus = 1\nORDER BY StartDate DESC"},
+            {"q": "Get job cost details", "sql": "SELECT JCCo, Job, Phase, CostType, ActualCost, ActualUnits, EstCost, EstUnits\nFROM JCCD WITH (NOLOCK)\nWHERE JCCo = @JCCo AND Job = @Job\nORDER BY Phase, CostType"},
+            {"q": "Sum job costs by phase", "sql": "SELECT JCCo, Job, Phase,\n  SUM(EstCost) AS BudgetCost, SUM(ActualCost) AS ActualCost,\n  SUM(ActualCost) - SUM(EstCost) AS Variance\nFROM JCCD WITH (NOLOCK)\nWHERE JCCo = @JCCo AND Job = @Job\nGROUP BY JCCo, Job, Phase\nORDER BY Phase"},
+            {"q": "Get job revenue", "sql": "SELECT JCCo, Job, Phase, Mth, ActualRevenue, BilledAmt\nFROM JCCD WITH (NOLOCK)\nWHERE JCCo = @JCCo AND Job = @Job AND ActualRevenue <> 0\nORDER BY Mth, Phase"},
+            {"q": "Find jobs over budget", "sql": "SELECT JCCo, Job, Description,\n  SUM(EstCost) AS Budget, SUM(ActualCost) AS Actual,\n  SUM(ActualCost) - SUM(EstCost) AS OverBudget\nFROM JCJM WITH (NOLOCK)\nINNER JOIN JCCD WITH (NOLOCK) ON JCJM.JCCo = JCCD.JCCo AND JCJM.Job = JCCD.Job\nWHERE JCJM.JCCo = @JCCo\nGROUP BY JCJM.JCCo, JCJM.Job, JCJM.Description\nHAVING SUM(ActualCost) > SUM(EstCost)"},
+
+            # ===== JC Module - Advanced =====
+            {"q": "Job profitability report", "sql": "SELECT JCJM.JCCo, JCJM.Job, JCJM.Description,\n  SUM(JCCD.ActualCost) AS TotalCost,\n  SUM(JCCD.ActualRevenue) AS TotalRevenue,\n  SUM(JCCD.ActualRevenue) - SUM(JCCD.ActualCost) AS Profit,\n  CASE WHEN SUM(JCCD.ActualRevenue) > 0 \n    THEN (SUM(JCCD.ActualRevenue) - SUM(JCCD.ActualCost)) / SUM(JCCD.ActualRevenue) * 100\n    ELSE 0 END AS ProfitMargin\nFROM JCJM WITH (NOLOCK)\nINNER JOIN JCCD WITH (NOLOCK) ON JCJM.JCCo = JCCD.JCCo AND JCJM.Job = JCCD.Job\nWHERE JCJM.JCCo = @JCCo\nGROUP BY JCJM.JCCo, JCJM.Job, JCJM.Description"},
+            {"q": "Job cost by cost type", "sql": "SELECT JCCD.JCCo, JCCD.Job, JCCD.CostType, JCCT.Description,\n  SUM(JCCD.EstCost) AS Budget, SUM(JCCD.ActualCost) AS Actual\nFROM JCCD WITH (NOLOCK)\nINNER JOIN JCCT WITH (NOLOCK)\n  ON JCCD.PhaseGroup = JCCT.PhaseGroup AND JCCD.CostType = JCCT.CostType\nWHERE JCCD.JCCo = @JCCo AND JCCD.Job = @Job\nGROUP BY JCCD.JCCo, JCCD.Job, JCCD.CostType, JCCT.Description\nORDER BY JCCD.CostType"},
+
+            # ===== PR Module =====
+            {"q": "Get all employees", "sql": "SELECT PRCo, Employee, FirstName, LastName, HireDate, Dept, Craft, ActiveYN\nFROM PREH WITH (NOLOCK)\nWHERE PRCo = @PRCo\nORDER BY LastName, FirstName"},
+            {"q": "Find active employees", "sql": "SELECT PRCo, Employee, FirstName, LastName, HireDate, Dept\nFROM PREH WITH (NOLOCK)\nWHERE PRCo = @PRCo AND ActiveYN = 'Y'\nORDER BY LastName, FirstName"},
+            {"q": "Get employee hours by pay period", "sql": "SELECT PRCo, Employee, PayPeriod, SUM(Hours) AS TotalHours\nFROM PRTD WITH (NOLOCK)\nWHERE PRCo = @PRCo AND PayPeriod = @PayPeriod\nGROUP BY PRCo, Employee, PayPeriod\nORDER BY Employee"},
+            {"q": "Find overtime hours", "sql": "SELECT PREH.PRCo, PREH.Employee, PREH.LastName, PREH.FirstName,\n  PRTD.PayPeriod, SUM(PRTD.Hours) AS OTHours\nFROM PRTD WITH (NOLOCK)\nINNER JOIN PREH WITH (NOLOCK)\n  ON PRTD.PRCo = PREH.PRCo AND PRTD.Employee = PREH.Employee\nWHERE PRTD.PRCo = @PRCo AND PRTD.EarnType IN ('OT', 'DT')\nGROUP BY PREH.PRCo, PREH.Employee, PREH.LastName, PREH.FirstName, PRTD.PayPeriod"},
+            {"q": "Employee timecard details", "sql": "SELECT PRTH.PRCo, PRTH.Employee, PRTH.PayPeriod, PRTH.Type,\n  PRTD.PostSeq, PRTD.EarnType, PRTD.Hours, PRTD.Amt\nFROM PRTH WITH (NOLOCK)\nINNER JOIN PRTD WITH (NOLOCK)\n  ON PRTH.PRCo = PRTD.PRCo AND PRTH.Employee = PRTD.Employee\n  AND PRTH.PayPeriod = PRTD.PayPeriod AND PRTH.Type = PRTD.Type\nWHERE PRTH.PRCo = @PRCo AND PRTH.Employee = @Employee"},
+
+            # ===== GL Module =====
+            {"q": "Get GL transactions", "sql": "SELECT GLCo, Mth, GLAcct, Jrnl, GLRef, Amount, Description\nFROM GLDT WITH (NOLOCK)\nWHERE GLCo = @GLCo AND Mth = @Mth\nORDER BY GLAcct, Jrnl"},
+            {"q": "Account balance by month", "sql": "SELECT GLCo, GLAcct, Mth, SUM(Amount) AS Balance\nFROM GLDT WITH (NOLOCK)\nWHERE GLCo = @GLCo AND GLAcct = @GLAcct\nGROUP BY GLCo, GLAcct, Mth\nORDER BY Mth"},
+            {"q": "Trial balance query", "sql": "SELECT GLAC.GLCo, GLAC.GLAcct, GLAC.Description, GLAC.AcctType,\n  ISNULL(SUM(GLDT.Amount), 0) AS Balance\nFROM GLAC WITH (NOLOCK)\nLEFT JOIN GLDT WITH (NOLOCK)\n  ON GLAC.GLCo = GLDT.GLCo AND GLAC.GLAcct = GLDT.GLAcct\n  AND GLDT.Mth <= @AsOfMonth\nWHERE GLAC.GLCo = @GLCo AND GLAC.Active = 'Y'\nGROUP BY GLAC.GLCo, GLAC.GLAcct, GLAC.Description, GLAC.AcctType\nORDER BY GLAC.GLAcct"},
+            {"q": "Find GL accounts by type", "sql": "SELECT GLCo, GLAcct, Description, AcctType, Active\nFROM GLAC WITH (NOLOCK)\nWHERE GLCo = @GLCo AND AcctType = @AcctType\nORDER BY GLAcct"},
+
+            # ===== AR Module =====
+            {"q": "Get AR invoices", "sql": "SELECT ARCo, CustGroup, Customer, Invoice, InvDate, Amount, Balance\nFROM ARTH WITH (NOLOCK)\nWHERE ARCo = @ARCo\nORDER BY InvDate DESC"},
+            {"q": "Find open AR invoices", "sql": "SELECT ARCo, Customer, Invoice, InvDate, Amount, Balance,\n  DATEDIFF(day, InvDate, GETDATE()) AS Age\nFROM ARTH WITH (NOLOCK)\nWHERE ARCo = @ARCo AND Balance > 0\nORDER BY Age DESC"},
+            {"q": "AR with customer names", "sql": "SELECT ARTH.ARCo, ARTH.Customer, ARCM.Name AS CustomerName,\n  ARTH.Invoice, ARTH.InvDate, ARTH.Amount, ARTH.Balance\nFROM ARTH WITH (NOLOCK)\nINNER JOIN ARCM WITH (NOLOCK)\n  ON ARTH.CustGroup = ARCM.CustGroup AND ARTH.Customer = ARCM.Customer\nWHERE ARTH.ARCo = @ARCo\nORDER BY ARTH.InvDate DESC"},
+            {"q": "Customer aging summary", "sql": "SELECT ARCM.CustGroup, ARCM.Customer, ARCM.Name,\n  SUM(CASE WHEN DATEDIFF(day, ARTH.InvDate, GETDATE()) <= 30 THEN ARTH.Balance ELSE 0 END) AS Current30,\n  SUM(CASE WHEN DATEDIFF(day, ARTH.InvDate, GETDATE()) BETWEEN 31 AND 60 THEN ARTH.Balance ELSE 0 END) AS Days31_60,\n  SUM(CASE WHEN DATEDIFF(day, ARTH.InvDate, GETDATE()) > 60 THEN ARTH.Balance ELSE 0 END) AS Over60\nFROM ARTH WITH (NOLOCK)\nINNER JOIN ARCM WITH (NOLOCK)\n  ON ARTH.CustGroup = ARCM.CustGroup AND ARTH.Customer = ARCM.Customer\nWHERE ARTH.ARCo = @ARCo AND ARTH.Balance > 0\nGROUP BY ARCM.CustGroup, ARCM.Customer, ARCM.Name"},
+
+            # ===== EM Module =====
+            {"q": "Get all equipment", "sql": "SELECT EMCo, Equipment, Description, Category, Type, Status\nFROM EMEM WITH (NOLOCK)\nWHERE EMCo = @EMCo\nORDER BY Equipment"},
+            {"q": "Find active equipment", "sql": "SELECT EMCo, Equipment, Description, Category, HourMeter, Odometer\nFROM EMEM WITH (NOLOCK)\nWHERE EMCo = @EMCo AND Status = 'A'\nORDER BY Category, Equipment"},
+            {"q": "Equipment cost summary", "sql": "SELECT EMEM.EMCo, EMEM.Equipment, EMEM.Description,\n  SUM(EMCD.ActualCost) AS TotalCost, SUM(EMCD.ActualHours) AS TotalHours\nFROM EMEM WITH (NOLOCK)\nINNER JOIN EMCD WITH (NOLOCK)\n  ON EMEM.EMCo = EMCD.EMCo AND EMEM.Equipment = EMCD.Equipment\nWHERE EMEM.EMCo = @EMCo\nGROUP BY EMEM.EMCo, EMEM.Equipment, EMEM.Description"},
+
+            # ===== PO Module =====
+            {"q": "Get open purchase orders", "sql": "SELECT POCo, PO, Vendor, Description, TotalAmt, Status\nFROM POHD WITH (NOLOCK)\nWHERE POCo = @POCo AND Status = 0\nORDER BY PO"},
+            {"q": "PO with line items", "sql": "SELECT POHD.POCo, POHD.PO, POHD.Vendor, POHD.Description,\n  POIT.POItem, POIT.Description AS ItemDesc, POIT.UM, POIT.UnitPrice, POIT.CurCost\nFROM POHD WITH (NOLOCK)\nINNER JOIN POIT WITH (NOLOCK)\n  ON POHD.POCo = POIT.POCo AND POHD.PO = POIT.PO\nWHERE POHD.POCo = @POCo AND POHD.PO = @PO\nORDER BY POIT.POItem"},
+            {"q": "PO commitments by job", "sql": "SELECT POIT.POCo, POIT.PO, POIT.Job, POIT.Phase,\n  SUM(POIT.CurCost) AS Committed, SUM(POIT.RecvdCost) AS Received\nFROM POIT WITH (NOLOCK)\nWHERE POIT.POCo = @POCo AND POIT.Job IS NOT NULL\nGROUP BY POIT.POCo, POIT.PO, POIT.Job, POIT.Phase"},
+
+            # ===== Cross-Module =====
+            {"q": "Get company list", "sql": "SELECT HQCo, Name, Address, City, State, Zip\nFROM HQCO WITH (NOLOCK)\nORDER BY HQCo"},
+            {"q": "Find all 1099 vendors", "sql": "SELECT VendorGroup, Vendor, Name, TaxId, Address, City, State, Zip\nFROM APVM WITH (NOLOCK)\nWHERE VendorGroup = @VendorGroup AND Vendor1099 = 'Y'\nORDER BY Name"},
+        ]
+
+        for ex in sql_examples:
+            if max_records and count >= max_records:
+                break
+            yield TrainingRecord(
+                instruction=f"Write SQL to: {ex['q']}",
+                output=f"```sql\n{ex['sql']}\n```\n\nNote: WITH (NOLOCK) prevents blocking production transactions. Always filter by company column.",
+                category=DataCategory.SQL_GENERATION.value,
+                source="SQL_Generation_Expanded"
+            )
+            count += 1
+
+    def generate_extended_schema_explanations(self, max_records: Optional[int] = None) -> Iterator[TrainingRecord]:
+        """Generate longer, more detailed schema explanations to reduce short outputs."""
+        columns = self.load_columns()
+        count = 0
+
+        # Group by table
+        tables = {}
+        for col in columns:
+            if not isinstance(col, dict):
+                continue
+            obj_name = col.get('ObjectName', '')
+            if obj_name and obj_name not in tables:
+                tables[obj_name] = {
+                    'columns': [],
+                    'module': col.get('Module', 'Unknown'),
+                    'type': col.get('ObjectType', 'Table')
+                }
+            if obj_name:
+                tables[obj_name]['columns'].append(col)
+
+        # Generate detailed explanations for major tables
+        major_tables_info = {
+            'APTH': 'Accounts Payable Transaction Header. Core table for tracking vendor invoices, payments, and 1099 reporting.',
+            'APTL': 'Accounts Payable Transaction Lines. Contains GL distributions and cost allocations for AP invoices.',
+            'APVM': 'Accounts Payable Vendor Master. Central repository for all vendor information shared across companies via VendorGroup.',
+            'ARTH': 'Accounts Receivable Transaction Header. Tracks customer invoices, payments, and collections.',
+            'ARCM': 'Accounts Receivable Customer Master. Customer information shared via CustGroup across companies.',
+            'JCJM': 'Job Cost Job Master. The central job/project table containing all job-level information.',
+            'JCCD': 'Job Cost Cost Detail. Detailed cost and revenue transactions at the phase/cost type level.',
+            'JCCH': 'Job Cost Cost History. Historical cost data typically summarized by month.',
+            'PREH': 'Payroll Employee Header. Master employee information including demographics, rates, and deductions.',
+            'PRTH': 'Payroll Timecard Header. Timecard header records for payroll processing.',
+            'PRTD': 'Payroll Timecard Detail. Individual earnings, hours, and amounts by earn type.',
+            'GLDT': 'General Ledger Detail Transactions. All financial transactions posting to the GL.',
+            'GLAC': 'General Ledger Account Chart. Chart of accounts with account types and hierarchies.',
+            'EMEM': 'Equipment Management Equipment Master. Central equipment/asset repository.',
+            'POHD': 'Purchase Order Header. PO header information including vendor, terms, and status.',
+            'POIT': 'Purchase Order Items. Line items on purchase orders with cost and receipt tracking.',
+        }
+
+        for table_name, info in tables.items():
+            if max_records and count >= max_records:
+                break
+
+            if table_name not in major_tables_info:
+                continue
+
+            cols = info['columns']
+            module = info['module']
+            desc = major_tables_info.get(table_name, '')
+
+            # Get key columns
+            pk_cols = [c for c in cols if c.get('IsPrimaryKey') == 'True']
+            fk_cols = [c for c in cols if c.get('IsForeignKey') == 'True']
+
+            # Build detailed column list
+            col_details = []
+            for c in cols[:15]:
+                cname = c.get('ColumnName', '')
+                dtype = c.get('DataType', '')
+                nullable = 'nullable' if c.get('IsNullable') == 'True' else 'required'
+                col_details.append(f"  - {cname} ({dtype}, {nullable})")
+
+            pk_list = ', '.join([c.get('ColumnName', '') for c in pk_cols]) if pk_cols else 'Not defined'
+
+            output = f"""{table_name} is in the {module} module.
+
+**Purpose:** {desc}
+
+**Primary Key:** {pk_list}
+
+**Key Columns:**
+{chr(10).join(col_details)}
+{f'... and {len(cols) - 15} more columns' if len(cols) > 15 else ''}
+
+**Usage Example:**
+```sql
+SELECT {', '.join([c.get('ColumnName', '') for c in cols[:5]])}
+FROM {table_name} WITH (NOLOCK)
+WHERE {pk_cols[0].get('ColumnName', 'ID') if pk_cols else 'ID'} = @Value
+```
+
+Always use WITH (NOLOCK) for SELECT queries to prevent blocking."""
+
+            yield TrainingRecord(
+                instruction=f"Tell me about the {table_name} table in Viewpoint Vista",
+                output=output,
+                category=DataCategory.SCHEMA_QUERY.value,
+                source="Extended_Schema"
+            )
+            count += 1
+
+            # Also generate a "what columns" question with more detail
+            if count < (max_records or float('inf')):
+                col_list_detailed = []
+                for c in cols[:20]:
+                    cname = c.get('ColumnName', '')
+                    dtype = c.get('DataType', '')
+                    col_list_detailed.append(f"{cname} ({dtype})")
+
+                yield TrainingRecord(
+                    instruction=f"What columns does {table_name} have?",
+                    output=f"""The {table_name} table ({module} module) contains {len(cols)} columns.
+
+**Primary columns:** {', '.join(col_list_detailed[:10])}
+
+**Additional columns:** {', '.join(col_list_detailed[10:20]) if len(col_list_detailed) > 10 else 'See above'}
+
+**Primary Key:** {pk_list}
+
+To query this table:
+```sql
+SELECT * FROM {table_name} WITH (NOLOCK) WHERE {pk_cols[0].get('ColumnName', 'ID') if pk_cols else 'ID'} = @Value
+```""",
+                    category=DataCategory.SCHEMA_QUERY.value,
+                    source="Extended_Schema"
+                )
+                count += 1
+
+    def generate_table_query_examples(self, max_records: Optional[int] = None) -> Iterator[TrainingRecord]:
+        """Generate SQL query examples for every table to massively boost NOLOCK and SQL coverage."""
+        columns = self.load_columns()
+        count = 0
+
+        # Group columns by table
+        tables = {}
+        for col in columns:
+            if not isinstance(col, dict):
+                continue
+            obj_name = col.get('ObjectName', '')
+            if obj_name and obj_name not in tables:
+                tables[obj_name] = {
+                    'columns': [],
+                    'module': col.get('Module', 'Unknown'),
+                    'type': col.get('ObjectType', 'Table')
+                }
+            if obj_name:
+                tables[obj_name]['columns'].append(col)
+
+        # Standard company column mapping
+        company_cols = {
+            'AP': 'APCo', 'AR': 'ARCo', 'JC': 'JCCo', 'PR': 'PRCo',
+            'GL': 'GLCo', 'EM': 'EMCo', 'PO': 'POCo', 'IN': 'INCo',
+            'SM': 'SMCo', 'HQ': 'HQCo', 'HR': 'HRCo', 'SL': 'SLCo',
+            'MS': 'MSCo', 'PM': 'PMCo', 'VA': 'VACo', 'DM': 'DMCo'
+        }
+
+        # Question templates for variety
+        question_templates = [
+            "How do I query {table}?",
+            "Write SQL to select from {table}",
+            "Query {table} for company 1",
+            "Get all records from {table}",
+            "Show me how to read {table}",
+            "SELECT from {table}",
+        ]
+
+        for table_name, info in tables.items():
+            if max_records and count >= max_records:
+                break
+
+            cols = info['columns']
+            module = info['module']
+
+            # Skip views with complex names (like vrv*, brv*)
+            if table_name.startswith(('vrv', 'brv', 'sys', 'fn_')):
+                continue
+
+            # Get first 6 columns
+            col_names = [c.get('ColumnName', '') for c in cols[:6] if c.get('ColumnName')]
+            if not col_names:
+                continue
+
+            col_list = ', '.join(col_names)
+
+            # Determine company column
+            prefix = table_name[:2] if len(table_name) >= 2 else ''
+            co_col = company_cols.get(prefix, 'Company')
+
+            # Check if company column exists in this table
+            table_col_names = [c.get('ColumnName', '') for c in cols]
+            if co_col not in table_col_names:
+                # Try to find a *Co column
+                co_cols_in_table = [c for c in table_col_names if c.endswith('Co')]
+                co_col = co_cols_in_table[0] if co_cols_in_table else None
+
+            # Rotate through question templates
+            template_idx = count % len(question_templates)
+            question = question_templates[template_idx].format(table=table_name)
+
+            if co_col:
+                sql = f"""SELECT {col_list}
+FROM {table_name} WITH (NOLOCK)
+WHERE {co_col} = @{co_col}
+ORDER BY {col_names[0]}"""
+
+                output = f"""```sql
+{sql}
+```
+
+This query selects key columns from {table_name} ({module} module).
+
+Important:
+- WITH (NOLOCK) prevents blocking production transactions
+- Always filter by company column ({co_col})
+- Use exact column case (Viewpoint is case-sensitive)"""
+            else:
+                sql = f"""SELECT {col_list}
+FROM {table_name} WITH (NOLOCK)
+ORDER BY {col_names[0]}"""
+
+                output = f"""```sql
+{sql}
+```
+
+This query selects key columns from {table_name} ({module} module).
+
+Important:
+- WITH (NOLOCK) prevents blocking production transactions
+- Use exact column case (Viewpoint is case-sensitive)"""
+
+            yield TrainingRecord(
+                instruction=question,
+                output=output,
+                category=DataCategory.SQL_GENERATION.value,
+                source="Table_Query_Examples"
+            )
+            count += 1
+
+            # Generate a second variation if we have room
+            if max_records and count >= max_records:
+                break
+
+            # Add a "how to filter" example
+            if len(cols) >= 3 and co_col:
+                filter_col = cols[2].get('ColumnName', '') if cols[2].get('ColumnName') != co_col else cols[1].get('ColumnName', '')
+                if filter_col:
+                    yield TrainingRecord(
+                        instruction=f"Filter {table_name} by {filter_col}",
+                        output=f"""```sql
+SELECT {col_list}
+FROM {table_name} WITH (NOLOCK)
+WHERE {co_col} = @{co_col}
+  AND {filter_col} = @{filter_col}
+ORDER BY {col_names[0]}
+```
+
+Always include:
+- WITH (NOLOCK) to prevent blocking
+- Company filter ({co_col}) for data isolation
+- Specific columns instead of SELECT *""",
+                        category=DataCategory.SQL_GENERATION.value,
+                        source="Table_Query_Examples"
+                    )
+                    count += 1
+
+    def generate_nolock_fix_examples(self, max_records: Optional[int] = None) -> Iterator[TrainingRecord]:
+        """Generate many examples of fixing queries by adding NOLOCK."""
+        columns = self.load_columns()
+        count = 0
+
+        # Group columns by table
+        tables = {}
+        for col in columns:
+            if not isinstance(col, dict):
+                continue
+            obj_name = col.get('ObjectName', '')
+            if obj_name and obj_name not in tables:
+                tables[obj_name] = []
+            if obj_name:
+                tables[obj_name].append(col.get('ColumnName', ''))
+
+        # Standard company column mapping
+        company_cols = {
+            'AP': 'APCo', 'AR': 'ARCo', 'JC': 'JCCo', 'PR': 'PRCo',
+            'GL': 'GLCo', 'EM': 'EMCo', 'PO': 'POCo', 'IN': 'INCo',
+            'SM': 'SMCo', 'HQ': 'HQCo', 'HR': 'HRCo', 'SL': 'SLCo',
+        }
+
+        # Error patterns to fix
+        error_patterns = [
+            # Missing NOLOCK
+            {
+                "wrong": "SELECT * FROM {table}",
+                "issues": ["Missing WITH (NOLOCK)", "Missing company filter", "Using SELECT *"]
+            },
+            # Using alias
+            {
+                "wrong": "SELECT t.* FROM {table} t WHERE t.{co} = 1",
+                "issues": ["Missing WITH (NOLOCK)", "Using table alias 't'"]
+            },
+            # Using dbo prefix
+            {
+                "wrong": "SELECT * FROM dbo.{table} WHERE {co} = 1",
+                "issues": ["Missing WITH (NOLOCK)", "Using 'dbo.' prefix", "Using SELECT *"]
+            },
+            # Wrong case
+            {
+                "wrong": "SELECT {col_lower} FROM {table} WHERE {co_lower} = 1",
+                "issues": ["Missing WITH (NOLOCK)", "Wrong column case ({col_lower} should be {col})"]
+            },
+        ]
+
+        for table_name, col_names in tables.items():
+            if max_records and count >= max_records:
+                break
+
+            # Skip system tables
+            if table_name.startswith(('sys', 'fn_', 'vrv', 'brv')):
+                continue
+
+            if not col_names or len(col_names) < 3:
+                continue
+
+            # Get first few columns
+            cols = col_names[:5]
+            col_list = ', '.join(cols)
+
+            # Determine company column
+            prefix = table_name[:2] if len(table_name) >= 2 else ''
+            co_col = company_cols.get(prefix, None)
+            if not co_col or co_col not in col_names:
+                co_cols_in_table = [c for c in col_names if c.endswith('Co')]
+                co_col = co_cols_in_table[0] if co_cols_in_table else None
+
+            if not co_col:
+                continue
+
+            # Generate one fix example per table
+            pattern = error_patterns[count % len(error_patterns)]
+            wrong_query = pattern["wrong"].format(
+                table=table_name,
+                co=co_col,
+                col_lower=cols[0].lower() if cols else 'id',
+                co_lower=co_col.lower()
+            )
+            issues = [i.format(col_lower=cols[0].lower() if cols else 'id', col=cols[0] if cols else 'ID') for i in pattern["issues"]]
+
+            correct_query = f"""SELECT {col_list}
+FROM {table_name} WITH (NOLOCK)
+WHERE {co_col} = @{co_col}"""
+
+            yield TrainingRecord(
+                instruction=f"Fix this query: {wrong_query}",
+                output=f"""**Issues found:**
+{chr(10).join(['- ' + i for i in issues])}
+
+**Corrected SQL:**
+```sql
+{correct_query}
+```
+
+**Best practices:**
+- Always use WITH (NOLOCK) for SELECT queries
+- Always filter by company column ({co_col})
+- Use full table names, not aliases
+- Match exact column case
+- Specify columns instead of SELECT *""",
+                category=DataCategory.ERROR_CORRECTION.value,
+                source="NOLOCK_Fix_Examples"
+            )
+            count += 1
 
     # =========================================================================
     # UTILITY METHODS
