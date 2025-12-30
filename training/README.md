@@ -4,6 +4,22 @@
 
 ---
 
+## 🚀 Quick Start: Run Batch Files
+
+When the AI assistant needs you to run something, it will create a `.bat` file in the `batch/` folder.
+
+```
+C:\Github\LLM_fine-tuning\batch\
+```
+
+**Just double-click the .bat file to run it.** No terminal commands needed.
+
+### Current Tasks - Run These Now:
+1. `batch\01_validate_sft.bat` - Get SFT baseline scores
+2. `batch\02_probe_sft.bat` - Test real/fake table recognition
+
+---
+
 ## ⚠️ IMPORTANT: Read Before Training
 
 Before starting any new training, read:
