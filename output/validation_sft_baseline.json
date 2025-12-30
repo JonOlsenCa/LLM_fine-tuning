@@ -1,0 +1,621 @@
+{
+  "model_path": "saves\\vgpt2_v3\\sft",
+  "timestamp": "2025-12-31T01:01:03.443774",
+  "total_tests": 47,
+  "passed": 45,
+  "failed": 2,
+  "overall_score": 0.9063829787234042,
+  "category_scores": {
+    "schema": 0.8600000000000001,
+    "sql_generation": 0.8916666666666666,
+    "hallucination": 0.9800000000000001,
+    "join": 0.9800000000000001,
+    "error_correction": 0.86,
+    "business_logic": 0.86
+  },
+  "results": [
+    {
+      "test_id": "schema_001",
+      "category": "schema",
+      "question": "What columns are in the APTH table?",
+      "response": "The APTH table (AP module) contains 61 columns.\n\n**Primary columns:** APCo (bCompany), Mth (bMonth), APTrans (bTrans), VendorGroup (bGroup), Vendor (bVendor), InvId (char), APRef (bAPReference), Description (bDesc), InvDate (bDate), DiscDate (bDate)\n\n**Additional columns:** DueDate (bDate), InvTotal (bDollar), HoldCode (bHoldCode), PayControl (varchar), PayMethod (char), CMCo (bCompany), CMAcct (bCMAcct), PrePaidYN (bYN), PrePaidMth (bMonth), PrePaidDate (bDate)\n\n**Primary Key:** Not defined\n\nTo",
+      "passed": true,
+      "score": 0.85,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'InvNum'",
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 11397.850513458252
+    },
+    {
+      "test_id": "schema_002",
+      "category": "schema",
+      "question": "What is the primary key of JCJM?",
+      "response": "The primary key of JCJM is: JCCo, KeyID",
+      "passed": true,
+      "score": 0.9,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'Job'"
+      ],
+      "latency_ms": 878.4840106964111
+    },
+    {
+      "test_id": "schema_003",
+      "category": "schema",
+      "question": "Describe the APTL table structure",
+      "response": "The table 'APTL' does not exist in Viewpoint Vista. Viewpoint uses specific naming conventions with module prefixes (AP, AR, JC, GL, PR, etc.).\n\nYou may be looking for:\n- APTH (AP Transaction Header)\n- APTL (AP Transaction Lines)",
+      "passed": true,
+      "score": 0.6000000000000001,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'APCo'",
+        "Missing expected keyword: 'Mth'",
+        "Missing expected keyword: 'APTrans'",
+        "Missing expected keyword: 'APLine'"
+      ],
+      "latency_ms": 3538.4137630462646
+    },
+    {
+      "test_id": "schema_004",
+      "category": "schema",
+      "question": "What data type is the Vendor column in APTH?",
+      "response": "The Vendor column in APTH has data type bVendor.",
+      "passed": true,
+      "score": 0.7000000000000001,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'int'",
+        "Missing expected keyword: 'integer'",
+        "Missing expected keyword: 'numeric'"
+      ],
+      "latency_ms": 797.8701591491699
+    },
+    {
+      "test_id": "schema_005",
+      "category": "schema",
+      "question": "What columns link APTH to APTL?",
+      "response": "The APTH-APTL linkage columns are: APCo, Mth, APTrans, APLine",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 1295.471429824829
+    },
+    {
+      "test_id": "schema_006",
+      "category": "schema",
+      "question": "What is the difference between APTH and bAPTH?",
+      "response": "The main difference is that bAPTH is a view (indicated by 'b' prefix) of APTH, providing simplified access to AP transaction headers without additional table constructs. Other differences include:\n- bAPTH includes fields like DiscTaken and PayMethod, while APTH does not\n- bAPTH uses direct column references, while APTH requires joins via APTL for some fields\n- bAPTH supports multi-company environments with Co as part of the key\n- APTH has a broader set of features including subquerying and repor",
+      "passed": true,
+      "score": 0.8,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'base'",
+        "Missing expected keyword: 'SELECT'"
+      ],
+      "latency_ms": 7655.378580093384
+    },
+    {
+      "test_id": "schema_007",
+      "category": "schema",
+      "question": "List all tables in the AP module",
+      "response": "There are 41 tables in the AP module:\n- APTH (AP Transaction Header)\n- APTL (AP Transaction Lines)\n- APVM (AP Vendor Master)\n- APFT (AP 1099 Totals)\n- APUL (AP Unapproved Invoice Lines)\n- APUR (AP Unapproved Reviewers)\n- APPC (AP Payable Category)\n- APPH (AP Payment Header)\n- APJC (AP Job Cost Distributions)\n- APIN (AP Inventory Distributions)\n- APLB (AP Labor Burden)\n- APPO (AP Purchase Order Distributions)\n- APGL (AP GL Distributions)\n- APULUniqueAttchID (AP Unapproved Invoice Lines Unique Att",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 29736.796379089355
+    },
+    {
+      "test_id": "schema_008",
+      "category": "schema",
+      "question": "What is VendorGroup in Viewpoint?",
+      "response": "# VendorGroup\n\n## Overview\n\n| Property | Value |\n|----------|-------|\n| **Schema** | `dbo` |\n| **Module** | Accounts Payable (AP) |\n| **Column Count** | 6 |\n| **Has Primary Key** | Yes |\n| **Index Count** | 3 |\n| **Foreign Key Count** | 0 |\n| **Check Constraint Count** | 0 |\n| **Created** | 2001-04-19 11:20:17.080 |\n| **Modified** | 2023-09-18 12:28:45.057 |\n\n## Business Purpose\n\nThe VendorGroup column stores vendor group codes used in the Accounts Payable module for categorizing vendors. Each r",
+      "passed": true,
+      "score": 0.8,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'master'",
+        "Missing expected keyword: 'shared'"
+      ],
+      "latency_ms": 30561.992406845093
+    },
+    {
+      "test_id": "schema_009",
+      "category": "schema",
+      "question": "What company column does JCCD use?",
+      "response": "The company column in JCCD is: JCCo",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 702.9078006744385
+    },
+    {
+      "test_id": "schema_010",
+      "category": "schema",
+      "question": "What columns are in GLAC?",
+      "response": "The GLAC table (GL module) contains 20 columns.\n\n**Primary columns:** GLCo (bCompany), GLAcct (bGLAcct), Description (bDesc), AcctType (char), SubType (char), NormBal (char), InterfaceDetail (bYN), Active (bYN), SummaryAcct (bGLAcct), CashAccrual (char)\n\n**Additional columns:** CashOffAcct (bGLAcct), Notes (varchar), Part1 (varchar), Part2 (varchar), Part3 (varchar), Part4 (varchar), Part5 (varchar), Part6 (varchar), AllParts (varchar), CrossRefMemAcct (bGLAcct)\n\n**Primary Key:** Not defined\n\nTo",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 10578.012466430664
+    },
+    {
+      "test_id": "sql_001",
+      "category": "sql_generation",
+      "question": "Write SQL to get all unpaid AP invoices for company 1",
+      "response": "```sql\nSELECT APCo, Mth, APTrans, Vendor, InvNum, InvDate, GrossAmt, DueDate\nFROM APTH WITH (NOLOCK)\nWHERE APCo = 1\n  AND Status = 0\nORDER BY DueDate\n```\n\nNote: Always use WITH (NOLOCK) for SELECT queries and filter by company column.",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 5011.925220489502
+    },
+    {
+      "test_id": "sql_002",
+      "category": "sql_generation",
+      "question": "Query all active jobs for JC company 5",
+      "response": "```sql\nSELECT JCCo, Job, Description, Contract, JobStatus, BidNumber\nFROM JCJM WITH (NOLOCK)\nWHERE JCCo = 5\n  AND JobStatus = 1\nORDER BY JCCo\n```\n\nNote: WITH (NOLOCK) prevents blocking production transactions. Always include company filter (JCCo).",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 4595.417499542236
+    },
+    {
+      "test_id": "sql_003",
+      "category": "sql_generation",
+      "question": "Get vendor name and total invoiced amount",
+      "response": "```sql\nSELECT APTH.Vendor, APVM.Name AS VendorName,\n  SUM(APTH.GrossAmt) AS TotalInvoiced\nFROM APTH WITH (NOLOCK)\nINNER JOIN APVM WITH (NOLOCK)\n  ON APTH.VendorGroup = APVM.VendorGroup AND APTH.Vendor = APVM.Vendor\nWHERE APTH.APCo = @APCo\nGROUP BY APTH.Vendor, APVM.Name\nORDER BY TotalInvoiced DESC\n```\n\nNote: WITH (NOLOCK) prevents blocking production transactions. Always filter by company column.",
+      "passed": true,
+      "score": 0.8999999999999999,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)",
+        "SQL Warning: JOIN on 'APVM' may be incomplete (usually needs multiple key columns)"
+      ],
+      "latency_ms": 7591.0985469818115
+    },
+    {
+      "test_id": "sql_004",
+      "category": "sql_generation",
+      "question": "Find AP invoices over $10,000",
+      "response": "```sql\nSELECT APCo, Vendor, InvNum, InvDate, GrossAmt\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo\n  AND GrossAmt > 10000\nORDER BY GrossAmt DESC\n```\n\nNote: Always use WITH (NOLOCK) for SELECT queries and filter by company column.",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 4596.198558807373
+    },
+    {
+      "test_id": "sql_005",
+      "category": "sql_generation",
+      "question": "List all GL accounts for company 1",
+      "response": "```sql\nSELECT GLCo, GLAcct, Description, AcctType, Active, SubType\nFROM GLAC WITH (NOLOCK)\nWHERE GLCo = 1\nORDER BY GLAcct\n```\n\nNote: WITH (NOLOCK) prevents blocking production transactions. Always include company filter (GLCo).",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 4207.204580307007
+    },
+    {
+      "test_id": "sql_006",
+      "category": "sql_generation",
+      "question": "Get payroll timecards for employee 100",
+      "response": "```sql\nSELECT PRCo, Mth, Employee, Name, PRGroup, PREndDate\nFROM PRTH WITH (NOLOCK)\nWHERE PRCo = @PRCo\n  AND Employee = 100\nORDER BY PRCo\n```\n\nNote: WITH (NOLOCK) prevents blocking production transactions. Always filter by company column.",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 4454.826354980469
+    },
+    {
+      "test_id": "sql_007",
+      "category": "sql_generation",
+      "question": "Query AR transactions for customer group 1",
+      "response": "```sql\nSELECT ARCo, Mth, ARTrans, ARTransType, Customer, CustGroup\nFROM ARTH WITH (NOLOCK)\nWHERE ARCo = @ARCo\n  AND CustGroup = 1\nORDER BY ARCo\n```\n\nThis query selects key columns from ARTH (AR module).\n\nImportant:\n- WITH (NOLOCK) prevents blocking production transactions\n- Always filter by company column (ARCo)\n- Use exact column case (Viewpoint is case-sensitive)",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 6436.576366424561
+    },
+    {
+      "test_id": "sql_008",
+      "category": "sql_generation",
+      "question": "Get job costs by phase",
+      "response": "```sql\nSELECT JCCo, Job, PhaseGroup, Phase, CostType, Mth\nFROM JCCD WITH (NOLOCK)\nWHERE JCCo = @JCCo\n  AND PhaseGroup = @PhaseGroup\nORDER BY Phase\n```\n\nNote: WITH (NOLOCK) prevents blocking production transactions. Always filter by company column.",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 4698.6634731292725
+    },
+    {
+      "test_id": "sql_009",
+      "category": "sql_generation",
+      "question": "List equipment for EM company 1",
+      "response": "Equipment in EM Company 1:\n- EMCo (bCompany, not null)\n- Equipment (bEquip, not null)\n- Location (varchar, nullable)\n- Type (char, not null)\n- Department (bDept, nullable)",
+      "passed": true,
+      "score": 0.6000000000000001,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'SELECT'",
+        "Missing expected keyword: 'EMEM'",
+        "Missing expected keyword: 'WITH'",
+        "Missing expected keyword: 'NOLOCK'"
+      ],
+      "latency_ms": 3088.3867740631104
+    },
+    {
+      "test_id": "sql_010",
+      "category": "sql_generation",
+      "question": "Get purchase orders pending approval",
+      "response": "```sql\nSELECT POCo, PO, VendorGroup, Vendor, Description, TotalAmt\nFROM POHD WITH (NOLOCK)\nWHERE POCo = @POCo\n  AND Status = 0\nORDER BY PO\n```\n\nNote: Always use WITH (NOLOCK) for SELECT queries and filter by company column.",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 4937.209367752075
+    },
+    {
+      "test_id": "sql_011",
+      "category": "sql_generation",
+      "question": "Find all invoices from January 2024",
+      "response": "```sql\nSELECT APCo, Mth, APTrans, Vendor, InvNum, InvDate, GrossAmt, Status\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo\n  AND Mth = '2024-01'\nORDER BY InvDate DESC\n```\n\nNote: WITH (NOLOCK) prevents blocking production transactions. Always filter by company column.",
+      "passed": true,
+      "score": 0.85,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: '2024-01-01'",
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 5870.025634765625
+    },
+    {
+      "test_id": "sql_012",
+      "category": "sql_generation",
+      "question": "Get subcontract commitments for a job",
+      "response": "```sql\nSELECT SLCo, SL, VendorGroup, Vendor, Description, OrigAmt\nFROM SLCD WITH (NOLOCK)\nWHERE SLCo = @SLCo\n  AND SL = @SL\nORDER BY SLCo\n```\n\nNote: WITH (NOLOCK) prevents blocking production transactions. Always filter by company column.",
+      "passed": true,
+      "score": 0.75,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'SLHD'",
+        "Missing expected keyword: 'Job'",
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 4377.920866012573
+    },
+    {
+      "test_id": "halluc_001",
+      "category": "hallucination",
+      "question": "What columns are in the Invoice table?",
+      "response": "There is no table or view named 'Invoice' in Viewpoint Vista. The database uses module-prefixed names like APTH (AP Transaction Header) or JCJM (JC Job Master).\n\nYou may be looking for:\n- APTH (AP Transaction Header)\n- vrvAP_MVAllInvoices\n- APTL (AP Transaction Lines)",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 4528.121471405029
+    },
+    {
+      "test_id": "halluc_002",
+      "category": "hallucination",
+      "question": "Query the Customers table",
+      "response": "I cannot query 'Customers' because this table does not exist in Viewpoint Vista.\n\nYou may be looking for:\n- ARCM (AR Customer Master)\n\nPlease specify the correct Viewpoint table name.",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 2350.527763366699
+    },
+    {
+      "test_id": "halluc_003",
+      "category": "hallucination",
+      "question": "What is the UserPreferences table?",
+      "response": "There is no table or view named 'UserPreferences' in Viewpoint Vista. The database uses module-prefixed names like APTH (AP Transaction Header) or JCJM (JC Job Master).\n\nYou may be looking for:\n- DDUP (DD User Preferences)",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 3243.455171585083
+    },
+    {
+      "test_id": "halluc_004",
+      "category": "hallucination",
+      "question": "Describe the Payments table structure",
+      "response": "The table 'Payments' does not exist in Viewpoint Vista. Viewpoint uses specific naming conventions with module prefixes (AP, AR, JC, GL, PR, etc.).",
+      "passed": false,
+      "score": 0.8,
+      "errors": [
+        "Missing expected keyword: 'APCM'"
+      ],
+      "warnings": [],
+      "latency_ms": 2119.2286014556885
+    },
+    {
+      "test_id": "halluc_005",
+      "category": "hallucination",
+      "question": "How do I join Invoice and Customer?",
+      "response": "Neither 'Invoice' nor 'Customer' exist in Viewpoint Vista. Viewpoint tables use module prefixes. For example:\n- AP tables: APTH, APTL, APVM\n- JC tables: JCJM, JCCD, JCCI\n\nPlease specify the correct Viewpoint table names.",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 3852.262258529663
+    },
+    {
+      "test_id": "halluc_006",
+      "category": "hallucination",
+      "question": "What columns are in the SalesData table?",
+      "response": "There is no table or view named 'SalesData' in Viewpoint Vista. The database uses module-prefixed names like APTH (AP Transaction Header) or JCJM (JC Job Master).",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 2526.487112045288
+    },
+    {
+      "test_id": "halluc_007",
+      "category": "hallucination",
+      "question": "Query the Orders table for pending orders",
+      "response": "I cannot query 'Orders' because this table does not exist in Viewpoint Vista.\n\nYou may be looking for:\n- POHD (PO Header)\n\nPlease specify the correct Viewpoint table name.",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 2396.0306644439697
+    },
+    {
+      "test_id": "halluc_008",
+      "category": "hallucination",
+      "question": "What is the EmployeeMaster table?",
+      "response": "There is no table or view named 'EmployeeMaster' in Viewpoint Vista. The database uses module-prefixed names like APTH (AP Transaction Header) or JCJM (JC Job Master).\n\nYou may be looking for:\n- PREH (PR Employee Header)\n- PRTH (PR Timecard Header)",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 3633.1286430358887
+    },
+    {
+      "test_id": "halluc_009",
+      "category": "hallucination",
+      "question": "Describe the TransactionHistory table",
+      "response": "The table 'TransactionHistory' does not exist in Viewpoint Vista. Viewpoint uses specific naming conventions with module prefixes (AP, AR, JC, GL, PR, etc.).",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 2229.59041595459
+    },
+    {
+      "test_id": "halluc_010",
+      "category": "hallucination",
+      "question": "How do I query the Project table?",
+      "response": "I cannot write a query for 'Project' because this table does not exist in Viewpoint Vista.\n\nYou may be looking for:\n- JCJM (JC Job Master)\n\nPlease specify the correct Viewpoint table name.",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 2702.39520072937
+    },
+    {
+      "test_id": "join_001",
+      "category": "join",
+      "question": "How do I join APTH and APTL?",
+      "response": "To correctly join APTH and APTL, you must include all key columns:\n\n```sql\nSELECT *\nFROM APTH WITH (NOLOCK)\nINNER JOIN APTL WITH (NOLOCK)\n  ON APTH.APCo = APTL.APCo AND APTH.Mth = APTL.Mth AND APTH.APTrans = APTL.APTrans\n```\n\nIncomplete JOIN like `APTH.APTrans = APTL.APTrans` would be incorrect because: Missing APCo in JOIN.",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 6373.549222946167
+    },
+    {
+      "test_id": "join_002",
+      "category": "join",
+      "question": "How do I join APTH with APVM?",
+      "response": "To correctly join APTH with APVM, you must include all key columns:\n\n```sql\nSELECT *\nFROM APTH WITH (NOLOCK)\nINNER JOIN APVM WITH (NOLOCK)\n  ON APTH.VendorGroup = APVM.VendorGroup AND APTH.Vendor = APVM.Vendor\n```\n\nIncomplete JOIN like `APTH.Vendor = APVM.Vendor` would be incorrect because: Missing VendorGroup in JOIN.",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: JOIN on 'APVM' may be incomplete (usually needs multiple key columns)"
+      ],
+      "latency_ms": 5088.633060455322
+    },
+    {
+      "test_id": "join_003",
+      "category": "join",
+      "question": "How do I join JCJM with JCCD?",
+      "response": "To correctly join JCJM with JCCD, you must include all key columns:\n\n```sql\nSELECT *\nFROM JCJM WITH (NOLOCK)\nINNER JOIN JCCD WITH (NOLOCK)\n  ON JCJM.JCCo = JCCD.JCCo AND JCJM.Job = JCCD.Job\n```\n\nIncomplete JOIN like `JCJM.Job = JCCD.Job` would be incorrect because: Missing JCCo in JOIN.",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 5460.671186447144
+    },
+    {
+      "test_id": "join_004",
+      "category": "join",
+      "question": "What columns link ARTH to ARCM?",
+      "response": "The ARTH table has 37 columns, including ARCo, Mth, ARTrans, ARTransType, CustGroup, Customer, CustRef, CustPO, RecType, JCCo, Contract, Invoice, CheckNo, Source, MSCo, TransDate, DueDate, DiscDate, CheckDate, Description... (43 total)\nThe ARCM table has 55 columns, including CustGroup, Customer, Name, SortName, TempYN, Phone, Fax, EMail, URL, Contact, ContactExt, Address, City, State, Zip... (29 total)\n\nTo link ARTH to ARCM:\n\n```sql\nFROM ARTH WITH (NOLOCK)\nINNER JOIN ARCM WITH (NOLOCK)\n  ON ART",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: JOIN on 'ARCM' may be incomplete (usually needs multiple key columns)"
+      ],
+      "latency_ms": 11467.180252075195
+    },
+    {
+      "test_id": "join_005",
+      "category": "join",
+      "question": "How do I join PRTH with PREH?",
+      "response": "To correctly join PRTH with PREH, you must include all key columns:\n\n```sql\nSELECT *\nFROM PRTH WITH (NOLOCK)\nINNER JOIN PREH WITH (NOLOCK)\n  ON PRTH.PRCo = PREH.PRCo AND PRTH.Employee = PREH.Employee\n```\n\nIncomplete JOIN like `PRTH.Employee = PREH.Employee` would be incorrect because: Missing PRCo in JOIN.",
+      "passed": true,
+      "score": 1,
+      "errors": [],
+      "warnings": [],
+      "latency_ms": 5044.857978820801
+    },
+    {
+      "test_id": "error_001",
+      "category": "error_correction",
+      "question": "Fix this query: SELECT * FROM bAPTH WHERE APCo = 1",
+      "response": "**Issues found:**\n- Missing WITH (NOLOCK)\n- Using base table 'bAPTH' instead of view\n\n**Corrected SQL:**\n```sql\nSELECT APCo, Mth, APTrans, VendorGroup, Vendor\nFROM bAPTH WITH (NOLOCK)\nWHERE APCo = @APCo\n```\n\n**Best practices:**\n- Always use WITH (NOLOCK) for SELECT queries\n- Always filter by company column (APCo)\n- Use full table names, not aliases\n- Match exact column case\n- Specify columns instead of SELECT *",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 6944.167137145996
+    },
+    {
+      "test_id": "error_002",
+      "category": "error_correction",
+      "question": "Fix this query: SELECT apco, vendor FROM APTH",
+      "response": "**Issues found:**\n- Missing WITH (NOLOCK)\n- Wrong column case (apco should be APCo)\n\n**Corrected SQL:**\n```sql\nSELECT APCo, VendorGroup, Vendor, InvId, APRef\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo\n```\n\n**Best practices:**\n- Always use WITH (NOLOCK) for SELECT queries\n- Always filter by company column (APCo)\n- Use full table names, not aliases\n- Match exact column case\n- Specify columns instead of SELECT *",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 6744.832754135132
+    },
+    {
+      "test_id": "error_003",
+      "category": "error_correction",
+      "question": "Fix this query: SELECT a.* FROM APTH a WHERE a.APCo = 1",
+      "response": "**Issues found:**\n- Missing WITH (NOLOCK)\n- Using table alias 'a'\n\n**Corrected SQL:**\n```sql\nSELECT APCo, Mth, APTrans, VendorGroup, Vendor\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo\n```\n\n**Best practices:**\n- Always use WITH (NOLOCK) for SELECT queries\n- Always filter by company column (APCo)\n- Use full table names, not aliases\n- Match exact column case\n- Specify columns instead of SELECT *",
+      "passed": true,
+      "score": 0.95,
+      "errors": [],
+      "warnings": [
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 6650.504350662231
+    },
+    {
+      "test_id": "error_004",
+      "category": "error_correction",
+      "question": "Fix this query: SELECT * FROM APTH WHERE Mth = '2024-01'",
+      "response": "**Issues found:**\n- Missing WITH (NOLOCK)\n- Using SELECT *\n\n**Corrected SQL:**\n```sql\nSELECT APCo, Mth, APTrans, VendorGroup, Vendor\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo\n  AND Mth = @Mth\n```\n\n**Best practices:**\n- Always use WITH (NOLOCK) for SELECT queries\n- Always filter by company column (APCo)\n- Use full table names, not aliases\n- Match exact column case\n- Specify columns instead of SELECT *",
+      "passed": false,
+      "score": 0.55,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: '2024-01-01'",
+        "Missing expected keyword: 'first'",
+        "Missing expected keyword: 'day'",
+        "Missing expected keyword: 'month'",
+        "SQL Warning: SQL may be missing company filter (APCo, JCCo, etc.)"
+      ],
+      "latency_ms": 6654.564619064331
+    },
+    {
+      "test_id": "error_005",
+      "category": "error_correction",
+      "question": "Fix this query: SELECT * FROM APTH JOIN APTL ON APTH.APTrans = APTL.APTrans",
+      "response": "**Issues found:**\n- Missing WITH (NOLOCK)\n- Using JOIN clause instead of WHERE clause\n- Using table aliases \"APTH\" and \"APTL\"\n\n**Corrected SQL:**\n```sql\nSELECT APTH.APCo, APTH.Mth, APTH.APTrans, APTL.APCo, APTL.Line\nFROM APTH WITH (NOLOCK)\nINNER JOIN APTL WITH (NOLOCK)\n  ON APTH.APCo = APTL.APCo AND APTH.Mth = APTL.Mth AND APTH.APTrans = APTL.APTrans\n```\n\n**Best practices:**\n- Always use WITH (NOLOCK) for SELECT queries\n- Always filter by company column (APCo)\n- Use full table names, not aliases",
+      "passed": true,
+      "score": 0.9,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'incomplete'"
+      ],
+      "latency_ms": 10989.797115325928
+    },
+    {
+      "test_id": "biz_001",
+      "category": "business_logic",
+      "question": "What status codes indicate an unpaid AP invoice?",
+      "response": "Unpaid AP invoices have Status < 3 (typically 0 or 1).",
+      "passed": true,
+      "score": 0.9,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'Open'"
+      ],
+      "latency_ms": 1069.0820217132568
+    },
+    {
+      "test_id": "biz_002",
+      "category": "business_logic",
+      "question": "How does batch processing work in AP?",
+      "response": "# AP Batch Processing Reference\n\n**Status:** AUTHORITATIVE - Generated from schema metadata\n**Generated:** 2025-12-23 19:46\n**Source:** `Viewpoint_Database/_Metadata/CSVs/columns.csv`\n\n---\n\n## 🎯 What Is Batch Processing?\n\n**Batches are Viewpoint's mechanism for staging transactions before posting.**\n\nInstead of posting transactions directly, users enter and edit them in batches:\n- **AP Entry (APEntry)** - Main AP transaction entry screen\n- **AP Clear (APClear)** - Clear AP transactions\n- **AP Ed",
+      "passed": true,
+      "score": 0.9,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'APTB'"
+      ],
+      "latency_ms": 31499.637365341187
+    },
+    {
+      "test_id": "biz_003",
+      "category": "business_logic",
+      "question": "What is the difference between ActualCost and OrigEstCost in JCCD?",
+      "response": "The 'ActualCost' column in JCCD has no description defined in the database.\n\nThe 'OrigEstCost' column in JCCD has no description defined in the database.\n\nBoth are user-defined fields (udActualCost, udOrigEstCost) with the same data type bDollar.",
+      "passed": true,
+      "score": 0.7000000000000001,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'original'",
+        "Missing expected keyword: 'estimate'",
+        "Missing expected keyword: 'budget'"
+      ],
+      "latency_ms": 3476.778984069824
+    },
+    {
+      "test_id": "biz_004",
+      "category": "business_logic",
+      "question": "How are vendors shared across companies?",
+      "response": "Vendors can be shared across companies through vendor groups in the AP module. A vendor group holds related vendors (company-specific via VendorGroupID or company-agnostic via HQCo). To link vendors to a specific company, join on VendorGroupID or HQCo + VendorGroupID.",
+      "passed": true,
+      "score": 0.9,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'master'"
+      ],
+      "latency_ms": 3664.0148162841797
+    },
+    {
+      "test_id": "biz_005",
+      "category": "business_logic",
+      "question": "When should I use vrv* views vs custom SQL?",
+      "response": "Custom SQL is preferred for:\n- Simple aggregations (GROUP BY)\n- Complex joins with derived tables\n- Performance-critical queries\n\nvrv* views are better for:\n- Reporting\n- Ad-hoc analysis\n- Parameterized queries\n- ETL processes\n\nAlways check if a vrv* view exists before writing custom SQL - they're optimized and validated.",
+      "passed": true,
+      "score": 0.9,
+      "errors": [],
+      "warnings": [
+        "Missing expected keyword: 'Crystal'"
+      ],
+      "latency_ms": 4819.655179977417
+    }
+  ],
+  "summary": "\nValidation Summary\n==================\nTotal Tests: 47\nPassed: 45 (95.7%)\nFailed: 2 (4.3%)\nOverall Score: 0.91\n\nCategory Scores:\n  business_logic: 0.86\n  error_correction: 0.86\n  hallucination: 0.98\n  join: 0.98\n  schema: 0.86\n  sql_generation: 0.89\n"
+}
