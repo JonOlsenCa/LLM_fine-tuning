@@ -1,0 +1,289 @@
+{
+  "results": [
+    {
+      "id": "complex_sql_001",
+      "category": "complex_sql",
+      "question": "Write SQL to calculate AR aging buckets (30/60/90+ days) for unpaid invoices by customer",
+      "ground_truth": "Key tables: ARTH (AR Transaction Header), ARCM (AR Customer Master). Use DATEDIFF with TransDate, filter PayFullDate IS NULL for unpaid. GROUP BY CustGroup, Customer with CASE WHEN for aging buckets.",
+      "model_response": "```sql\nSELECT ARCo, CustGroup, Customer, InvNum, InvDate, Amount,\n  DATEDIFF(day, InvDate, GETDATE()) AS DaysOld\nFROM ARTH WITH (NOLOCK)\nWHERE ARCo = @ARCo AND Status = 0\nGROUP BY ARCo, CustGroup, Customer, InvNum, InvDate, Amount\nORDER BY DaysOld\n```\n\nNote: Always use WITH (NOLOCK) for SELECT queries and filter by company column.",
+      "key_elements_found": [
+        "ARTH",
+        "DATEDIFF",
+        "CustGroup",
+        "Customer"
+      ],
+      "key_elements_missing": [
+        "ARCM",
+        "PayFullDate IS NULL",
+        "CASE WHEN"
+      ],
+      "score": 0.5714285714285714
+    },
+    {
+      "id": "complex_sql_002",
+      "category": "complex_sql",
+      "question": "Write SQL to get subcontractor costs with original, change orders, invoiced, paid, and retainage by vendor",
+      "ground_truth": "Key tables: SLHD (SL Header), SLIT (SL Item), APVM (Vendor Master). Join on SLCo/SL and VendorGroup/Vendor. Sum OrigCost, CurCost-OrigCost for changes, InvCost, Retainage. GROUP BY vendor.",
+      "model_response": "```sql\nSELECT SLHD.SLCo, SLHD.Vendor, SLHD.SL,\n  SLIT.CurCost + SLIT.ChgCost AS OriginalCost,\n  SLIT.InvCost + SLIT.PaidCost + SLIT.Retainage AS InvoicedPaid,\n  SLIT.CurCost + SLIT.ChgCost + SLIT.Retainage AS CurrentCost\nFROM SLHD WITH (NOLOCK)\nINNER JOIN SLIT WITH (NOLOCK)\n  ON SLHD.SLCo = SLIT.SLCo AND SLHD.SL = SLIT.SL\nWHERE SLHD.SLCo = @SLCo AND SLHD.Vendor = @Vendor\nORDER BY SLIT.SLItem\n```\n\nNote: WITH (NOLOCK) prevents blocking production transactions. Always filter by company column.",
+      "key_elements_found": [
+        "SLHD",
+        "SLIT",
+        "CurCost",
+        "InvCost",
+        "Retainage"
+      ],
+      "key_elements_missing": [
+        "APVM",
+        "OrigCost",
+        "VendorGroup"
+      ],
+      "score": 0.625
+    },
+    {
+      "id": "complex_sql_003",
+      "category": "complex_sql",
+      "question": "Write SQL to aggregate job cost estimates by phase and cost type with item vs phase unit distinctions",
+      "ground_truth": "Key tables: JCJP (Job Phase), JCCH (Cost Header), JCCP (Cost Phase), JCCT (Cost Type). Use ItemUnitFlag/PhaseUnitFlag from JCCH to determine unit type. Sum OrigEstCost, CurrEstCost, CurrEstHours.",
+      "model_response": "```sql\nSELECT JCCD.JCCo, JCCD.Job, JCCD.PhaseGroup, JCCD.Phase, JCCD.CostType,\n  SUM(JCCD.EstCost) AS Budget, SUM(JCCD.EstUnits) AS EstUnits\nFROM JCCD WITH (NOLOCK)\nWHERE JCCD.JCCo = @JCCo AND JCCD.Job = @Job\nGROUP BY JCCD.JCCo, JCCD.Job, JCCD.PhaseGroup, JCCD.Phase, JCCD.CostType\nORDER BY JCCD.Phase\n```\n\nNote: WITH (NOLOCK) prevents blocking production transactions. Always filter by company column.",
+      "key_elements_found": [],
+      "key_elements_missing": [
+        "JCJP",
+        "JCCH",
+        "JCCP",
+        "JCCT",
+        "ItemUnitFlag",
+        "PhaseUnitFlag",
+        "OrigEstCost",
+        "CurrEstCost"
+      ],
+      "score": 0.0
+    },
+    {
+      "id": "complex_sql_004",
+      "category": "complex_sql",
+      "question": "Write SQL to track AP hold status distinguishing retainage vs non-retainage holds",
+      "ground_truth": "Key tables: APTD (AP Trans Detail), APHD (AP Hold Detail), APCO (AP Company). Check HoldCode against APCO.RetHoldCode. If match = retainage hold, else = non-retainage hold.",
+      "model_response": "```sql\nSELECT APCo, Mth, APTrans, HoldCode, Amount,\n  CASE WHEN HoldCode LIKE 'R%' THEN 'Retainage Hold' ELSE 'Non-Retainage Hold' END AS HoldType\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo AND Status = 2\nORDER BY Mth DESC\n```\n\nNote: Always use WITH (NOLOCK) for SELECT queries and filter by company column.",
+      "key_elements_found": [
+        "APCO",
+        "HoldCode"
+      ],
+      "key_elements_missing": [
+        "APTD",
+        "APHD",
+        "RetHoldCode",
+        "PayType"
+      ],
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "complex_sql_005",
+      "category": "complex_sql",
+      "question": "Write SQL to reconcile AP oncost batch lines with original transactions",
+      "ground_truth": "Key tables: APLB (AP Line Batch), APHB (AP Header Batch), APTL (AP Trans Line), APTH (AP Trans Header), APVM. Join on ocApplyMth, ocApplyTrans, ocApplyLine to link oncost to original.",
+      "model_response": "-- =====================================================================================\n-- AP On-Cost RECONCILIATION Query\n-- =====================================================================================\n-- Purpose: Reconcile AP oncost batch lines with original transactions\n-- Author: Viewpoint GPT - AR/GL Reconciliation Expert\n-- Date: 2025-10-10\n-- =====================================================================================\n\n-- =====================================================================================\n-- Step 1: Capture AP Batch Details\n-- =====================================================================================\n\nWITH AP_Batch_Summary AS (\n    Select \n        APTH.APCo as Company,\n        APTH.Mth as TransactionMonth,\n        APTH.BatchId as BatchID,\n        APTH.BatchSeq as BatchSequence,\n        COUNT(DISTINCT APTH.APRef) as InvoiceCount,\n        SUM(APTH.GrossAmt) as TotalGross,\n        SUM(APTH.TotalCost) as TotalOnCost,\n        SUM(APTH.Retainage) as TotalRetainage,\n        SUM(APTH.PrevPaid) as TotalPrevPaid,\n        SUM(APTH.DiscTaken) as TotalDiscTaken,\n        SUM(APTH.PrevDisc) as TotalPrevDisc,\n        SUM(APTH.Balance) as TotalBalance,\n        SUM(APTH.AmountDue) as TotalAmountDue,\n        SUM(APTH.AmountDue + APTH.OnCost) as TotalNetAmount\n    From APTH\n    WHERE APTH.BatchId IS NOT NULL\n    GROUP BY APTH.APCo, APTH.Mth, APTH.BatchId, APTH.BatchSeq\n),\n\nAP_OnCost_Dist AS (\n    Select \n        HQBC.Co as Company,\n        HQBC.Mth as TransactionMonth,\n        HQBC.BatchId as BatchID,\n        HQBC.BatchSeq as BatchSequence,\n        HQBC.TransType as TransactionType,\n        APHB.APTrans as APTransaction,\n        APHB.APRef as APReference,\n        APHB.InvDate as InvoiceDate,\n        APHB.Description as TransactionDescription,\n        APHB.GrossAmt as GrossAmount,\n        APHB.OnCost as OnCostAmount,\n        APHB.PrevPaid as PreviousPaid,\n        APHB.DiscTaken as DiscountTaken,\n        APHB.Retainage as Retainage,\n        APHB.PrevDisc as PreviousDiscount,\n        APHB.Balance as Balance,\n        APHB.AmountDue as AmountDue,\n        APHB.NetPayable as NetPayable,\n        APHB.Co as Company,\n        APHB.Mth as TransactionMonth,\n        APHB.BatchId as BatchID,\n        APHB.BatchSeq as Batch",
+      "key_elements_found": [
+        "APHB",
+        "APTH"
+      ],
+      "key_elements_missing": [
+        "APLB",
+        "APTL",
+        "APVM",
+        "ocApplyMth",
+        "ocApplyTrans",
+        "ocApplyLine"
+      ],
+      "score": 0.25
+    },
+    {
+      "id": "complex_biz_001",
+      "category": "business_logic",
+      "question": "How does Vista calculate maximum retainage when InclACOinMaxYN is set to Y?",
+      "ground_truth": "When InclACOinMaxYN='Y', Vista includes Approved Change Orders in max retainage: MaxRetgPct * CurCost. When 'N', uses OrigCost only. Found in SLHB/SLCO settings.",
+      "model_response": "When InclACOinMaxYN is 'Y', the calculation for maximum retainage includes the ACO amount:\n- If the contract has a fixed amount ('F' pricing method), it uses the contract amount.\n- Otherwise, it sums the contract amount and ACO values from qualifying bJBIT records (where ACO exists and InclACOinMaxYN='Y'), grouped by company, contract, and item.\n- The result is capped against the contract amount to prevent over-retainage.\n\n---",
+      "key_elements_found": [
+        "InclACOinMaxYN",
+        "ACO"
+      ],
+      "key_elements_missing": [
+        "MaxRetgPct",
+        "CurCost",
+        "OrigCost",
+        "SLHB"
+      ],
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "complex_biz_002",
+      "category": "business_logic",
+      "question": "What is the difference between WCRetAmt and SMRetAmt in subcontract worksheets?",
+      "ground_truth": "WCRetAmt = Work Completed Retainage (labor/work in place). SMRetAmt = Stored Materials Retainage. Both in SLWI table. Total retainage = WCRetAmt + SMRetAmt.",
+      "model_response": "The difference between WCRetAmt and SMRetAmt is: 0",
+      "key_elements_found": [
+        "WCRetAmt",
+        "SMRetAmt"
+      ],
+      "key_elements_missing": [
+        "SLWI",
+        "Work Completed",
+        "Stored Materials"
+      ],
+      "score": 0.4
+    },
+    {
+      "id": "complex_biz_003",
+      "category": "business_logic",
+      "question": "How do I determine if an AP invoice is on hold for retainage vs non-retainage reasons?",
+      "ground_truth": "Check APHD.HoldCode against APCO.RetHoldCode. If HoldCode = RetHoldCode, it is a retainage hold. Otherwise non-retainage hold.",
+      "model_response": "To check the hold status of an AP invoice for retainage or non-retainage reasons:\n\n```sql\nSELECT APCo, Mth, APTrans, HoldCode, PayType\nFROM APTH WITH (NOLOCK)\nWHERE APCo = @APCo AND Mth = @Mth AND APTrans = @APTrans\n```\n\nIf `HoldCode` exists and `PayType <> 3`, it's on hold for retainage; otherwise, it's not.\n\nNote: Always use WITH (NOLOCK) for SELECT queries and filter by company column.",
+      "key_elements_found": [
+        "APCO",
+        "HoldCode"
+      ],
+      "key_elements_missing": [
+        "APHD",
+        "RetHoldCode",
+        "retainage hold"
+      ],
+      "score": 0.4
+    },
+    {
+      "id": "complex_biz_004",
+      "category": "business_logic",
+      "question": "Explain how stored materials (Purchased - Installed) affects SL billing",
+      "ground_truth": "In SLWI: StoredMatls = Purchased - Installed. Materials on-site but not used. Billed separately from WCCost. Total billable = WCCost + StoredMatls. Different retainage rates (SMRetPct vs WCRetPct).",
+      "model_response": "When stored materials (Purchased - Installed) are used in service work, the associated costs may be billed to customers based on the billing method in the job's contract (e.g., T&M or fixed price). If T&M billing is enabled, costs are typically marked up and added to the invoice; if fixed price, they may be absorbed or reflected in the quoted price. This ensures accurate revenue recognition for service operations without direct inventory impact in this specific code.",
+      "key_elements_found": [
+        "Purchased",
+        "Installed"
+      ],
+      "key_elements_missing": [
+        "SLWI",
+        "StoredMatls",
+        "WCCost",
+        "SMRetPct",
+        "WCRetPct"
+      ],
+      "score": 0.2857142857142857
+    },
+    {
+      "id": "complex_biz_005",
+      "category": "business_logic",
+      "question": "What tables are involved in cost-to-complete projections for jobs?",
+      "ground_truth": "Key tables: JCPR (Projection Resources), JCPD (Projection Detail), JCCP (Cost Phase for estimates), JCCD (Cost Detail for actuals). Compare CurrEstCost vs ActualCost.",
+      "model_response": "- `JCCH` - JC Cost Header\n- `JCProjectionCode` - JCProjectionCode\n- `JCProjectionCodePhaseCT` - JCProjectionCodePhaseCT\n\n---",
+      "key_elements_found": [
+        "JCPR",
+        "projection"
+      ],
+      "key_elements_missing": [
+        "JCPD",
+        "JCCP",
+        "JCCD",
+        "CurrEstCost",
+        "ActualCost"
+      ],
+      "score": 0.2857142857142857
+    },
+    {
+      "id": "complex_join_001",
+      "category": "cross_module_join",
+      "question": "How do I join SLWI retainage amounts to matching APTD transactions?",
+      "ground_truth": "Join path: SLWI -> APTL (on SLCo=APCo, SL, SLItem) -> APTD (on APCo, Mth, APTrans, APLine). Filter APTD.PayType = APCO.RetPayType for retainage.",
+      "model_response": "To correctly join retainage amounts from SLWI to APTD, you must include all key columns:\n\n```sql\nSELECT *\nFROM SLWI WITH (NOLOCK)\nINNER JOIN APTD WITH (NOLOCK)\n  ON SLWI.APCo = APTD.APCo AND SLWI.Mth = APTD.Mth AND SLWI.APTrans = APTD.APTrans\n```\n\nIncomplete JOIN like `SLWI.ItemType = APTD.ItemType` would be incorrect because: Missing company, month, transaction in JOIN.",
+      "key_elements_found": [
+        "SLWI",
+        "APTD",
+        "APCO",
+        "SL"
+      ],
+      "key_elements_missing": [
+        "APTL",
+        "RetPayType",
+        "SLItem"
+      ],
+      "score": 0.5714285714285714
+    },
+    {
+      "id": "complex_join_002",
+      "category": "cross_module_join",
+      "question": "What is the relationship between JCJP (Job Phase) and JCCP (Cost Code Phase)?",
+      "ground_truth": "JCJP = Job/Contract Phase (billing). JCCP = Cost Code Phase (cost tracking). Join on JCCo, Job, PhaseGroup, Phase. JCJP links to JCJI. JCCP links to JCCH for cost types.",
+      "model_response": "The relationship between JCJP and JCCP is defined in the vJCJP table via foreign key constraints: JCCo and Job. Key columns in vJCJP include JCCo, Job, PhaseGroup, Phase, Description, Contract, Item, ProjMinPct, ActiveYN, Notes.",
+      "key_elements_found": [
+        "JCJP",
+        "JCCP",
+        "JCCo",
+        "Job",
+        "PhaseGroup",
+        "Phase"
+      ],
+      "key_elements_missing": [
+        "JCCH",
+        "JCJI"
+      ],
+      "score": 0.75
+    },
+    {
+      "id": "complex_join_003",
+      "category": "cross_module_join",
+      "question": "How do I link SM WorkOrder to AR billing through JC contracts?",
+      "ground_truth": "Path: SMWorkOrder -> SMServiceSite (ServiceSite) -> JCJM (Job) -> JCCM (Contract) -> ARTH for billing. Or direct via SMWorkOrderInvoice.",
+      "model_response": "To link SM WorkOrder to AR billing through JC contracts:\n\n1. **Identify the associated JC contract**: Find the SMWorkOrder record and join to SMCustomer to retrieve the linked JCJM (Job Master) job number, then to JCCM for the contract ID.\n2. **Check if the contract is billed**: Verify the JCCM contract table for any existing billing entries (e.g., Invoiced flag or BillingType).\n3. **Create new billing header**: If no billing exists, insert a new ARTH (AR Transaction Header) record with ARCo, Mth, BatchId, and other details from the SM work order.\n4. **Link back to SM**: Update the SMWorkCompleted records with the new ARTH.KeyID for all linked cost transactions.\n\nThis ensures SM work orders can be invoiced through JC contracts into AR without duplicating existing bills.",
+      "key_elements_found": [
+        "SMWorkOrder",
+        "JCJM",
+        "JCCM",
+        "ARTH",
+        "Job",
+        "Contract"
+      ],
+      "key_elements_missing": [
+        "SMServiceSite"
+      ],
+      "score": 0.8571428571428571
+    },
+    {
+      "id": "complex_halluc_001",
+      "category": "hallucination",
+      "question": "What columns are in the ARAgingReport table?",
+      "ground_truth": "REJECT - ARAgingReport does not exist in Viewpoint Vista. Use VPShared_CustomerAging view or query ARTH/ARTL directly.",
+      "model_response": "There is no table or view named 'ARAgeingReport' in Viewpoint Vista. The database uses module-prefixed names like APTH (AP Transaction Header) or JCJM (JC Job Master).",
+      "key_elements_found": [],
+      "key_elements_missing": [
+        "does not exist",
+        "not a real table",
+        "ARTH",
+        "VPShared_CustomerAging"
+      ],
+      "score": 0.0
+    },
+    {
+      "id": "complex_halluc_002",
+      "category": "hallucination",
+      "question": "Write SQL to query the SubcontractorPayments table",
+      "ground_truth": "REJECT - SubcontractorPayments does not exist. Use APTD linked to APTL with SL reference, or SLWI for worksheet tracking.",
+      "model_response": "I cannot write a query for 'SubcontractorPayments' because this table does not exist in Viewpoint Vista.\n\nPlease specify the correct Viewpoint table name.",
+      "key_elements_found": [
+        "does not exist"
+      ],
+      "key_elements_missing": [
+        "not a real table",
+        "APTD",
+        "APTL",
+        "SLWI"
+      ],
+      "score": 0.2
+    }
+  ],
+  "summary": {
+    "overall": 0.39087301587301587,
+    "by_category": {
+      "complex_sql": 0.3559523809523809,
+      "business_logic": 0.34095238095238095,
+      "cross_module_join": 0.7261904761904762,
+      "hallucination": 0.1
+    }
+  }
+}

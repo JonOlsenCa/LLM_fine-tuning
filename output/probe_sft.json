@@ -1,0 +1,211 @@
+{
+  "results": [
+    {
+      "table": "APTH",
+      "question": "Does the APTH table exist in Viewpoint Vista?",
+      "expected": "exists",
+      "response": "Yes, APTH exists in Viewpoint Vista.\n\n**Table Name:** APTH\n\n**Module:** AP (Accounts Payable)\n\n**Column Count:** 61\n\n**Key Columns:** APCo (bCompany), Mth (bMonth), APTrans (bTrans), VendorGroup (bGroup), Vendor (bVendor), InvId (char), APRef (bAPReference), Description (bDesc), InvDate (bDate), DiscDate (bDate)\n\n**Usage Example:**\n```sql\nSELECT APCo, Mth, APTrans, VendorGroup, Vendor\nFROM APTH WITH (NOLOCK)\nWHERE ID = @Value\n```\n\nAlways use WITH (NOLOCK) for SELECT queries to prevent blocking.",
+      "model_says": "exists",
+      "correct": true,
+      "exists_keywords": 3,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "APTL",
+      "question": "Does the APTL table exist in Vista?",
+      "expected": "exists",
+      "response": "Yes, APTL is in the AP module.\n\n**Purpose:** Accounts Payable Transaction Lines. Contains GL distribution details for each line of an AP invoice or payment.\n\n**Primary Key:** Not defined\n\n**Key Columns:**\n  - APCo (bCompany, required)\n  - Mth (bMonth, required)\n  - APTrans (bTrans, required)\n  - APLine (smallint, required)\n  - LineType (tinyint, required)\n  - PO (varchar, nullable)\n  - POItem (bItem, nullable)\n  - ItemType (tinyint, nullable)\n  - SL (varchar, nullable)\n  - SLItem (bItem, nullable)\n  - JCCo (bCompany, nullable)\n  - Job (bJob, nullable)\n  - PhaseGroup (bGroup, nullable)\n  - Phase (bPhase, nullable)\n... and 61 more columns\n\n**Usage Example:**\n```sql\nSELECT APCo, Mth, APTrans, APLine, LineType\nFROM APTL WITH (NOLOCK)\nWHERE ID = @Value\n```\n\nAlways use WITH (NOLOCK) for SELECT queries to prevent blocking.",
+      "model_says": "exists",
+      "correct": true,
+      "exists_keywords": 3,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "JCJM",
+      "question": "Does JCJM exist in Viewpoint?",
+      "expected": "exists",
+      "response": "Yes, JCJM exists in Viewpoint Vista. JCJM is in the JC module.\n\n**Purpose:** Job Cost Job Master. The central job/project table containing all job-level information.\n\n**Primary Key:** Not defined\n\n**Key Columns:**\n  - JCCo (bCompany, required)\n  - Job (bJob, required)\n  - Description (bItemDesc, nullable)\n  - Contract (bContract, nullable)\n  - JobStatus (tinyint, required)\n  - BidNumber (varchar, nullable)\n  - LockPhases (bYN, required)\n  - ProjectMgr (int, nullable)\n  - JobPhone (bPhone, nullable)\n  - JobFax (bPhone, nullable)\n  - MailAddress (varchar, nullable)\n  - MailCity (varchar, nullable)\n  - MailState (varchar, nullable)\n  - MailZip (bZip, nullable)\n... and 69 more columns\n\n**Usage Example:**\n```sql\nSELECT JCCo, Job, Description, Contract, JobStatus\nFROM JCJM WITH (NOLOCK)\nWHERE ID = @Value\n```\n\nAlways use WITH (NOLOCK) for SELECT queries to prevent blocking.",
+      "model_says": "exists",
+      "correct": true,
+      "exists_keywords": 4,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "JCCD",
+      "question": "Is JCCD a real Vista table?",
+      "expected": "exists",
+      "response": "Yes, JCCD is a real Vista table in the JC module.\n\n**Purpose:** Job Cost Cost Detail. Granular cost tracking by job, phase, cost type, and month.\n\n**Primary Key:** Not defined\n\n**Key Columns:**\n  - JCCo (bCompany, required)\n  - Mth (bMonth, required)\n  - CostTrans (bTrans, required)\n  - Job (bJob, required)\n  - PhaseGroup (bGroup, required)\n  - Phase (bPhase, required)\n  - CostType (bJCCType, required)\n  - PostedDate (bDate, required)\n  - ActualDate (bDate, required)\n  - JCTransType (varchar, required)\n  - Source (bSource, required)\n  - Description (bTransDesc, nullable)\n  - BatchId (bBatchID, required)\n  - InUseBatchId (bBatchID, nullable)\n  - GLCo (bCompany, required)\n... and 69 more columns\n\n**Usage Example:**\n```sql\nSELECT JCCo, Mth, CostTrans, Job, PhaseGroup\nFROM JCCD WITH (NOLOCK)\nWHERE ID = @Value\n```\n\nAlways use",
+      "model_says": "exists",
+      "correct": true,
+      "exists_keywords": 2,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "GLAC",
+      "question": "Does GLAC exist?",
+      "expected": "exists",
+      "response": "Yes, GLAC exists in the GL module.\n\n**Purpose:** General Ledger Account Chart. Chart of accounts with account types and hierarchies.\n\n**Primary Key:** Not defined\n\n**Key Columns:**\n  - GLCo (bCompany, required)\n  - GLAcct (bGLAcct, required)\n  - Description (bDesc, nullable)\n  - AcctType (char, required)\n  - SubType (char, nullable)\n  - NormBal (char, nullable)\n  - InterfaceDetail (bYN, required)\n  - Active (bYN, required)\n  - SummaryAcct (bGLAcct, required)\n  - CashAccrual (char, required)\n  - CashOffAcct (bGLAcct, nullable)\n  - Notes (varchar, nullable)\n  - Part1 (varchar, nullable)\n  - Part2 (varchar, nullable)\n... and 8 more columns\n\n**Usage Example:**\n```sql\nSELECT GLCo, GLAcct, Description, AcctType, SubType\nFROM GLAC WITH (NOLOCK)\nWHERE ID = @Value\n```\n\nAlways use WITH (NOLOCK) for SELECT queries to prevent blocking.",
+      "model_says": "exists",
+      "correct": true,
+      "exists_keywords": 3,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "ARCM",
+      "question": "Is ARCM a table in Viewpoint Vista?",
+      "expected": "exists",
+      "response": "Yes, ARCM is a table in the AR module.\n\n**Table Name:** ARCM\n\n**Module:** Accounts Receivable (AR)\n\n**Column Count:** 55\n\n**Has Primary Key:** Yes\n\n**Index Count:** 4\n\n**Foreign Key Count:** 0\n\n**Check Constraint Count:** 12\n\n**Created:** 2001-04-19 11:20:17.830\n\n**Modified:** 2023-09-18 12:28:44.690\n\n---\n\n*Documentation generated via LLM enrichment*\n\n- **LLM Provider:** xai\n- **Generated:** 2025-12-11\n- **Source:** CSV metadata extraction\n",
+      "model_says": "exists",
+      "correct": true,
+      "exists_keywords": 3,
+      "not_exists_keywords": 0
+    },
+    {
+      "table": "PREH",
+      "question": "Does PREH exist in Vista?",
+      "expected": "exists",
+      "response": "Yes, PREH exists in Vista. PREH is in the PR module.\n\n**Purpose:** Payroll Employee Header. Master employee information including demographics, rates, and deductions.\n\n**Primary Key:** Not defined\n\n**Key Columns:**\n  - PRCo (bCompany, required)\n  - Employee (bEmployee, required)\n  - LastName (varchar, required)\n  - FirstName (varchar, nullable)\n  - MidName (varchar, nullable)\n  - SortName (bSortName, required)\n  - Address (varchar, nullable)\n  - City (varchar, nullable)\n  - State (varchar, nullable)\n  - Zip (bZip, nullable)\n  - Address2 (varchar, nullable)\n... and 126 more columns\n\n**Usage Example:**\n```sql\nSELECT PRCo, Employee, LastName, FirstName, MidName\nFROM PREH WITH (NOLOCK)\nWHERE ID = @Value\n```\n\nAlways use WITH (NOLOCK) for SELECT queries to prevent blocking.",
+      "model_says": "exists",
+      "correct": true,
+      "exists_keywords": 4,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "APVM",
+      "question": "Is APVM a real table?",
+      "expected": "exists",
+      "response": "Yes, APVM is a real table in the AP module.\n\n**Purpose:** Accounts Payable Vendor Master. Central repository for all vendor information shared across companies via VendorGroup.\n\n**Primary Key:** Not defined\n\n**Key Columns:**\n  - VendorGroup (bGroup, required)\n  - Vendor (bVendor, required)\n  - SortName (bSortName, required)\n  - Name (varchar, nullable)\n  - Type (char, required)\n  - TempYN (bYN, required)\n  - Contact (varchar, nullable)\n  - Phone (bPhone, nullable)\n  - Fax (bPhone, nullable)\n  - EMail (varchar, nullable)\n  - URL (varchar, nullable)\n  - Address (varchar, nullable)\n... and 86 more columns\n\n**Usage Example:**\n```sql\nSELECT VendorGroup, Vendor, SortName, Name, Type\nFROM APVM WITH (NOLOCK)\nWHERE ID = @Value\n```\n\nAlways use WITH (NOLOCK) for SELECT queries to prevent blocking.",
+      "model_says": "exists",
+      "correct": true,
+      "exists_keywords": 3,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "EMEM",
+      "question": "Does the EMEM table exist?",
+      "expected": "exists",
+      "response": "Yes, the EMEM table exists. It is the core table in the Equipment Management (EM) module, storing master records for equipment including identifiers, types, statuses, locations, and attachments.\n\n**Table Name:** EMEM\n\n**Module:** Equipment Management (EM)\n\n**Primary Key:** Not defined\n\n**Key Columns:**\n  - EMCo (bCompany, required)\n  - Equipment (bEquip, required)\n  - Location (varchar, nullable)\n  - Type (char, required)\n  - Department (bDept, nullable)\n  - Category (bCat, nullable)\n  - Manufacturer (varchar, nullable)\n  - Model (varchar, nullable)\n  - ModelYr (char, nullable)\n  - VINNumber (varchar, nullable)\n  - Description (bItemDesc, nullable)\n  - Status (char, required)\n  - OdoReading (bHrs, required)\n... and 103 more columns\n\n**Usage Example:**\n```sql\nSELECT EMCo, Equipment, Location, Type, Department\nFROM EMEM WITH (NOLOCK)\nWHERE ID = @Value\n```\n\nAlways use WITH (NOLOCK) for SELECT queries to prevent blocking.",
+      "model_says": "exists",
+      "correct": true,
+      "exists_keywords": 3,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "POHD",
+      "question": "Is POHD a Viewpoint table?",
+      "expected": "exists",
+      "response": "Yes, POHD is a Viewpoint table. It serves as the header for purchase orders in the PO module.\n\n**Table Type:** View (indicated by 'v' prefix)\n**Module:** Purchase Order (PO)\n**Column Count:** 45\n**Has Primary Key:** Yes\n**Index Count:** 6\n**Foreign Key Count:** 0\n**Check Constraint Count:** 12\n**Created:** 2009-07-27 11:13:15.823\n**Modified:** 2023-09-18 12:28:44.017\n\n\n---\n\n*Documentation generated via LLM enrichment*\n\n- **LLM Provider:** xai\n- **Generated:** 2025-12-11\n- **Source:** CSV metadata extraction\n",
+      "model_says": "exists",
+      "correct": true,
+      "exists_keywords": 3,
+      "not_exists_keywords": 0
+    },
+    {
+      "table": "Invoice",
+      "question": "Does the Invoice table exist in Viewpoint Vista?",
+      "expected": "not_exists",
+      "response": "No, 'Invoice' does not exist in Viewpoint Vista. The database uses module-prefixed names like APTH (AP Transaction Header) or JCJM (JC Job Master).\n\nYou may be looking for:\n- APTH (AP Transaction Header)\n- vrvAP_MVAllInvoices\n- APTL (AP Transaction Lines)",
+      "model_says": "not_exists",
+      "correct": true,
+      "exists_keywords": 1,
+      "not_exists_keywords": 3
+    },
+    {
+      "table": "Customers",
+      "question": "Does the Customers table exist in Vista?",
+      "expected": "not_exists",
+      "response": "No, 'Customers' does not exist in Viewpoint Vista.\n\nYou may be looking for:\n- ARCM (AR Customer Master)\n- ARTH (AR Transaction Header)\n\nPlease specify the correct Viewpoint table name.",
+      "model_says": "not_exists",
+      "correct": true,
+      "exists_keywords": 1,
+      "not_exists_keywords": 3
+    },
+    {
+      "table": "Orders",
+      "question": "Is Orders a real Vista table?",
+      "expected": "not_exists",
+      "response": "No, 'Orders' is not a real Vista table. The database uses module-prefixed names like APTH (AP Transaction Header) or JCJM (JC Job Master).\n\nYou may be looking for:\n- POHD (PO Header)\n- PODL (PO Detail)",
+      "model_says": "not_exists",
+      "correct": true,
+      "exists_keywords": 0,
+      "not_exists_keywords": 2
+    },
+    {
+      "table": "Payments",
+      "question": "Does the Payments table exist?",
+      "expected": "not_exists",
+      "response": "No, the 'Payments' table does not exist in Viewpoint Vista. The database uses module-prefixed names like APTH (AP Transaction Header) or JCJM (JC Job Master).\n\nYou may be looking for:\n- APCM (AP Check Master)\n- ARCR (AR Cash Receipt)",
+      "model_says": "not_exists",
+      "correct": true,
+      "exists_keywords": 1,
+      "not_exists_keywords": 3
+    },
+    {
+      "table": "EmployeeMaster",
+      "question": "Is EmployeeMaster a table in Vista?",
+      "expected": "not_exists",
+      "response": "Yes, EmployeeMaster is a Viewpoint table. It combines core employee data from PREH with additional details like SSN, hire/term dates, active status, and occupation category.\n\nKey columns in EmployeeMaster:\n- PRCo (bCompany, not null)\n- Employee (bEmployee, not null)\n- LastName (varchar, not null)\n- FirstName (varchar, nullable)\n- MidName (varchar, nullable)",
+      "model_says": "exists",
+      "correct": false,
+      "exists_keywords": 2,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "UserPreferences",
+      "question": "Does UserPreferences exist?",
+      "expected": "not_exists",
+      "response": "Yes, the table 'UserPreferences' exists in Viewpoint Vista.\n\n**Purpose:** This table stores user-specific preferences and configuration settings within Vista's user preference system, allowing personalized views, reports, and system behaviors for individual users. It supports features like custom dashboards, report layouts, color schemes, and default companies across modules such as AP, AR, and JC. By persisting these preferences in a centralized table, it ensures consistent user experience and efficient customization without hardcoding changes.\n\n**Primary Key:** Not defined\n\n**Key Columns:**\n  - KeyID (bigint, not null)\n  - VPUserName (bVPUserName, not null)\n  - Company (bCompany, not null)\n  - ColorSchemeID (int, nullable)\n  - SmartCursorColor (int, nullable)\n  - ReqFieldColor (int, nullable)\n  - AccentColor1 (int, nullable)\n  - AccentColor2 (int, nullable)\n  - UseColorGrad (bYN, not null)\n  - FormColor1 (int, nullable)\n  - FormColor2 (int, nullable)\n  - GradDirection (tinyint, nullable)\n  - LabelBackgroundColor (int, nullable)\n  - LabelTextColor (int, nullable)\n  - LabelBorderStyle (",
+      "model_says": "exists",
+      "correct": false,
+      "exists_keywords": 8,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "SalesData",
+      "question": "Is SalesData a Viewpoint table?",
+      "expected": "not_exists",
+      "response": "No, SalesData is not a Viewpoint table. Viewpoint uses specific naming conventions with module prefixes (AP, AR, JC, GL, PR, etc.).\n\nYou may be looking for:\n- brvARInvoiceDetails (AR module)",
+      "model_says": "not_exists",
+      "correct": true,
+      "exists_keywords": 0,
+      "not_exists_keywords": 1
+    },
+    {
+      "table": "Project",
+      "question": "Does the Project table exist?",
+      "expected": "not_exists",
+      "response": "No. The 'Project' table does not exist in Viewpoint Vista.\n\nPlease specify the correct Viewpoint table name.",
+      "model_says": "not_exists",
+      "correct": true,
+      "exists_keywords": 1,
+      "not_exists_keywords": 3
+    },
+    {
+      "table": "TransactionHistory",
+      "question": "Is TransactionHistory a real table?",
+      "expected": "not_exists",
+      "response": "No, the table 'TransactionHistory' does not exist in Viewpoint Vista. Viewpoint uses specific naming conventions with module prefixes (AP, AR, JC, GL, PR, etc.).",
+      "model_says": "not_exists",
+      "correct": true,
+      "exists_keywords": 2,
+      "not_exists_keywords": 3
+    },
+    {
+      "table": "Customer",
+      "question": "Does Customer exist in Vista?",
+      "expected": "not_exists",
+      "response": "Yes, 'Customer' exists in Viewpoint Vista.\n\n**Customer is in the AR module:**\n- ARCM (AR Customer Master)\n- ARTH (AR Transaction Header)\n\n**Key columns in ARCM:**\n- CustGroup (bGroup, required)\n- Customer (bCustomer, required)\n- Name (varchar, nullable)\n- SortName (bSortName, required)\n- TempYN (bYN, required)",
+      "model_says": "exists",
+      "correct": false,
+      "exists_keywords": 3,
+      "not_exists_keywords": 0
+    }
+  ],
+  "summary": {
+    "correct_exists": 10,
+    "correct_not_exists": 7,
+    "false_rejections": 0,
+    "false_acceptances": 3,
+    "total": 20
+  }
+}

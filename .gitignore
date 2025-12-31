@@ -191,3 +191,9 @@ saves/
 
 # Keep output/ but ignore very large files
 output/vgpt2_training_data.json
+
+# Large training data files
+data/vgpt2_v3_sft.json
+data/vgpt2_v3_sft_merged.json
+data/vgpt2_v3_merged.json
+data/vgpt2_v3_advanced.json

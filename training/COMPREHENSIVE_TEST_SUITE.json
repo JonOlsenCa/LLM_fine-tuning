@@ -1,0 +1,3898 @@
+[
+  {
+    "id": "basic_apth_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the APTH table?",
+    "ground_truth": "Columns include: APCo, Mth, APTrans, VendorGroup, Vendor, InvId, APRef, Description, InvDate, DiscDate",
+    "key_elements": [
+      "APCo",
+      "Mth",
+      "APTrans",
+      "VendorGroup",
+      "Vendor"
+    ]
+  },
+  {
+    "id": "basic_apth_module",
+    "category": "basic_schema",
+    "question": "What module is APTH in?",
+    "ground_truth": "APTH is in the AP module",
+    "key_elements": [
+      "AP",
+      "APTH"
+    ]
+  },
+  {
+    "id": "basic_apth_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in APTH?",
+    "ground_truth": "Mth data type in APTH",
+    "key_elements": [
+      "Mth",
+      "APTH"
+    ]
+  },
+  {
+    "id": "basic_aptl_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the APTL table?",
+    "ground_truth": "Columns include: APCo, Mth, APTrans, APLine, LineType, PO, POItem, ItemType, SL, SLItem",
+    "key_elements": [
+      "APCo",
+      "Mth",
+      "APTrans",
+      "APLine",
+      "LineType"
+    ]
+  },
+  {
+    "id": "basic_aptl_module",
+    "category": "basic_schema",
+    "question": "What module is APTL in?",
+    "ground_truth": "APTL is in the AP module",
+    "key_elements": [
+      "AP",
+      "APTL"
+    ]
+  },
+  {
+    "id": "basic_aptl_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in APTL?",
+    "ground_truth": "Mth data type in APTL",
+    "key_elements": [
+      "Mth",
+      "APTL"
+    ]
+  },
+  {
+    "id": "basic_aptd_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the APTD table?",
+    "ground_truth": "Columns include: APCo, Mth, APTrans, APLine, APSeq, PayType, Amount, DiscOffer, DiscTaken, DueDate",
+    "key_elements": [
+      "APCo",
+      "Mth",
+      "APTrans",
+      "APLine",
+      "APSeq"
+    ]
+  },
+  {
+    "id": "basic_aptd_module",
+    "category": "basic_schema",
+    "question": "What module is APTD in?",
+    "ground_truth": "APTD is in the AP module",
+    "key_elements": [
+      "AP",
+      "APTD"
+    ]
+  },
+  {
+    "id": "basic_aptd_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in APTD?",
+    "ground_truth": "Mth data type in APTD",
+    "key_elements": [
+      "Mth",
+      "APTD"
+    ]
+  },
+  {
+    "id": "basic_aphd_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the APHD table?",
+    "ground_truth": "Columns include: APCo, Mth, APTrans, APLine, APSeq, HoldCode",
+    "key_elements": [
+      "APCo",
+      "Mth",
+      "APTrans",
+      "APLine",
+      "APSeq"
+    ]
+  },
+  {
+    "id": "basic_aphd_module",
+    "category": "basic_schema",
+    "question": "What module is APHD in?",
+    "ground_truth": "APHD is in the AP module",
+    "key_elements": [
+      "AP",
+      "APHD"
+    ]
+  },
+  {
+    "id": "basic_aphd_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in APHD?",
+    "ground_truth": "Mth data type in APHD",
+    "key_elements": [
+      "Mth",
+      "APHD"
+    ]
+  },
+  {
+    "id": "basic_aplb_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the APLB table?",
+    "ground_truth": "Columns include: Co, Mth, BatchId, BatchSeq, APLine, BatchTransType, LineType, PO, POItem, ItemType",
+    "key_elements": [
+      "Co",
+      "Mth",
+      "BatchId",
+      "BatchSeq",
+      "APLine"
+    ]
+  },
+  {
+    "id": "basic_aplb_module",
+    "category": "basic_schema",
+    "question": "What module is APLB in?",
+    "ground_truth": "APLB is in the AP module",
+    "key_elements": [
+      "AP",
+      "APLB"
+    ]
+  },
+  {
+    "id": "basic_aplb_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in APLB?",
+    "ground_truth": "Mth data type in APLB",
+    "key_elements": [
+      "Mth",
+      "APLB"
+    ]
+  },
+  {
+    "id": "basic_apco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the APCO table?",
+    "ground_truth": "Columns include: APCo, GLCo, ExpJrnl, GLExpInterfaceLvl, GLExpSummaryDesc, GLExpTransDesc, GLJobDetailDesc, GLInvDetailDesc, GLEquipDetailDesc, GLExpDetailDesc",
+    "key_elements": [
+      "APCo",
+      "GLCo",
+      "ExpJrnl",
+      "GLExpInterfaceLvl",
+      "GLExpSummaryDesc"
+    ]
+  },
+  {
+    "id": "basic_apco_module",
+    "category": "basic_schema",
+    "question": "What module is APCO in?",
+    "ground_truth": "APCO is in the AP module",
+    "key_elements": [
+      "AP",
+      "APCO"
+    ]
+  },
+  {
+    "id": "basic_apco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of GLCo in APCO?",
+    "ground_truth": "GLCo data type in APCO",
+    "key_elements": [
+      "GLCo",
+      "APCO"
+    ]
+  },
+  {
+    "id": "basic_apvm_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the APVM table?",
+    "ground_truth": "Columns include: VendorGroup, Vendor, SortName, Name, Type, TempYN, Contact, Phone, Fax, EMail",
+    "key_elements": [
+      "VendorGroup",
+      "Vendor",
+      "SortName",
+      "Name",
+      "Type"
+    ]
+  },
+  {
+    "id": "basic_apvm_module",
+    "category": "basic_schema",
+    "question": "What module is APVM in?",
+    "ground_truth": "APVM is in the AP module",
+    "key_elements": [
+      "AP",
+      "APVM"
+    ]
+  },
+  {
+    "id": "basic_apvm_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Vendor in APVM?",
+    "ground_truth": "Vendor data type in APVM",
+    "key_elements": [
+      "Vendor",
+      "APVM"
+    ]
+  },
+  {
+    "id": "basic_aphb_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the APHB table?",
+    "ground_truth": "Columns include: Co, Mth, BatchId, BatchSeq, BatchTransType, APTrans, VendorGroup, Vendor, APRef, Description",
+    "key_elements": [
+      "Co",
+      "Mth",
+      "BatchId",
+      "BatchSeq",
+      "BatchTransType"
+    ]
+  },
+  {
+    "id": "basic_aphb_module",
+    "category": "basic_schema",
+    "question": "What module is APHB in?",
+    "ground_truth": "APHB is in the AP module",
+    "key_elements": [
+      "AP",
+      "APHB"
+    ]
+  },
+  {
+    "id": "basic_aphb_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in APHB?",
+    "ground_truth": "Mth data type in APHB",
+    "key_elements": [
+      "Mth",
+      "APHB"
+    ]
+  },
+  {
+    "id": "basic_arth_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the ARTH table?",
+    "ground_truth": "Columns include: ARCo, Mth, ARTrans, ARTransType, CustGroup, Customer, CustRef, CustPO, RecType, JCCo",
+    "key_elements": [
+      "ARCo",
+      "Mth",
+      "ARTrans",
+      "ARTransType",
+      "CustGroup"
+    ]
+  },
+  {
+    "id": "basic_arth_module",
+    "category": "basic_schema",
+    "question": "What module is ARTH in?",
+    "ground_truth": "ARTH is in the AR module",
+    "key_elements": [
+      "AR",
+      "ARTH"
+    ]
+  },
+  {
+    "id": "basic_arth_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in ARTH?",
+    "ground_truth": "Mth data type in ARTH",
+    "key_elements": [
+      "Mth",
+      "ARTH"
+    ]
+  },
+  {
+    "id": "basic_artl_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the ARTL table?",
+    "ground_truth": "Columns include: ARCo, Mth, ARTrans, ARLine, RecType, LineType, Description, GLCo, GLAcct, TaxGroup",
+    "key_elements": [
+      "ARCo",
+      "Mth",
+      "ARTrans",
+      "ARLine",
+      "RecType"
+    ]
+  },
+  {
+    "id": "basic_artl_module",
+    "category": "basic_schema",
+    "question": "What module is ARTL in?",
+    "ground_truth": "ARTL is in the AR module",
+    "key_elements": [
+      "AR",
+      "ARTL"
+    ]
+  },
+  {
+    "id": "basic_artl_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in ARTL?",
+    "ground_truth": "Mth data type in ARTL",
+    "key_elements": [
+      "Mth",
+      "ARTL"
+    ]
+  },
+  {
+    "id": "basic_arcm_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the ARCM table?",
+    "ground_truth": "Columns include: CustGroup, Customer, Name, SortName, TempYN, Phone, Fax, EMail, URL, Contact",
+    "key_elements": [
+      "CustGroup",
+      "Customer",
+      "Name",
+      "SortName",
+      "TempYN"
+    ]
+  },
+  {
+    "id": "basic_arcm_module",
+    "category": "basic_schema",
+    "question": "What module is ARCM in?",
+    "ground_truth": "ARCM is in the AR module",
+    "key_elements": [
+      "AR",
+      "ARCM"
+    ]
+  },
+  {
+    "id": "basic_arcm_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Customer in ARCM?",
+    "ground_truth": "Customer data type in ARCM",
+    "key_elements": [
+      "Customer",
+      "ARCM"
+    ]
+  },
+  {
+    "id": "basic_arco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the ARCO table?",
+    "ground_truth": "Columns include: ARCo, GLCo, CMCo, CMAcct, CMInterface, CMSummaryDesc, JCCo, JCInterface, FCLevel, FCCalcOnFC",
+    "key_elements": [
+      "ARCo",
+      "GLCo",
+      "CMCo",
+      "CMAcct",
+      "CMInterface"
+    ]
+  },
+  {
+    "id": "basic_arco_module",
+    "category": "basic_schema",
+    "question": "What module is ARCO in?",
+    "ground_truth": "ARCO is in the AR module",
+    "key_elements": [
+      "AR",
+      "ARCO"
+    ]
+  },
+  {
+    "id": "basic_arco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of GLCo in ARCO?",
+    "ground_truth": "GLCo data type in ARCO",
+    "key_elements": [
+      "GLCo",
+      "ARCO"
+    ]
+  },
+  {
+    "id": "basic_gldt_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the GLDT table?",
+    "ground_truth": "Columns include: GLCo, Mth, GLTrans, GLAcct, Jrnl, GLRef, SourceCo, Source, ActDate, DatePosted",
+    "key_elements": [
+      "GLCo",
+      "Mth",
+      "GLTrans",
+      "GLAcct",
+      "Jrnl"
+    ]
+  },
+  {
+    "id": "basic_gldt_module",
+    "category": "basic_schema",
+    "question": "What module is GLDT in?",
+    "ground_truth": "GLDT is in the GL module",
+    "key_elements": [
+      "GL",
+      "GLDT"
+    ]
+  },
+  {
+    "id": "basic_gldt_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in GLDT?",
+    "ground_truth": "Mth data type in GLDT",
+    "key_elements": [
+      "Mth",
+      "GLDT"
+    ]
+  },
+  {
+    "id": "basic_glac_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the GLAC table?",
+    "ground_truth": "Columns include: GLCo, GLAcct, Description, AcctType, SubType, NormBal, InterfaceDetail, Active, SummaryAcct, CashAccrual",
+    "key_elements": [
+      "GLCo",
+      "GLAcct",
+      "Description",
+      "AcctType",
+      "SubType"
+    ]
+  },
+  {
+    "id": "basic_glac_module",
+    "category": "basic_schema",
+    "question": "What module is GLAC in?",
+    "ground_truth": "GLAC is in the GL module",
+    "key_elements": [
+      "GL",
+      "GLAC"
+    ]
+  },
+  {
+    "id": "basic_glac_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of GLAcct in GLAC?",
+    "ground_truth": "GLAcct data type in GLAC",
+    "key_elements": [
+      "GLAcct",
+      "GLAC"
+    ]
+  },
+  {
+    "id": "basic_gljr_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the GLJR table?",
+    "ground_truth": "Columns include: GLCo, Jrnl, Description, Rev, RevJrnl, Notes, UniqueAttchID, KeyID",
+    "key_elements": [
+      "GLCo",
+      "Jrnl",
+      "Description",
+      "Rev",
+      "RevJrnl"
+    ]
+  },
+  {
+    "id": "basic_gljr_module",
+    "category": "basic_schema",
+    "question": "What module is GLJR in?",
+    "ground_truth": "GLJR is in the GL module",
+    "key_elements": [
+      "GL",
+      "GLJR"
+    ]
+  },
+  {
+    "id": "basic_gljr_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Jrnl in GLJR?",
+    "ground_truth": "Jrnl data type in GLJR",
+    "key_elements": [
+      "Jrnl",
+      "GLJR"
+    ]
+  },
+  {
+    "id": "basic_glco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the GLCO table?",
+    "ground_truth": "Columns include: GLCo, Consolid, LastMthSubClsd, LastMthGLClsd, MaxOpen, CashAccrual, Unbal, AuditCoParams, AuditAccts, AuditAutoJrnl",
+    "key_elements": [
+      "GLCo",
+      "Consolid",
+      "LastMthSubClsd",
+      "LastMthGLClsd",
+      "MaxOpen"
+    ]
+  },
+  {
+    "id": "basic_glco_module",
+    "category": "basic_schema",
+    "question": "What module is GLCO in?",
+    "ground_truth": "GLCO is in the GL module",
+    "key_elements": [
+      "GL",
+      "GLCO"
+    ]
+  },
+  {
+    "id": "basic_glco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Consolid in GLCO?",
+    "ground_truth": "Consolid data type in GLCO",
+    "key_elements": [
+      "Consolid",
+      "GLCO"
+    ]
+  },
+  {
+    "id": "basic_jcjm_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the JCJM table?",
+    "ground_truth": "Columns include: JCCo, Job, Description, Contract, JobStatus, BidNumber, LockPhases, ProjectMgr, JobPhone, JobFax",
+    "key_elements": [
+      "JCCo",
+      "Job",
+      "Description",
+      "Contract",
+      "JobStatus"
+    ]
+  },
+  {
+    "id": "basic_jcjm_module",
+    "category": "basic_schema",
+    "question": "What module is JCJM in?",
+    "ground_truth": "JCJM is in the JC module",
+    "key_elements": [
+      "JC",
+      "JCJM"
+    ]
+  },
+  {
+    "id": "basic_jcjm_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Job in JCJM?",
+    "ground_truth": "Job data type in JCJM",
+    "key_elements": [
+      "Job",
+      "JCJM"
+    ]
+  },
+  {
+    "id": "basic_jccm_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the JCCM table?",
+    "ground_truth": "Columns include: JCCo, Contract, Description, Department, ContractStatus, OriginalDays, CurrentDays, StartMonth, MonthClosed, ProjCloseDate",
+    "key_elements": [
+      "JCCo",
+      "Contract",
+      "Description",
+      "Department",
+      "ContractStatus"
+    ]
+  },
+  {
+    "id": "basic_jccm_module",
+    "category": "basic_schema",
+    "question": "What module is JCCM in?",
+    "ground_truth": "JCCM is in the JC module",
+    "key_elements": [
+      "JC",
+      "JCCM"
+    ]
+  },
+  {
+    "id": "basic_jccm_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Contract in JCCM?",
+    "ground_truth": "Contract data type in JCCM",
+    "key_elements": [
+      "Contract",
+      "JCCM"
+    ]
+  },
+  {
+    "id": "basic_jccd_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the JCCD table?",
+    "ground_truth": "Columns include: JCCo, Mth, CostTrans, Job, PhaseGroup, Phase, CostType, PostedDate, ActualDate, JCTransType",
+    "key_elements": [
+      "JCCo",
+      "Mth",
+      "CostTrans",
+      "Job",
+      "PhaseGroup"
+    ]
+  },
+  {
+    "id": "basic_jccd_module",
+    "category": "basic_schema",
+    "question": "What module is JCCD in?",
+    "ground_truth": "JCCD is in the JC module",
+    "key_elements": [
+      "JC",
+      "JCCD"
+    ]
+  },
+  {
+    "id": "basic_jccd_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in JCCD?",
+    "ground_truth": "Mth data type in JCCD",
+    "key_elements": [
+      "Mth",
+      "JCCD"
+    ]
+  },
+  {
+    "id": "basic_jccp_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the JCCP table?",
+    "ground_truth": "Columns include: JCCo, Job, PhaseGroup, Phase, CostType, Mth, ActualHours, ActualUnits, ActualCost, OrigEstHours",
+    "key_elements": [
+      "JCCo",
+      "Job",
+      "PhaseGroup",
+      "Phase",
+      "CostType"
+    ]
+  },
+  {
+    "id": "basic_jccp_module",
+    "category": "basic_schema",
+    "question": "What module is JCCP in?",
+    "ground_truth": "JCCP is in the JC module",
+    "key_elements": [
+      "JC",
+      "JCCP"
+    ]
+  },
+  {
+    "id": "basic_jccp_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Job in JCCP?",
+    "ground_truth": "Job data type in JCCP",
+    "key_elements": [
+      "Job",
+      "JCCP"
+    ]
+  },
+  {
+    "id": "basic_jcch_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the JCCH table?",
+    "ground_truth": "Columns include: JCCo, Job, PhaseGroup, Phase, CostType, UM, BillFlag, ItemUnitFlag, PhaseUnitFlag, BuyOutYN",
+    "key_elements": [
+      "JCCo",
+      "Job",
+      "PhaseGroup",
+      "Phase",
+      "CostType"
+    ]
+  },
+  {
+    "id": "basic_jcch_module",
+    "category": "basic_schema",
+    "question": "What module is JCCH in?",
+    "ground_truth": "JCCH is in the JC module",
+    "key_elements": [
+      "JC",
+      "JCCH"
+    ]
+  },
+  {
+    "id": "basic_jcch_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Job in JCCH?",
+    "ground_truth": "Job data type in JCCH",
+    "key_elements": [
+      "Job",
+      "JCCH"
+    ]
+  },
+  {
+    "id": "basic_jcjp_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the JCJP table?",
+    "ground_truth": "Columns include: JCCo, Job, PhaseGroup, Phase, Description, Contract, Item, ProjMinPct, ActiveYN, Notes",
+    "key_elements": [
+      "JCCo",
+      "Job",
+      "PhaseGroup",
+      "Phase",
+      "Description"
+    ]
+  },
+  {
+    "id": "basic_jcjp_module",
+    "category": "basic_schema",
+    "question": "What module is JCJP in?",
+    "ground_truth": "JCJP is in the JC module",
+    "key_elements": [
+      "JC",
+      "JCJP"
+    ]
+  },
+  {
+    "id": "basic_jcjp_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Job in JCJP?",
+    "ground_truth": "Job data type in JCJP",
+    "key_elements": [
+      "Job",
+      "JCJP"
+    ]
+  },
+  {
+    "id": "basic_jcct_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the JCCT table?",
+    "ground_truth": "Columns include: PhaseGroup, CostType, Description, Abbreviation, TrackHours, LinkProgress, Notes, JBCostTypeCategory, UniqueAttchID, KeyID",
+    "key_elements": [
+      "PhaseGroup",
+      "CostType",
+      "Description",
+      "Abbreviation",
+      "TrackHours"
+    ]
+  },
+  {
+    "id": "basic_jcct_module",
+    "category": "basic_schema",
+    "question": "What module is JCCT in?",
+    "ground_truth": "JCCT is in the JC module",
+    "key_elements": [
+      "JC",
+      "JCCT"
+    ]
+  },
+  {
+    "id": "basic_jcct_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of CostType in JCCT?",
+    "ground_truth": "CostType data type in JCCT",
+    "key_elements": [
+      "CostType",
+      "JCCT"
+    ]
+  },
+  {
+    "id": "basic_jcco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the JCCO table?",
+    "ground_truth": "Columns include: JCCo, ValidPhaseChars, PostClosedJobs, UseJobBilling, DefaultBillType, ARCo, INCo, GLCo, GLCostLevel, GLCostOveride",
+    "key_elements": [
+      "JCCo",
+      "ValidPhaseChars",
+      "PostClosedJobs",
+      "UseJobBilling",
+      "DefaultBillType"
+    ]
+  },
+  {
+    "id": "basic_jcco_module",
+    "category": "basic_schema",
+    "question": "What module is JCCO in?",
+    "ground_truth": "JCCO is in the JC module",
+    "key_elements": [
+      "JC",
+      "JCCO"
+    ]
+  },
+  {
+    "id": "basic_jcco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of ValidPhaseChars in JCCO?",
+    "ground_truth": "ValidPhaseChars data type in JCCO",
+    "key_elements": [
+      "ValidPhaseChars",
+      "JCCO"
+    ]
+  },
+  {
+    "id": "basic_jcpr_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the JCPR table?",
+    "ground_truth": "Columns include: KeyID, JCCo, Mth, ResTrans, Job, PhaseGroup, Phase, CostType, PostedDate, ActualDate",
+    "key_elements": [
+      "KeyID",
+      "JCCo",
+      "Mth",
+      "ResTrans",
+      "Job"
+    ]
+  },
+  {
+    "id": "basic_jcpr_module",
+    "category": "basic_schema",
+    "question": "What module is JCPR in?",
+    "ground_truth": "JCPR is in the JC module",
+    "key_elements": [
+      "JC",
+      "JCPR"
+    ]
+  },
+  {
+    "id": "basic_jcpr_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of JCCo in JCPR?",
+    "ground_truth": "JCCo data type in JCPR",
+    "key_elements": [
+      "JCCo",
+      "JCPR"
+    ]
+  },
+  {
+    "id": "basic_jcpd_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the JCPD table?",
+    "ground_truth": "Columns include: KeyID, Co, Mth, BatchId, BatchSeq, DetSeq, Source, JCTransType, TransType, ResTrans",
+    "key_elements": [
+      "KeyID",
+      "Co",
+      "Mth",
+      "BatchId",
+      "BatchSeq"
+    ]
+  },
+  {
+    "id": "basic_jcpd_module",
+    "category": "basic_schema",
+    "question": "What module is JCPD in?",
+    "ground_truth": "JCPD is in the JC module",
+    "key_elements": [
+      "JC",
+      "JCPD"
+    ]
+  },
+  {
+    "id": "basic_jcpd_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Co in JCPD?",
+    "ground_truth": "Co data type in JCPD",
+    "key_elements": [
+      "Co",
+      "JCPD"
+    ]
+  },
+  {
+    "id": "basic_prth_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the PRTH table?",
+    "ground_truth": "Columns include: PRCo, PRGroup, PREndDate, Employee, PaySeq, PostSeq, Type, PostDate, JCCo, Job",
+    "key_elements": [
+      "PRCo",
+      "PRGroup",
+      "PREndDate",
+      "Employee",
+      "PaySeq"
+    ]
+  },
+  {
+    "id": "basic_prth_module",
+    "category": "basic_schema",
+    "question": "What module is PRTH in?",
+    "ground_truth": "PRTH is in the PR module",
+    "key_elements": [
+      "PR",
+      "PRTH"
+    ]
+  },
+  {
+    "id": "basic_prth_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of PRGroup in PRTH?",
+    "ground_truth": "PRGroup data type in PRTH",
+    "key_elements": [
+      "PRGroup",
+      "PRTH"
+    ]
+  },
+  {
+    "id": "basic_prtb_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the PRTB table?",
+    "ground_truth": "Columns include: Co, Mth, BatchId, BatchSeq, BatchTransType, Employee, PaySeq, PostSeq, Type, DayNum",
+    "key_elements": [
+      "Co",
+      "Mth",
+      "BatchId",
+      "BatchSeq",
+      "BatchTransType"
+    ]
+  },
+  {
+    "id": "basic_prtb_module",
+    "category": "basic_schema",
+    "question": "What module is PRTB in?",
+    "ground_truth": "PRTB is in the PR module",
+    "key_elements": [
+      "PR",
+      "PRTB"
+    ]
+  },
+  {
+    "id": "basic_prtb_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in PRTB?",
+    "ground_truth": "Mth data type in PRTB",
+    "key_elements": [
+      "Mth",
+      "PRTB"
+    ]
+  },
+  {
+    "id": "basic_preh_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the PREH table?",
+    "ground_truth": "Columns include: PRCo, Employee, LastName, FirstName, MidName, SortName, Address, City, State, Zip",
+    "key_elements": [
+      "PRCo",
+      "Employee",
+      "LastName",
+      "FirstName",
+      "MidName"
+    ]
+  },
+  {
+    "id": "basic_preh_module",
+    "category": "basic_schema",
+    "question": "What module is PREH in?",
+    "ground_truth": "PREH is in the PR module",
+    "key_elements": [
+      "PR",
+      "PREH"
+    ]
+  },
+  {
+    "id": "basic_preh_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Employee in PREH?",
+    "ground_truth": "Employee data type in PREH",
+    "key_elements": [
+      "Employee",
+      "PREH"
+    ]
+  },
+  {
+    "id": "basic_prco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the PRCO table?",
+    "ground_truth": "Columns include: PRCo, GLCo, Jrnl, GLInterface, CMCo, APCo, AutoOT, OTEarnCode, JCCo, AllowNoPhase",
+    "key_elements": [
+      "PRCo",
+      "GLCo",
+      "Jrnl",
+      "GLInterface",
+      "CMCo"
+    ]
+  },
+  {
+    "id": "basic_prco_module",
+    "category": "basic_schema",
+    "question": "What module is PRCO in?",
+    "ground_truth": "PRCO is in the PR module",
+    "key_elements": [
+      "PR",
+      "PRCO"
+    ]
+  },
+  {
+    "id": "basic_prco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of GLCo in PRCO?",
+    "ground_truth": "GLCo data type in PRCO",
+    "key_elements": [
+      "GLCo",
+      "PRCO"
+    ]
+  },
+  {
+    "id": "basic_prdt_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the PRDT table?",
+    "ground_truth": "Columns include: PRCo, PRGroup, PREndDate, Employee, PaySeq, EDLType, EDLCode, Hours, Amount, SubjectAmt",
+    "key_elements": [
+      "PRCo",
+      "PRGroup",
+      "PREndDate",
+      "Employee",
+      "PaySeq"
+    ]
+  },
+  {
+    "id": "basic_prdt_module",
+    "category": "basic_schema",
+    "question": "What module is PRDT in?",
+    "ground_truth": "PRDT is in the PR module",
+    "key_elements": [
+      "PR",
+      "PRDT"
+    ]
+  },
+  {
+    "id": "basic_prdt_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of PRGroup in PRDT?",
+    "ground_truth": "PRGroup data type in PRDT",
+    "key_elements": [
+      "PRGroup",
+      "PRDT"
+    ]
+  },
+  {
+    "id": "basic_prtc_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the PRTC table?",
+    "ground_truth": "Columns include: PRCo, Craft, Class, Template, OverCapLimit, OldCapLimit, NewCapLimit, Notes, UniqueAttchID, KeyID",
+    "key_elements": [
+      "PRCo",
+      "Craft",
+      "Class",
+      "Template",
+      "OverCapLimit"
+    ]
+  },
+  {
+    "id": "basic_prtc_module",
+    "category": "basic_schema",
+    "question": "What module is PRTC in?",
+    "ground_truth": "PRTC is in the PR module",
+    "key_elements": [
+      "PR",
+      "PRTC"
+    ]
+  },
+  {
+    "id": "basic_prtc_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Craft in PRTC?",
+    "ground_truth": "Craft data type in PRTC",
+    "key_elements": [
+      "Craft",
+      "PRTC"
+    ]
+  },
+  {
+    "id": "basic_prpc_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the PRPC table?",
+    "ground_truth": "Columns include: PRCo, PRGroup, PREndDate, BeginDate, MultiMth, BeginMth, EndMth, CutoffDate, LimitMth, Hrs",
+    "key_elements": [
+      "PRCo",
+      "PRGroup",
+      "PREndDate",
+      "BeginDate",
+      "MultiMth"
+    ]
+  },
+  {
+    "id": "basic_prpc_module",
+    "category": "basic_schema",
+    "question": "What module is PRPC in?",
+    "ground_truth": "PRPC is in the PR module",
+    "key_elements": [
+      "PR",
+      "PRPC"
+    ]
+  },
+  {
+    "id": "basic_prpc_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of PRGroup in PRPC?",
+    "ground_truth": "PRGroup data type in PRPC",
+    "key_elements": [
+      "PRGroup",
+      "PRPC"
+    ]
+  },
+  {
+    "id": "basic_slhd_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the SLHD table?",
+    "ground_truth": "Columns include: SLCo, SL, JCCo, Job, Description, VendorGroup, Vendor, HoldCode, PayTerms, CompGroup",
+    "key_elements": [
+      "SLCo",
+      "SL",
+      "JCCo",
+      "Job",
+      "Description"
+    ]
+  },
+  {
+    "id": "basic_slhd_module",
+    "category": "basic_schema",
+    "question": "What module is SLHD in?",
+    "ground_truth": "SLHD is in the SL module",
+    "key_elements": [
+      "SL",
+      "SLHD"
+    ]
+  },
+  {
+    "id": "basic_slhd_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of SL in SLHD?",
+    "ground_truth": "SL data type in SLHD",
+    "key_elements": [
+      "SL",
+      "SLHD"
+    ]
+  },
+  {
+    "id": "basic_slit_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the SLIT table?",
+    "ground_truth": "Columns include: SLCo, SL, SLItem, ItemType, Addon, AddonPct, JCCo, Job, PhaseGroup, Phase",
+    "key_elements": [
+      "SLCo",
+      "SL",
+      "SLItem",
+      "ItemType",
+      "Addon"
+    ]
+  },
+  {
+    "id": "basic_slit_module",
+    "category": "basic_schema",
+    "question": "What module is SLIT in?",
+    "ground_truth": "SLIT is in the SL module",
+    "key_elements": [
+      "SL",
+      "SLIT"
+    ]
+  },
+  {
+    "id": "basic_slit_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of SL in SLIT?",
+    "ground_truth": "SL data type in SLIT",
+    "key_elements": [
+      "SL",
+      "SLIT"
+    ]
+  },
+  {
+    "id": "basic_slwi_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the SLWI table?",
+    "ground_truth": "Columns include: SLCo, UserName, SL, SLItem, ItemType, Description, PhaseGroup, Phase, UM, CurUnits",
+    "key_elements": [
+      "SLCo",
+      "UserName",
+      "SL",
+      "SLItem",
+      "ItemType"
+    ]
+  },
+  {
+    "id": "basic_slwi_module",
+    "category": "basic_schema",
+    "question": "What module is SLWI in?",
+    "ground_truth": "SLWI is in the SL module",
+    "key_elements": [
+      "SL",
+      "SLWI"
+    ]
+  },
+  {
+    "id": "basic_slwi_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of UserName in SLWI?",
+    "ground_truth": "UserName data type in SLWI",
+    "key_elements": [
+      "UserName",
+      "SLWI"
+    ]
+  },
+  {
+    "id": "basic_slhb_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the SLHB table?",
+    "ground_truth": "Columns include: Co, Mth, BatchId, BatchSeq, BatchTransType, SL, JCCo, Job, Description, VendorGroup",
+    "key_elements": [
+      "Co",
+      "Mth",
+      "BatchId",
+      "BatchSeq",
+      "BatchTransType"
+    ]
+  },
+  {
+    "id": "basic_slhb_module",
+    "category": "basic_schema",
+    "question": "What module is SLHB in?",
+    "ground_truth": "SLHB is in the SL module",
+    "key_elements": [
+      "SL",
+      "SLHB"
+    ]
+  },
+  {
+    "id": "basic_slhb_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in SLHB?",
+    "ground_truth": "Mth data type in SLHB",
+    "key_elements": [
+      "Mth",
+      "SLHB"
+    ]
+  },
+  {
+    "id": "basic_slco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the SLCO table?",
+    "ground_truth": "Columns include: SLCo, CmtdDetailToJC, AuditCoParams, AuditSLs, Notes, UniqueAttchID, AuditSLCompliance, KeyID, AttachBatchReportsYN, EnforceSLCatchup",
+    "key_elements": [
+      "SLCo",
+      "CmtdDetailToJC",
+      "AuditCoParams",
+      "AuditSLs",
+      "Notes"
+    ]
+  },
+  {
+    "id": "basic_slco_module",
+    "category": "basic_schema",
+    "question": "What module is SLCO in?",
+    "ground_truth": "SLCO is in the SL module",
+    "key_elements": [
+      "SL",
+      "SLCO"
+    ]
+  },
+  {
+    "id": "basic_slco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of CmtdDetailToJC in SLCO?",
+    "ground_truth": "CmtdDetailToJC data type in SLCO",
+    "key_elements": [
+      "CmtdDetailToJC",
+      "SLCO"
+    ]
+  },
+  {
+    "id": "basic_slcb_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the SLCB table?",
+    "ground_truth": "Columns include: Co, Mth, BatchId, BatchSeq, BatchTransType, SLTrans, SL, SLItem, SLChangeOrder, AppChangeOrder",
+    "key_elements": [
+      "Co",
+      "Mth",
+      "BatchId",
+      "BatchSeq",
+      "BatchTransType"
+    ]
+  },
+  {
+    "id": "basic_slcb_module",
+    "category": "basic_schema",
+    "question": "What module is SLCB in?",
+    "ground_truth": "SLCB is in the SL module",
+    "key_elements": [
+      "SL",
+      "SLCB"
+    ]
+  },
+  {
+    "id": "basic_slcb_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in SLCB?",
+    "ground_truth": "Mth data type in SLCB",
+    "key_elements": [
+      "Mth",
+      "SLCB"
+    ]
+  },
+  {
+    "id": "basic_pohd_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the POHD table?",
+    "ground_truth": "Columns include: POCo, PO, VendorGroup, Vendor, Description, OrderDate, OrderedBy, ExpDate, Status, JCCo",
+    "key_elements": [
+      "POCo",
+      "PO",
+      "VendorGroup",
+      "Vendor",
+      "Description"
+    ]
+  },
+  {
+    "id": "basic_pohd_module",
+    "category": "basic_schema",
+    "question": "What module is POHD in?",
+    "ground_truth": "POHD is in the PO module",
+    "key_elements": [
+      "PO",
+      "POHD"
+    ]
+  },
+  {
+    "id": "basic_pohd_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of PO in POHD?",
+    "ground_truth": "PO data type in POHD",
+    "key_elements": [
+      "PO",
+      "POHD"
+    ]
+  },
+  {
+    "id": "basic_poit_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the POIT table?",
+    "ground_truth": "Columns include: POCo, PO, POItem, ItemType, MatlGroup, Material, VendMatId, Description, UM, RecvYN",
+    "key_elements": [
+      "POCo",
+      "PO",
+      "POItem",
+      "ItemType",
+      "MatlGroup"
+    ]
+  },
+  {
+    "id": "basic_poit_module",
+    "category": "basic_schema",
+    "question": "What module is POIT in?",
+    "ground_truth": "POIT is in the PO module",
+    "key_elements": [
+      "PO",
+      "POIT"
+    ]
+  },
+  {
+    "id": "basic_poit_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of PO in POIT?",
+    "ground_truth": "PO data type in POIT",
+    "key_elements": [
+      "PO",
+      "POIT"
+    ]
+  },
+  {
+    "id": "basic_poib_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the POIB table?",
+    "ground_truth": "Columns include: Co, Mth, BatchId, BatchSeq, POItem, BatchTransType, ItemType, MatlGroup, Material, VendMatId",
+    "key_elements": [
+      "Co",
+      "Mth",
+      "BatchId",
+      "BatchSeq",
+      "POItem"
+    ]
+  },
+  {
+    "id": "basic_poib_module",
+    "category": "basic_schema",
+    "question": "What module is POIB in?",
+    "ground_truth": "POIB is in the PO module",
+    "key_elements": [
+      "PO",
+      "POIB"
+    ]
+  },
+  {
+    "id": "basic_poib_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in POIB?",
+    "ground_truth": "Mth data type in POIB",
+    "key_elements": [
+      "Mth",
+      "POIB"
+    ]
+  },
+  {
+    "id": "basic_poco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the POCO table?",
+    "ground_truth": "Columns include: POCo, AutoPO, LastPO, CmtdDetailToJC, AuditCoParams, AuditPOs, Notes, ReceiptUpdate, GLAccrualAcct, GLRecExpInterfacelvl",
+    "key_elements": [
+      "POCo",
+      "AutoPO",
+      "LastPO",
+      "CmtdDetailToJC",
+      "AuditCoParams"
+    ]
+  },
+  {
+    "id": "basic_poco_module",
+    "category": "basic_schema",
+    "question": "What module is POCO in?",
+    "ground_truth": "POCO is in the PO module",
+    "key_elements": [
+      "PO",
+      "POCO"
+    ]
+  },
+  {
+    "id": "basic_poco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of AutoPO in POCO?",
+    "ground_truth": "AutoPO data type in POCO",
+    "key_elements": [
+      "AutoPO",
+      "POCO"
+    ]
+  },
+  {
+    "id": "basic_emem_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the EMEM table?",
+    "ground_truth": "Columns include: EMCo, Equipment, Location, Type, Department, Category, Manufacturer, Model, ModelYr, VINNumber",
+    "key_elements": [
+      "EMCo",
+      "Equipment",
+      "Location",
+      "Type",
+      "Department"
+    ]
+  },
+  {
+    "id": "basic_emem_module",
+    "category": "basic_schema",
+    "question": "What module is EMEM in?",
+    "ground_truth": "EMEM is in the EM module",
+    "key_elements": [
+      "EM",
+      "EMEM"
+    ]
+  },
+  {
+    "id": "basic_emem_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Equipment in EMEM?",
+    "ground_truth": "Equipment data type in EMEM",
+    "key_elements": [
+      "Equipment",
+      "EMEM"
+    ]
+  },
+  {
+    "id": "basic_emco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the EMCO table?",
+    "ground_truth": "Columns include: EMCo, EMGroup, INCo, JCCo, PRCo, GLCo, AdjstGLLvl, AdjstGLSumDesc, AdjstGLDetlDesc, AdjstGLJrnl",
+    "key_elements": [
+      "EMCo",
+      "EMGroup",
+      "INCo",
+      "JCCo",
+      "PRCo"
+    ]
+  },
+  {
+    "id": "basic_emco_module",
+    "category": "basic_schema",
+    "question": "What module is EMCO in?",
+    "ground_truth": "EMCO is in the EM module",
+    "key_elements": [
+      "EM",
+      "EMCO"
+    ]
+  },
+  {
+    "id": "basic_emco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of EMGroup in EMCO?",
+    "ground_truth": "EMGroup data type in EMCO",
+    "key_elements": [
+      "EMGroup",
+      "EMCO"
+    ]
+  },
+  {
+    "id": "basic_emrd_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the EMRD table?",
+    "ground_truth": "Columns include: EMCo, Mth, Trans, BatchID, EMGroup, Equipment, RevCode, Source, TransType, PostDate",
+    "key_elements": [
+      "EMCo",
+      "Mth",
+      "Trans",
+      "BatchID",
+      "EMGroup"
+    ]
+  },
+  {
+    "id": "basic_emrd_module",
+    "category": "basic_schema",
+    "question": "What module is EMRD in?",
+    "ground_truth": "EMRD is in the EM module",
+    "key_elements": [
+      "EM",
+      "EMRD"
+    ]
+  },
+  {
+    "id": "basic_emrd_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in EMRD?",
+    "ground_truth": "Mth data type in EMRD",
+    "key_elements": [
+      "Mth",
+      "EMRD"
+    ]
+  },
+  {
+    "id": "basic_embf_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the EMBF table?",
+    "ground_truth": "Columns include: Co, Mth, BatchId, BatchSeq, Source, Equipment, RevCode, EMTrans, BatchTransType, EMTransType",
+    "key_elements": [
+      "Co",
+      "Mth",
+      "BatchId",
+      "BatchSeq",
+      "Source"
+    ]
+  },
+  {
+    "id": "basic_embf_module",
+    "category": "basic_schema",
+    "question": "What module is EMBF in?",
+    "ground_truth": "EMBF is in the EM module",
+    "key_elements": [
+      "EM",
+      "EMBF"
+    ]
+  },
+  {
+    "id": "basic_embf_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in EMBF?",
+    "ground_truth": "Mth data type in EMBF",
+    "key_elements": [
+      "Mth",
+      "EMBF"
+    ]
+  },
+  {
+    "id": "basic_emcd_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the EMCD table?",
+    "ground_truth": "Columns include: EMCo, Mth, EMTrans, BatchId, EMGroup, Equipment, Component, ComponentTypeCode, Asset, WorkOrder",
+    "key_elements": [
+      "EMCo",
+      "Mth",
+      "EMTrans",
+      "BatchId",
+      "EMGroup"
+    ]
+  },
+  {
+    "id": "basic_emcd_module",
+    "category": "basic_schema",
+    "question": "What module is EMCD in?",
+    "ground_truth": "EMCD is in the EM module",
+    "key_elements": [
+      "EM",
+      "EMCD"
+    ]
+  },
+  {
+    "id": "basic_emcd_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in EMCD?",
+    "ground_truth": "Mth data type in EMCD",
+    "key_elements": [
+      "Mth",
+      "EMCD"
+    ]
+  },
+  {
+    "id": "basic_inmt_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the INMT table?",
+    "ground_truth": "Columns include: INCo, Loc, MatlGroup, Material, VendorGroup, LastVendor, LastCost, LastECM, LastCostUpdate, AvgCost",
+    "key_elements": [
+      "INCo",
+      "Loc",
+      "MatlGroup",
+      "Material",
+      "VendorGroup"
+    ]
+  },
+  {
+    "id": "basic_inmt_module",
+    "category": "basic_schema",
+    "question": "What module is INMT in?",
+    "ground_truth": "INMT is in the IN module",
+    "key_elements": [
+      "IN",
+      "INMT"
+    ]
+  },
+  {
+    "id": "basic_inmt_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Loc in INMT?",
+    "ground_truth": "Loc data type in INMT",
+    "key_elements": [
+      "Loc",
+      "INMT"
+    ]
+  },
+  {
+    "id": "basic_inco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the INCO table?",
+    "ground_truth": "Columns include: INCo, GLCo, Jrnl, GLAdjInterfaceLvl, GLAdjSummaryDesc, GLAdjDetailDesc, GLTrnsfrInterfaceLvl, GLTrnsfrSummaryDesc, GLTrnsfrDetailDesc, GLProdInterfaceLvl",
+    "key_elements": [
+      "INCo",
+      "GLCo",
+      "Jrnl",
+      "GLAdjInterfaceLvl",
+      "GLAdjSummaryDesc"
+    ]
+  },
+  {
+    "id": "basic_inco_module",
+    "category": "basic_schema",
+    "question": "What module is INCO in?",
+    "ground_truth": "INCO is in the IN module",
+    "key_elements": [
+      "IN",
+      "INCO"
+    ]
+  },
+  {
+    "id": "basic_inco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of GLCo in INCO?",
+    "ground_truth": "GLCo data type in INCO",
+    "key_elements": [
+      "GLCo",
+      "INCO"
+    ]
+  },
+  {
+    "id": "basic_inlm_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the INLM table?",
+    "ground_truth": "Columns include: INCo, Loc, Description, Active, MailAddress, MailCity, MailState, MailZip, MailAddress2, ShipAddress",
+    "key_elements": [
+      "INCo",
+      "Loc",
+      "Description",
+      "Active",
+      "MailAddress"
+    ]
+  },
+  {
+    "id": "basic_inlm_module",
+    "category": "basic_schema",
+    "question": "What module is INLM in?",
+    "ground_truth": "INLM is in the IN module",
+    "key_elements": [
+      "IN",
+      "INLM"
+    ]
+  },
+  {
+    "id": "basic_inlm_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Loc in INLM?",
+    "ground_truth": "Loc data type in INLM",
+    "key_elements": [
+      "Loc",
+      "INLM"
+    ]
+  },
+  {
+    "id": "basic_indt_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the INDT table?",
+    "ground_truth": "Columns include: INCo, Mth, INTrans, Loc, MatlGroup, Material, ActDate, PostedDate, Source, TransType",
+    "key_elements": [
+      "INCo",
+      "Mth",
+      "INTrans",
+      "Loc",
+      "MatlGroup"
+    ]
+  },
+  {
+    "id": "basic_indt_module",
+    "category": "basic_schema",
+    "question": "What module is INDT in?",
+    "ground_truth": "INDT is in the IN module",
+    "key_elements": [
+      "IN",
+      "INDT"
+    ]
+  },
+  {
+    "id": "basic_indt_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in INDT?",
+    "ground_truth": "Mth data type in INDT",
+    "key_elements": [
+      "Mth",
+      "INDT"
+    ]
+  },
+  {
+    "id": "basic_smworkorder_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the SMWorkOrder table?",
+    "ground_truth": "Columns include: SMWorkOrderID, SMCo, WorkOrder, CustGroup, Customer, ServiceSite, Description, ServiceCenter, RequestedDate, RequestedTime",
+    "key_elements": [
+      "SMWorkOrderID",
+      "SMCo",
+      "WorkOrder",
+      "CustGroup",
+      "Customer"
+    ]
+  },
+  {
+    "id": "basic_smworkorder_module",
+    "category": "basic_schema",
+    "question": "What module is SMWorkOrder in?",
+    "ground_truth": "SMWorkOrder is in the SM module",
+    "key_elements": [
+      "SM",
+      "SMWorkOrder"
+    ]
+  },
+  {
+    "id": "basic_smworkorder_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of SMCo in SMWorkOrder?",
+    "ground_truth": "SMCo data type in SMWorkOrder",
+    "key_elements": [
+      "SMCo",
+      "SMWorkOrder"
+    ]
+  },
+  {
+    "id": "basic_smservicesite_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the SMServiceSite table?",
+    "ground_truth": "Columns include: SMServiceSiteID, SMCo, ServiceSite, CustGroup, Customer, Description, Address1, Address2, City, State",
+    "key_elements": [
+      "SMServiceSiteID",
+      "SMCo",
+      "ServiceSite",
+      "CustGroup",
+      "Customer"
+    ]
+  },
+  {
+    "id": "basic_smservicesite_module",
+    "category": "basic_schema",
+    "question": "What module is SMServiceSite in?",
+    "ground_truth": "SMServiceSite is in the SM module",
+    "key_elements": [
+      "SM",
+      "SMServiceSite"
+    ]
+  },
+  {
+    "id": "basic_smservicesite_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of SMCo in SMServiceSite?",
+    "ground_truth": "SMCo data type in SMServiceSite",
+    "key_elements": [
+      "SMCo",
+      "SMServiceSite"
+    ]
+  },
+  {
+    "id": "basic_smworkcompleted_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the SMWorkCompleted table?",
+    "ground_truth": "Columns include: KeyID, Type, IsDeleted, UniqueAttchID, APCo, APInUseMth, APInUseBatchId, APTLKeyID, JCCo, JCMth",
+    "key_elements": [
+      "KeyID",
+      "Type",
+      "IsDeleted",
+      "UniqueAttchID",
+      "APCo"
+    ]
+  },
+  {
+    "id": "basic_smworkcompleted_module",
+    "category": "basic_schema",
+    "question": "What module is SMWorkCompleted in?",
+    "ground_truth": "SMWorkCompleted is in the SM module",
+    "key_elements": [
+      "SM",
+      "SMWorkCompleted"
+    ]
+  },
+  {
+    "id": "basic_smworkcompleted_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Type in SMWorkCompleted?",
+    "ground_truth": "Type data type in SMWorkCompleted",
+    "key_elements": [
+      "Type",
+      "SMWorkCompleted"
+    ]
+  },
+  {
+    "id": "basic_pmco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the PMCO table?",
+    "ground_truth": "Columns include: PMCo, APInUse, SLInUse, POInUse, APCo, INInUse, INCo, MSInUse, MSCo, PRInUse",
+    "key_elements": [
+      "PMCo",
+      "APInUse",
+      "SLInUse",
+      "POInUse",
+      "APCo"
+    ]
+  },
+  {
+    "id": "basic_pmco_module",
+    "category": "basic_schema",
+    "question": "What module is PMCO in?",
+    "ground_truth": "PMCO is in the PM module",
+    "key_elements": [
+      "PM",
+      "PMCO"
+    ]
+  },
+  {
+    "id": "basic_pmco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of APInUse in PMCO?",
+    "ground_truth": "APInUse data type in PMCO",
+    "key_elements": [
+      "APInUse",
+      "PMCO"
+    ]
+  },
+  {
+    "id": "basic_pmoi_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the PMOI table?",
+    "ground_truth": "Columns include: PMCo, Project, PCOType, PCO, PCOItem, ACO, ACOItem, Description, Status, ApprovedDate",
+    "key_elements": [
+      "PMCo",
+      "Project",
+      "PCOType",
+      "PCO",
+      "PCOItem"
+    ]
+  },
+  {
+    "id": "basic_pmoi_module",
+    "category": "basic_schema",
+    "question": "What module is PMOI in?",
+    "ground_truth": "PMOI is in the PM module",
+    "key_elements": [
+      "PM",
+      "PMOI"
+    ]
+  },
+  {
+    "id": "basic_pmoi_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Project in PMOI?",
+    "ground_truth": "Project data type in PMOI",
+    "key_elements": [
+      "Project",
+      "PMOI"
+    ]
+  },
+  {
+    "id": "basic_pmpf_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the PMPF table?",
+    "ground_truth": "Columns include: PMCo, Project, Seq, VendorGroup, FirmNumber, ContactCode, Description, Notes, UniqueAttchID, PortalSiteAccess",
+    "key_elements": [
+      "PMCo",
+      "Project",
+      "Seq",
+      "VendorGroup",
+      "FirmNumber"
+    ]
+  },
+  {
+    "id": "basic_pmpf_module",
+    "category": "basic_schema",
+    "question": "What module is PMPF in?",
+    "ground_truth": "PMPF is in the PM module",
+    "key_elements": [
+      "PM",
+      "PMPF"
+    ]
+  },
+  {
+    "id": "basic_pmpf_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Project in PMPF?",
+    "ground_truth": "Project data type in PMPF",
+    "key_elements": [
+      "Project",
+      "PMPF"
+    ]
+  },
+  {
+    "id": "basic_hqco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the HQCO table?",
+    "ground_truth": "Columns include: HQCo, Name, Address, City, State, Zip, Address2, FedTaxId, Phone, Fax",
+    "key_elements": [
+      "HQCo",
+      "Name",
+      "Address",
+      "City",
+      "State"
+    ]
+  },
+  {
+    "id": "basic_hqco_module",
+    "category": "basic_schema",
+    "question": "What module is HQCO in?",
+    "ground_truth": "HQCO is in the HQ module",
+    "key_elements": [
+      "HQ",
+      "HQCO"
+    ]
+  },
+  {
+    "id": "basic_hqco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Name in HQCO?",
+    "ground_truth": "Name data type in HQCO",
+    "key_elements": [
+      "Name",
+      "HQCO"
+    ]
+  },
+  {
+    "id": "basic_hqma_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the HQMA table?",
+    "ground_truth": "Columns include: TableName, KeyString, Co, RecType, FieldName, OldValue, NewValue, DateTime, UserName, AuditID",
+    "key_elements": [
+      "TableName",
+      "KeyString",
+      "Co",
+      "RecType",
+      "FieldName"
+    ]
+  },
+  {
+    "id": "basic_hqma_module",
+    "category": "basic_schema",
+    "question": "What module is HQMA in?",
+    "ground_truth": "HQMA is in the HQ module",
+    "key_elements": [
+      "HQ",
+      "HQMA"
+    ]
+  },
+  {
+    "id": "basic_hqma_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of KeyString in HQMA?",
+    "ground_truth": "KeyString data type in HQMA",
+    "key_elements": [
+      "KeyString",
+      "HQMA"
+    ]
+  },
+  {
+    "id": "basic_hqbc_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the HQBC table?",
+    "ground_truth": "Columns include: Co, Mth, BatchId, Source, TableName, InUseBy, DateCreated, CreatedBy, Status, Rstrict",
+    "key_elements": [
+      "Co",
+      "Mth",
+      "BatchId",
+      "Source",
+      "TableName"
+    ]
+  },
+  {
+    "id": "basic_hqbc_module",
+    "category": "basic_schema",
+    "question": "What module is HQBC in?",
+    "ground_truth": "HQBC is in the HQ module",
+    "key_elements": [
+      "HQ",
+      "HQBC"
+    ]
+  },
+  {
+    "id": "basic_hqbc_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in HQBC?",
+    "ground_truth": "Mth data type in HQBC",
+    "key_elements": [
+      "Mth",
+      "HQBC"
+    ]
+  },
+  {
+    "id": "basic_hqmt_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the HQMT table?",
+    "ground_truth": "Columns include: MatlGroup, Material, Category, Description, StdUM, Cost, CostECM, Price, PriceECM, PayDiscType",
+    "key_elements": [
+      "MatlGroup",
+      "Material",
+      "Category",
+      "Description",
+      "StdUM"
+    ]
+  },
+  {
+    "id": "basic_hqmt_module",
+    "category": "basic_schema",
+    "question": "What module is HQMT in?",
+    "ground_truth": "HQMT is in the HQ module",
+    "key_elements": [
+      "HQ",
+      "HQMT"
+    ]
+  },
+  {
+    "id": "basic_hqmt_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Material in HQMT?",
+    "ground_truth": "Material data type in HQMT",
+    "key_elements": [
+      "Material",
+      "HQMT"
+    ]
+  },
+  {
+    "id": "basic_hqat_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the HQAT table?",
+    "ground_truth": "Columns include: HQCo, FormName, KeyField, Description, AddedBy, AddDate, DocName, AttachmentID, TableName, UniqueAttchID",
+    "key_elements": [
+      "HQCo",
+      "FormName",
+      "KeyField",
+      "Description",
+      "AddedBy"
+    ]
+  },
+  {
+    "id": "basic_hqat_module",
+    "category": "basic_schema",
+    "question": "What module is HQAT in?",
+    "ground_truth": "HQAT is in the HQ module",
+    "key_elements": [
+      "HQ",
+      "HQAT"
+    ]
+  },
+  {
+    "id": "basic_hqat_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of FormName in HQAT?",
+    "ground_truth": "FormName data type in HQAT",
+    "key_elements": [
+      "FormName",
+      "HQAT"
+    ]
+  },
+  {
+    "id": "basic_mstd_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the MSTD table?",
+    "ground_truth": "Columns include: MSCo, Mth, MSTrans, HaulTrans, SaleDate, Ticket, FromLoc, VendorGroup, MatlVendor, SaleType",
+    "key_elements": [
+      "MSCo",
+      "Mth",
+      "MSTrans",
+      "HaulTrans",
+      "SaleDate"
+    ]
+  },
+  {
+    "id": "basic_mstd_module",
+    "category": "basic_schema",
+    "question": "What module is MSTD in?",
+    "ground_truth": "MSTD is in the MS module",
+    "key_elements": [
+      "MS",
+      "MSTD"
+    ]
+  },
+  {
+    "id": "basic_mstd_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in MSTD?",
+    "ground_truth": "Mth data type in MSTD",
+    "key_elements": [
+      "Mth",
+      "MSTD"
+    ]
+  },
+  {
+    "id": "basic_msco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the MSCO table?",
+    "ground_truth": "Columns include: MSCo, GLCo, Jrnl, APCo, ARCo, ARInterfaceLvl, INInterfaceLvl, INProdInterfaceLvl, JCInterfaceLvl, EMInterfaceLvl",
+    "key_elements": [
+      "MSCo",
+      "GLCo",
+      "Jrnl",
+      "APCo",
+      "ARCo"
+    ]
+  },
+  {
+    "id": "basic_msco_module",
+    "category": "basic_schema",
+    "question": "What module is MSCO in?",
+    "ground_truth": "MSCO is in the MS module",
+    "key_elements": [
+      "MS",
+      "MSCO"
+    ]
+  },
+  {
+    "id": "basic_msco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of GLCo in MSCO?",
+    "ground_truth": "GLCo data type in MSCO",
+    "key_elements": [
+      "GLCo",
+      "MSCO"
+    ]
+  },
+  {
+    "id": "basic_mstb_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the MSTB table?",
+    "ground_truth": "Columns include: Co, Mth, BatchId, BatchSeq, BatchTransType, MSTrans, SaleDate, FromLoc, Ticket, VendorGroup",
+    "key_elements": [
+      "Co",
+      "Mth",
+      "BatchId",
+      "BatchSeq",
+      "BatchTransType"
+    ]
+  },
+  {
+    "id": "basic_mstb_module",
+    "category": "basic_schema",
+    "question": "What module is MSTB in?",
+    "ground_truth": "MSTB is in the MS module",
+    "key_elements": [
+      "MS",
+      "MSTB"
+    ]
+  },
+  {
+    "id": "basic_mstb_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in MSTB?",
+    "ground_truth": "Mth data type in MSTB",
+    "key_elements": [
+      "Mth",
+      "MSTB"
+    ]
+  },
+  {
+    "id": "basic_cmco_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the CMCO table?",
+    "ground_truth": "Columns include: CMCo, GLCo, Jrnl, GLDetailDesc, GLSummaryDesc, GLInterfaceLvl, ChangeBegBal, AuditCoParams, AuditAccts, AuditDetail",
+    "key_elements": [
+      "CMCo",
+      "GLCo",
+      "Jrnl",
+      "GLDetailDesc",
+      "GLSummaryDesc"
+    ]
+  },
+  {
+    "id": "basic_cmco_module",
+    "category": "basic_schema",
+    "question": "What module is CMCO in?",
+    "ground_truth": "CMCO is in the CM module",
+    "key_elements": [
+      "CM",
+      "CMCO"
+    ]
+  },
+  {
+    "id": "basic_cmco_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of GLCo in CMCO?",
+    "ground_truth": "GLCo data type in CMCO",
+    "key_elements": [
+      "GLCo",
+      "CMCO"
+    ]
+  },
+  {
+    "id": "basic_cmdt_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the CMDT table?",
+    "ground_truth": "Columns include: CMCo, Mth, CMTrans, CMAcct, StmtDate, CMTransType, SourceCo, Source, ActDate, PostedDate",
+    "key_elements": [
+      "CMCo",
+      "Mth",
+      "CMTrans",
+      "CMAcct",
+      "StmtDate"
+    ]
+  },
+  {
+    "id": "basic_cmdt_module",
+    "category": "basic_schema",
+    "question": "What module is CMDT in?",
+    "ground_truth": "CMDT is in the CM module",
+    "key_elements": [
+      "CM",
+      "CMDT"
+    ]
+  },
+  {
+    "id": "basic_cmdt_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of Mth in CMDT?",
+    "ground_truth": "Mth data type in CMDT",
+    "key_elements": [
+      "Mth",
+      "CMDT"
+    ]
+  },
+  {
+    "id": "basic_cmac_cols",
+    "category": "basic_schema",
+    "question": "What columns are in the CMAC table?",
+    "ground_truth": "Columns include: CMCo, CMAcct, Description, GLCo, GLAcct, BankAcct, ImmedDest, ImmedOrig, CompanyId, BankName",
+    "key_elements": [
+      "CMCo",
+      "CMAcct",
+      "Description",
+      "GLCo",
+      "GLAcct"
+    ]
+  },
+  {
+    "id": "basic_cmac_module",
+    "category": "basic_schema",
+    "question": "What module is CMAC in?",
+    "ground_truth": "CMAC is in the CM module",
+    "key_elements": [
+      "CM",
+      "CMAC"
+    ]
+  },
+  {
+    "id": "basic_cmac_dtype",
+    "category": "basic_schema",
+    "question": "What is the data type of CMAcct in CMAC?",
+    "ground_truth": "CMAcct data type in CMAC",
+    "key_elements": [
+      "CMAcct",
+      "CMAC"
+    ]
+  },
+  {
+    "id": "sql_ar_aging",
+    "question": "Write SQL for AR aging buckets by customer",
+    "key_elements": [
+      "ARTH",
+      "ARCM",
+      "DATEDIFF",
+      "PayFullDate IS NULL",
+      "CASE WHEN",
+      "CustGroup",
+      "Customer"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: ARTH, ARCM, DATEDIFF, PayFullDate IS NULL, CASE WHEN, CustGroup, Customer"
+  },
+  {
+    "id": "sql_ar_aging_v2",
+    "question": "Write SQL to calculate AR aging 30/60/90+ days for unpaid invoices",
+    "key_elements": [
+      "ARTH",
+      "ARCM",
+      "DATEDIFF",
+      "PayFullDate IS NULL",
+      "CASE WHEN"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: ARTH, ARCM, DATEDIFF, PayFullDate IS NULL, CASE WHEN"
+  },
+  {
+    "id": "sql_sl_costs",
+    "question": "Write SQL for subcontractor costs with retainage",
+    "key_elements": [
+      "SLHD",
+      "SLIT",
+      "APVM",
+      "OrigCost",
+      "CurCost",
+      "InvCost",
+      "Retainage",
+      "VendorGroup"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: SLHD, SLIT, APVM, OrigCost, CurCost, InvCost, Retainage, VendorGroup"
+  },
+  {
+    "id": "sql_sl_costs_v2",
+    "question": "Write SQL to get subcontractor costs with original, change orders, invoiced, paid by vendor",
+    "key_elements": [
+      "SLHD",
+      "SLIT",
+      "APVM",
+      "OrigCost",
+      "CurCost",
+      "InvCost",
+      "Retainage"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: SLHD, SLIT, APVM, OrigCost, CurCost, InvCost, Retainage"
+  },
+  {
+    "id": "sql_jc_budget",
+    "question": "Write SQL for job cost budget vs actual by phase",
+    "key_elements": [
+      "JCJP",
+      "JCCP",
+      "JCCH",
+      "JCCT",
+      "OrigEstCost",
+      "CurrEstCost",
+      "ActualCost",
+      "CostType"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: JCJP, JCCP, JCCH, JCCT, OrigEstCost, CurrEstCost, ActualCost, CostType"
+  },
+  {
+    "id": "sql_jc_budget_v2",
+    "question": "Write SQL to aggregate job cost estimates by phase and cost type",
+    "key_elements": [
+      "JCJP",
+      "JCCP",
+      "JCCH",
+      "JCCT",
+      "ItemUnitFlag",
+      "PhaseUnitFlag",
+      "OrigEstCost",
+      "CurrEstCost"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: JCJP, JCCP, JCCH, JCCT, ItemUnitFlag, PhaseUnitFlag, OrigEstCost, CurrEstCost"
+  },
+  {
+    "id": "sql_ap_holds",
+    "question": "Write SQL to identify retainage vs non-retainage holds",
+    "key_elements": [
+      "APTH",
+      "APHD",
+      "APCO",
+      "HoldCode",
+      "RetHoldCode",
+      "PayType"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: APTH, APHD, APCO, HoldCode, RetHoldCode, PayType"
+  },
+  {
+    "id": "sql_ap_holds_v2",
+    "question": "Write SQL to track AP hold status distinguishing retainage vs non-retainage holds",
+    "key_elements": [
+      "APTD",
+      "APHD",
+      "APCO",
+      "RetHoldCode",
+      "PayType"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: APTD, APHD, APCO, RetHoldCode, PayType"
+  },
+  {
+    "id": "sql_ap_oncost",
+    "question": "Write SQL to reconcile AP oncost batches",
+    "key_elements": [
+      "APLB",
+      "APTL",
+      "APTH",
+      "ocApplyMth",
+      "ocApplyTrans",
+      "ocApplyLine"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: APLB, APTL, APTH, ocApplyMth, ocApplyTrans, ocApplyLine"
+  },
+  {
+    "id": "sql_ap_oncost_v2",
+    "question": "Write SQL to reconcile AP oncost batch lines with original transactions",
+    "key_elements": [
+      "APLB",
+      "APTL",
+      "APTH",
+      "APVM",
+      "ocApplyMth",
+      "ocApplyTrans",
+      "ocApplyLine"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: APLB, APTL, APTH, APVM, ocApplyMth, ocApplyTrans, ocApplyLine"
+  },
+  {
+    "id": "sql_slwi_aptd",
+    "question": "Write SQL to join SLWI to APTD for retainage",
+    "key_elements": [
+      "SLWI",
+      "APTL",
+      "APTD",
+      "SL",
+      "SLItem",
+      "PayType",
+      "WCRetAmt",
+      "SMRetAmt"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: SLWI, APTL, APTD, SL, SLItem, PayType, WCRetAmt, SMRetAmt"
+  },
+  {
+    "id": "sql_slwi_aptd_v2",
+    "question": "How do I join SLWI retainage amounts to matching APTD transactions?",
+    "key_elements": [
+      "SLWI",
+      "APTL",
+      "APTD",
+      "SL",
+      "SLItem",
+      "RetPayType"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: SLWI, APTL, APTD, SL, SLItem, RetPayType"
+  },
+  {
+    "id": "sql_sm_ar",
+    "question": "Write SQL to link SM WorkOrder to AR billing",
+    "key_elements": [
+      "SMWorkOrder",
+      "SMServiceSite",
+      "JCJM",
+      "JCCM",
+      "ARTH",
+      "Contract"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: SMWorkOrder, SMServiceSite, JCJM, JCCM, ARTH, Contract"
+  },
+  {
+    "id": "sql_sm_ar_v2",
+    "question": "How do I link SM WorkOrder to AR billing through JC contracts?",
+    "key_elements": [
+      "SMWorkOrder",
+      "SMServiceSite",
+      "JCJM",
+      "JCCM",
+      "ARTH",
+      "Job",
+      "Contract"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: SMWorkOrder, SMServiceSite, JCJM, JCCM, ARTH, Job, Contract"
+  },
+  {
+    "id": "sql_pr_time",
+    "question": "Write SQL for employee timecard hours by job",
+    "key_elements": [
+      "PRTH",
+      "PREH",
+      "JCCD",
+      "Employee",
+      "Job",
+      "Hours"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: PRTH, PREH, JCCD, Employee, Job, Hours"
+  },
+  {
+    "id": "sql_po_recv",
+    "question": "Write SQL for PO items with received quantities",
+    "key_elements": [
+      "POHD",
+      "POIT",
+      "RecvdUnits",
+      "RecvdCost",
+      "PO"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: POHD, POIT, RecvdUnits, RecvdCost, PO"
+  },
+  {
+    "id": "sql_em_cost",
+    "question": "Write SQL for equipment costs by job",
+    "key_elements": [
+      "EMEM",
+      "JCCD",
+      "Equipment",
+      "Job",
+      "ActualCost"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: EMEM, JCCD, Equipment, Job, ActualCost"
+  },
+  {
+    "id": "sql_gl_detail",
+    "question": "Write SQL for GL detail transactions by account",
+    "key_elements": [
+      "GLDT",
+      "GLAC",
+      "GLCo",
+      "GLAcct",
+      "Amount"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: GLDT, GLAC, GLCo, GLAcct, Amount"
+  },
+  {
+    "id": "sql_ap_vendor_inv",
+    "question": "Write SQL to get vendor invoices with amounts",
+    "key_elements": [
+      "APTH",
+      "APTL",
+      "APVM",
+      "Vendor",
+      "GrossAmt"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: APTH, APTL, APVM, Vendor, GrossAmt"
+  },
+  {
+    "id": "sql_ar_customer_bal",
+    "question": "Write SQL for customer open balances",
+    "key_elements": [
+      "ARTH",
+      "ARCM",
+      "AmountDue",
+      "PayFullDate"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: ARTH, ARCM, AmountDue, PayFullDate"
+  },
+  {
+    "id": "sql_jc_contract",
+    "question": "Write SQL for job contract billing summary",
+    "key_elements": [
+      "JCCM",
+      "JCJI",
+      "JCJM",
+      "Contract",
+      "BilledAmt"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: JCCM, JCJI, JCJM, Contract, BilledAmt"
+  },
+  {
+    "id": "sql_sl_worksheet",
+    "question": "Write SQL for subcontract worksheet details",
+    "key_elements": [
+      "SLWI",
+      "SLHD",
+      "SLIT",
+      "WCCost",
+      "StoredMatls",
+      "WCRetAmt",
+      "SMRetAmt"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: SLWI, SLHD, SLIT, WCCost, StoredMatls, WCRetAmt, SMRetAmt"
+  },
+  {
+    "id": "sql_pr_earnings",
+    "question": "Write SQL for employee earnings by pay period",
+    "key_elements": [
+      "PREH",
+      "PRTH",
+      "PRDT",
+      "Employee",
+      "Earnings"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: PREH, PRTH, PRDT, Employee, Earnings"
+  },
+  {
+    "id": "sql_in_inventory",
+    "question": "Write SQL for inventory quantities by location",
+    "key_elements": [
+      "INMT",
+      "INLM",
+      "INDT",
+      "Material",
+      "OnHand"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: INMT, INLM, INDT, Material, OnHand"
+  },
+  {
+    "id": "sql_po_outstanding",
+    "question": "Write SQL for outstanding PO amounts",
+    "key_elements": [
+      "POHD",
+      "POIT",
+      "OrderedUnits",
+      "RecvdUnits",
+      "PO"
+    ],
+    "category": "sql_generation",
+    "ground_truth": "Must include tables/columns: POHD, POIT, OrderedUnits, RecvdUnits, PO"
+  },
+  {
+    "id": "join_ap_vendor",
+    "question": "How do I join APTH to APVM?",
+    "key_elements": [
+      "APTH",
+      "APVM",
+      "APCo",
+      "VendorGroup",
+      "Vendor"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: APCo, VendorGroup, Vendor"
+  },
+  {
+    "id": "join_ap_vendor_v2",
+    "question": "What columns link APTH to APVM?",
+    "key_elements": [
+      "APTH",
+      "APVM",
+      "APCo",
+      "VendorGroup",
+      "Vendor"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: APCo, VendorGroup, Vendor"
+  },
+  {
+    "id": "join_ar_cust",
+    "question": "How do I join ARTH to ARCM?",
+    "key_elements": [
+      "ARTH",
+      "ARCM",
+      "ARCo",
+      "CustGroup",
+      "Customer"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: ARCo, CustGroup, Customer"
+  },
+  {
+    "id": "join_ar_cust_v2",
+    "question": "What columns link ARTH to customer master?",
+    "key_elements": [
+      "ARTH",
+      "ARCM",
+      "ARCo",
+      "CustGroup",
+      "Customer"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: ARCo, CustGroup, Customer"
+  },
+  {
+    "id": "join_jcjp_jccp",
+    "question": "What is the relationship between JCJP and JCCP?",
+    "key_elements": [
+      "JCJP",
+      "JCCP",
+      "JCCo",
+      "Job",
+      "PhaseGroup",
+      "Phase",
+      "JCCH",
+      "JCJI"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: JCCo, Job, PhaseGroup, Phase, JCCH, JCJI"
+  },
+  {
+    "id": "join_jcjp_jccp_v2",
+    "question": "How do I join JCJP to JCCP?",
+    "key_elements": [
+      "JCJP",
+      "JCCP",
+      "JCCo",
+      "Job",
+      "PhaseGroup",
+      "Phase"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: JCCo, Job, PhaseGroup, Phase"
+  },
+  {
+    "id": "join_sl_vendor",
+    "question": "How do I join SLHD to vendor information?",
+    "key_elements": [
+      "SLHD",
+      "APVM",
+      "SLCo",
+      "VendorGroup",
+      "Vendor"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: SLCo, VendorGroup, Vendor"
+  },
+  {
+    "id": "join_aptl_aptd",
+    "question": "How do I join APTL to APTD?",
+    "key_elements": [
+      "APTL",
+      "APTD",
+      "APCo",
+      "Mth",
+      "APTrans",
+      "APLine"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: APCo, Mth, APTrans, APLine"
+  },
+  {
+    "id": "join_apth_aptl",
+    "question": "How do I join APTH to APTL?",
+    "key_elements": [
+      "APTH",
+      "APTL",
+      "APCo",
+      "Mth",
+      "APTrans"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: APCo, Mth, APTrans"
+  },
+  {
+    "id": "join_apth_aptd",
+    "question": "How do I join APTH to APTD?",
+    "key_elements": [
+      "APTH",
+      "APTD",
+      "APCo",
+      "Mth",
+      "APTrans"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: APCo, Mth, APTrans"
+  },
+  {
+    "id": "join_jccp_jcch",
+    "question": "How do I join JCCP to JCCH?",
+    "key_elements": [
+      "JCCP",
+      "JCCH",
+      "JCCo",
+      "Job",
+      "PhaseGroup",
+      "Phase",
+      "CostType"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: JCCo, Job, PhaseGroup, Phase, CostType"
+  },
+  {
+    "id": "join_slwi_aptl",
+    "question": "How do I join SLWI to APTL?",
+    "key_elements": [
+      "SLWI",
+      "APTL",
+      "SLCo",
+      "SL",
+      "SLItem"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: SLCo, SL, SLItem"
+  },
+  {
+    "id": "join_preh_prth",
+    "question": "How do I join PREH to PRTH?",
+    "key_elements": [
+      "PREH",
+      "PRTH",
+      "PRCo",
+      "Employee"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: PRCo, Employee"
+  },
+  {
+    "id": "join_jcjm_jccm",
+    "question": "How do I join JCJM to JCCM?",
+    "key_elements": [
+      "JCJM",
+      "JCCM",
+      "JCCo",
+      "Contract"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: JCCo, Contract"
+  },
+  {
+    "id": "join_jcjm_jcjp",
+    "question": "How do I join JCJM to JCJP?",
+    "key_elements": [
+      "JCJM",
+      "JCJP",
+      "JCCo",
+      "Job"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: JCCo, Job"
+  },
+  {
+    "id": "join_jcjm_jccd",
+    "question": "How do I join JCJM to JCCD?",
+    "key_elements": [
+      "JCJM",
+      "JCCD",
+      "JCCo",
+      "Job"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: JCCo, Job"
+  },
+  {
+    "id": "join_pohd_poit",
+    "question": "How do I join POHD to POIT?",
+    "key_elements": [
+      "POHD",
+      "POIT",
+      "POCo",
+      "PO"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: POCo, PO"
+  },
+  {
+    "id": "join_slhd_slit",
+    "question": "How do I join SLHD to SLIT?",
+    "key_elements": [
+      "SLHD",
+      "SLIT",
+      "SLCo",
+      "SL"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: SLCo, SL"
+  },
+  {
+    "id": "join_slhd_slwi",
+    "question": "How do I join SLHD to SLWI?",
+    "key_elements": [
+      "SLHD",
+      "SLWI",
+      "SLCo",
+      "SL"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: SLCo, SL"
+  },
+  {
+    "id": "join_slit_slwi",
+    "question": "How do I join SLIT to SLWI?",
+    "key_elements": [
+      "SLIT",
+      "SLWI",
+      "SLCo",
+      "SL",
+      "SLItem"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: SLCo, SL, SLItem"
+  },
+  {
+    "id": "join_gldt_glac",
+    "question": "How do I join GLDT to GLAC?",
+    "key_elements": [
+      "GLDT",
+      "GLAC",
+      "GLCo",
+      "GLAcct"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: GLCo, GLAcct"
+  },
+  {
+    "id": "join_arth_artl",
+    "question": "How do I join ARTH to ARTL?",
+    "key_elements": [
+      "ARTH",
+      "ARTL",
+      "ARCo",
+      "Mth",
+      "ARTrans"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: ARCo, Mth, ARTrans"
+  },
+  {
+    "id": "join_emem_embf",
+    "question": "How do I join EMEM to EMBF?",
+    "key_elements": [
+      "EMEM",
+      "EMBF",
+      "EMCo",
+      "Equipment"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: EMCo, Equipment"
+  },
+  {
+    "id": "join_inmt_inlm",
+    "question": "How do I join INMT to INLM?",
+    "key_elements": [
+      "INMT",
+      "INLM",
+      "INCo",
+      "Material",
+      "Loc"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: INCo, Material, Loc"
+  },
+  {
+    "id": "join_sm_service",
+    "question": "How do I join SMWorkOrder to SMServiceSite?",
+    "key_elements": [
+      "SMWorkOrder",
+      "SMServiceSite",
+      "SMCo",
+      "ServiceSite"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: SMCo, ServiceSite"
+  },
+  {
+    "id": "join_sm_jc",
+    "question": "How do I join SMServiceSite to JCJM?",
+    "key_elements": [
+      "SMServiceSite",
+      "JCJM",
+      "JCCo",
+      "Job"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: JCCo, Job"
+  },
+  {
+    "id": "join_apth_aphd",
+    "question": "How do I join APTH to APHD?",
+    "key_elements": [
+      "APTH",
+      "APHD",
+      "APCo",
+      "Mth",
+      "APTrans"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: APCo, Mth, APTrans"
+  },
+  {
+    "id": "join_jcch_jcct",
+    "question": "How do I join JCCH to JCCT?",
+    "key_elements": [
+      "JCCH",
+      "JCCT",
+      "PhaseGroup",
+      "CostType"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: PhaseGroup, CostType"
+  },
+  {
+    "id": "join_prth_prtb",
+    "question": "How do I join PRTH to PRTB?",
+    "key_elements": [
+      "PRTH",
+      "PRTB",
+      "PRCo",
+      "PRGroup",
+      "PREndDate"
+    ],
+    "category": "join_pattern",
+    "ground_truth": "Join columns: PRCo, PRGroup, PREndDate"
+  },
+  {
+    "id": "biz_retainage_max",
+    "question": "How does Vista calculate maximum retainage with InclACOinMaxYN?",
+    "key_elements": [
+      "InclACOinMaxYN",
+      "MaxRetgPct",
+      "CurCost",
+      "OrigCost",
+      "SLHB"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: InclACOinMaxYN, MaxRetgPct, CurCost, OrigCost, SLHB"
+  },
+  {
+    "id": "biz_retainage_max_v2",
+    "question": "How does InclACOinMaxYN affect retainage calculation?",
+    "key_elements": [
+      "InclACOinMaxYN",
+      "MaxRetgPct",
+      "CurCost",
+      "OrigCost",
+      "ACO"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: InclACOinMaxYN, MaxRetgPct, CurCost, OrigCost, ACO"
+  },
+  {
+    "id": "biz_wc_sm_ret",
+    "question": "What is the difference between WCRetAmt and SMRetAmt?",
+    "key_elements": [
+      "SLWI",
+      "WCRetAmt",
+      "SMRetAmt",
+      "Work Completed",
+      "Stored Materials"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: SLWI, WCRetAmt, SMRetAmt, Work Completed, Stored Materials"
+  },
+  {
+    "id": "biz_wc_sm_ret_v2",
+    "question": "Explain WCRetAmt and SMRetAmt in subcontract worksheets",
+    "key_elements": [
+      "SLWI",
+      "WCRetAmt",
+      "SMRetAmt",
+      "WCRetPct",
+      "SMRetPct"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: SLWI, WCRetAmt, SMRetAmt, WCRetPct, SMRetPct"
+  },
+  {
+    "id": "biz_ret_hold",
+    "question": "How do I identify retainage holds in AP?",
+    "key_elements": [
+      "APHD",
+      "APCO",
+      "HoldCode",
+      "RetHoldCode",
+      "retainage hold"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: APHD, APCO, HoldCode, RetHoldCode, retainage hold"
+  },
+  {
+    "id": "biz_ret_hold_v2",
+    "question": "How do I determine if an AP invoice is on hold for retainage vs non-retainage reasons?",
+    "key_elements": [
+      "APHD",
+      "APCO",
+      "HoldCode",
+      "RetHoldCode",
+      "retainage hold"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: APHD, APCO, HoldCode, RetHoldCode, retainage hold"
+  },
+  {
+    "id": "biz_stored_matl",
+    "question": "How does stored materials affect SL billing?",
+    "key_elements": [
+      "SLWI",
+      "StoredMatls",
+      "Purchased",
+      "Installed",
+      "WCCost"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: SLWI, StoredMatls, Purchased, Installed, WCCost"
+  },
+  {
+    "id": "biz_stored_matl_v2",
+    "question": "Explain how stored materials (Purchased - Installed) affects SL billing",
+    "key_elements": [
+      "SLWI",
+      "StoredMatls",
+      "Purchased",
+      "Installed",
+      "WCCost",
+      "SMRetPct",
+      "WCRetPct"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: SLWI, StoredMatls, Purchased, Installed, WCCost, SMRetPct, WCRetPct"
+  },
+  {
+    "id": "biz_projection",
+    "question": "What tables are used for job cost projections?",
+    "key_elements": [
+      "JCPR",
+      "JCPD",
+      "JCCP",
+      "JCCD",
+      "CurrEstCost",
+      "ActualCost"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: JCPR, JCPD, JCCP, JCCD, CurrEstCost, ActualCost"
+  },
+  {
+    "id": "biz_projection_v2",
+    "question": "What tables are involved in cost-to-complete projections for jobs?",
+    "key_elements": [
+      "JCPR",
+      "JCPD",
+      "JCCP",
+      "JCCD",
+      "CurrEstCost",
+      "ActualCost"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: JCPR, JCPD, JCCP, JCCD, CurrEstCost, ActualCost"
+  },
+  {
+    "id": "biz_paytype",
+    "question": "What do the PayType values mean in APTD?",
+    "key_elements": [
+      "APTD",
+      "PayType",
+      "Regular",
+      "Discount",
+      "Retainage",
+      "3"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: APTD, PayType, Regular, Discount, Retainage, 3"
+  },
+  {
+    "id": "biz_paytype_v2",
+    "question": "What are the PayType codes in AP transactions?",
+    "key_elements": [
+      "APTD",
+      "PayType",
+      "1",
+      "2",
+      "3",
+      "Retainage"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: APTD, PayType, 1, 2, 3, Retainage"
+  },
+  {
+    "id": "biz_oncost",
+    "question": "How do oncost columns work in APLB?",
+    "key_elements": [
+      "APLB",
+      "ocApplyMth",
+      "ocApplyTrans",
+      "ocApplyLine",
+      "original"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: APLB, ocApplyMth, ocApplyTrans, ocApplyLine, original"
+  },
+  {
+    "id": "biz_oncost_v2",
+    "question": "How do I reconcile AP oncost batch lines with original transactions?",
+    "key_elements": [
+      "APLB",
+      "APTL",
+      "ocApplyMth",
+      "ocApplyTrans",
+      "ocApplyLine"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: APLB, APTL, ocApplyMth, ocApplyTrans, ocApplyLine"
+  },
+  {
+    "id": "biz_unit_flag",
+    "question": "What do ItemUnitFlag and PhaseUnitFlag mean?",
+    "key_elements": [
+      "JCCH",
+      "ItemUnitFlag",
+      "PhaseUnitFlag",
+      "unit of measure"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: JCCH, ItemUnitFlag, PhaseUnitFlag, unit of measure"
+  },
+  {
+    "id": "biz_unit_flag_v2",
+    "question": "Explain ItemUnitFlag and PhaseUnitFlag in JCCH",
+    "key_elements": [
+      "JCCH",
+      "ItemUnitFlag",
+      "PhaseUnitFlag",
+      "Y",
+      "N"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: JCCH, ItemUnitFlag, PhaseUnitFlag, Y, N"
+  },
+  {
+    "id": "biz_sm_billing",
+    "question": "How does SM work order billing flow to AR?",
+    "key_elements": [
+      "SMWorkOrder",
+      "SMServiceSite",
+      "JCJM",
+      "JCCM",
+      "ARTH"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: SMWorkOrder, SMServiceSite, JCJM, JCCM, ARTH"
+  },
+  {
+    "id": "biz_sm_billing_v2",
+    "question": "How do I link SM WorkOrder to AR billing through JC contracts?",
+    "key_elements": [
+      "SMWorkOrder",
+      "SMServiceSite",
+      "JCJM",
+      "JCCM",
+      "ARTH",
+      "Job",
+      "Contract"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: SMWorkOrder, SMServiceSite, JCJM, JCCM, ARTH, Job, Contract"
+  },
+  {
+    "id": "biz_cost_complete",
+    "question": "How is cost-to-complete calculated?",
+    "key_elements": [
+      "JCCP",
+      "CurrEstCost",
+      "ActualCost",
+      "Remaining"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: JCCP, CurrEstCost, ActualCost, Remaining"
+  },
+  {
+    "id": "biz_cost_complete_v2",
+    "question": "What is the formula for cost-to-complete in job costing?",
+    "key_elements": [
+      "JCCP",
+      "CurrEstCost",
+      "ActualCost",
+      "Remaining",
+      "Budget"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: JCCP, CurrEstCost, ActualCost, Remaining, Budget"
+  },
+  {
+    "id": "biz_jcjp_jccp_diff",
+    "question": "What is the difference between JCJP and JCCP?",
+    "key_elements": [
+      "JCJP",
+      "JCCP",
+      "billing",
+      "cost tracking",
+      "Phase"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: JCJP, JCCP, billing, cost tracking, Phase"
+  },
+  {
+    "id": "biz_retpaytype",
+    "question": "What is APCO.RetPayType used for?",
+    "key_elements": [
+      "APCO",
+      "RetPayType",
+      "Retainage",
+      "payment type",
+      "3"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: APCO, RetPayType, Retainage, payment type, 3"
+  },
+  {
+    "id": "biz_ar_unpaid",
+    "question": "How do I identify unpaid AR invoices?",
+    "key_elements": [
+      "ARTH",
+      "PayFullDate",
+      "NULL",
+      "unpaid",
+      "AmountDue"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: ARTH, PayFullDate, NULL, unpaid, AmountDue"
+  },
+  {
+    "id": "biz_sl_retainage",
+    "question": "How is retainage tracked in subcontracts?",
+    "key_elements": [
+      "SLIT",
+      "SLWI",
+      "Retainage",
+      "WCRetAmt",
+      "SMRetAmt"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: SLIT, SLWI, Retainage, WCRetAmt, SMRetAmt"
+  },
+  {
+    "id": "biz_jc_budget_actual",
+    "question": "How do I compare budget to actual in job costing?",
+    "key_elements": [
+      "JCCP",
+      "OrigEstCost",
+      "CurrEstCost",
+      "ActualCost"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: JCCP, OrigEstCost, CurrEstCost, ActualCost"
+  },
+  {
+    "id": "biz_ap_status",
+    "question": "What do the Status values mean in AP transactions?",
+    "key_elements": [
+      "APTD",
+      "Status",
+      "Open",
+      "Paid",
+      "Void",
+      "0",
+      "1",
+      "2"
+    ],
+    "category": "business_logic",
+    "ground_truth": "Key concepts: APTD, Status, Open, Paid, Void, 0, 1, 2"
+  },
+  {
+    "id": "halluc_aragingreport_cols",
+    "category": "hallucination",
+    "question": "What columns are in the ARAgingReport table?",
+    "ground_truth": "REJECT - ARAgingReport does not exist. Use ARTH/ARTL with DATEDIFF for aging",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_aragingreport_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the ARAgingReport table",
+    "ground_truth": "REJECT - ARAgingReport does not exist. Use ARTH/ARTL with DATEDIFF for aging",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_subcontractorpayments_cols",
+    "category": "hallucination",
+    "question": "What columns are in the SubcontractorPayments table?",
+    "ground_truth": "REJECT - SubcontractorPayments does not exist. Use APTD joined to APTL with SL reference, or SLWI",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_subcontractorpayments_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the SubcontractorPayments table",
+    "ground_truth": "REJECT - SubcontractorPayments does not exist. Use APTD joined to APTL with SL reference, or SLWI",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_jobcostsummary_cols",
+    "category": "hallucination",
+    "question": "What columns are in the JobCostSummary table?",
+    "ground_truth": "REJECT - JobCostSummary does not exist. Use JCCP for phase-level or JCCD for transactions",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_jobcostsummary_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the JobCostSummary table",
+    "ground_truth": "REJECT - JobCostSummary does not exist. Use JCCP for phase-level or JCCD for transactions",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_vendorinvoices_cols",
+    "category": "hallucination",
+    "question": "What columns are in the VendorInvoices table?",
+    "ground_truth": "REJECT - VendorInvoices does not exist. Use APTH for AP headers joined to APVM",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_vendorinvoices_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the VendorInvoices table",
+    "ground_truth": "REJECT - VendorInvoices does not exist. Use APTH for AP headers joined to APVM",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_employeetimesheet_cols",
+    "category": "hallucination",
+    "question": "What columns are in the EmployeeTimesheet table?",
+    "ground_truth": "REJECT - EmployeeTimesheet does not exist. Use PRTH for timecard headers or PRTB for batches",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_employeetimesheet_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the EmployeeTimesheet table",
+    "ground_truth": "REJECT - EmployeeTimesheet does not exist. Use PRTH for timecard headers or PRTB for batches",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_gltransactions_cols",
+    "category": "hallucination",
+    "question": "What columns are in the GLTransactions table?",
+    "ground_truth": "REJECT - GLTransactions does not exist. Use GLDT for GL detail transactions",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_gltransactions_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the GLTransactions table",
+    "ground_truth": "REJECT - GLTransactions does not exist. Use GLDT for GL detail transactions",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_customerinvoices_cols",
+    "category": "hallucination",
+    "question": "What columns are in the CustomerInvoices table?",
+    "ground_truth": "REJECT - CustomerInvoices does not exist. Use ARTH for AR transaction headers",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_customerinvoices_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the CustomerInvoices table",
+    "ground_truth": "REJECT - CustomerInvoices does not exist. Use ARTH for AR transaction headers",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_purchaseorderdetail_cols",
+    "category": "hallucination",
+    "question": "What columns are in the PurchaseOrderDetail table?",
+    "ground_truth": "REJECT - PurchaseOrderDetail does not exist. Use POHD for headers, POIT for items",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_purchaseorderdetail_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the PurchaseOrderDetail table",
+    "ground_truth": "REJECT - PurchaseOrderDetail does not exist. Use POHD for headers, POIT for items",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_inventoryitems_cols",
+    "category": "hallucination",
+    "question": "What columns are in the InventoryItems table?",
+    "ground_truth": "REJECT - InventoryItems does not exist. Use INMT for inventory material master",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_inventoryitems_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the InventoryItems table",
+    "ground_truth": "REJECT - InventoryItems does not exist. Use INMT for inventory material master",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_projectbudget_cols",
+    "category": "hallucination",
+    "question": "What columns are in the ProjectBudget table?",
+    "ground_truth": "REJECT - ProjectBudget does not exist. Use JCCP.OrigEstCost and CurrEstCost for budgets",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_projectbudget_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the ProjectBudget table",
+    "ground_truth": "REJECT - ProjectBudget does not exist. Use JCCP.OrigEstCost and CurrEstCost for budgets",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_payrolltransactions_cols",
+    "category": "hallucination",
+    "question": "What columns are in the PayrollTransactions table?",
+    "ground_truth": "REJECT - PayrollTransactions does not exist. Use PRTH and PRTB for payroll transactions",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_payrolltransactions_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the PayrollTransactions table",
+    "ground_truth": "REJECT - PayrollTransactions does not exist. Use PRTH and PRTB for payroll transactions",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_contractbilling_cols",
+    "category": "hallucination",
+    "question": "What columns are in the ContractBilling table?",
+    "ground_truth": "REJECT - ContractBilling does not exist. Use JCCM for contracts, JCJI for items, ARTH for billing",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_contractbilling_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the ContractBilling table",
+    "ground_truth": "REJECT - ContractBilling does not exist. Use JCCM for contracts, JCJI for items, ARTH for billing",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_equipmentcosts_cols",
+    "category": "hallucination",
+    "question": "What columns are in the EquipmentCosts table?",
+    "ground_truth": "REJECT - EquipmentCosts does not exist. Use EMEM for equipment, EMBF for fuel",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_equipmentcosts_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the EquipmentCosts table",
+    "ground_truth": "REJECT - EquipmentCosts does not exist. Use EMEM for equipment, EMBF for fuel",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_materialrequests_cols",
+    "category": "hallucination",
+    "question": "What columns are in the MaterialRequests table?",
+    "ground_truth": "REJECT - MaterialRequests does not exist. Use INMT for materials, POIT for PO items",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_materialrequests_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the MaterialRequests table",
+    "ground_truth": "REJECT - MaterialRequests does not exist. Use INMT for materials, POIT for PO items",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_workorderdetails_cols",
+    "category": "hallucination",
+    "question": "What columns are in the WorkOrderDetails table?",
+    "ground_truth": "REJECT - WorkOrderDetails does not exist. Use SMWorkOrder and SMWorkCompleted tables",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_workorderdetails_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the WorkOrderDetails table",
+    "ground_truth": "REJECT - WorkOrderDetails does not exist. Use SMWorkOrder and SMWorkCompleted tables",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_vendorpaymenthistory_cols",
+    "category": "hallucination",
+    "question": "What columns are in the VendorPaymentHistory table?",
+    "ground_truth": "REJECT - VendorPaymentHistory does not exist. Use APTD for payment detail, APTH for headers",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_vendorpaymenthistory_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the VendorPaymentHistory table",
+    "ground_truth": "REJECT - VendorPaymentHistory does not exist. Use APTD for payment detail, APTH for headers",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_customerbalance_cols",
+    "category": "hallucination",
+    "question": "What columns are in the CustomerBalance table?",
+    "ground_truth": "REJECT - CustomerBalance does not exist. Use ARCM for customer master, ARTH for transactions",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_customerbalance_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the CustomerBalance table",
+    "ground_truth": "REJECT - CustomerBalance does not exist. Use ARCM for customer master, ARTH for transactions",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_jobphasedetail_cols",
+    "category": "hallucination",
+    "question": "What columns are in the JobPhaseDetail table?",
+    "ground_truth": "REJECT - JobPhaseDetail does not exist. Use JCJP for phases, JCCP for costs",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_jobphasedetail_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the JobPhaseDetail table",
+    "ground_truth": "REJECT - JobPhaseDetail does not exist. Use JCJP for phases, JCCP for costs",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_changeorderlog_cols",
+    "category": "hallucination",
+    "question": "What columns are in the ChangeOrderLog table?",
+    "ground_truth": "REJECT - ChangeOrderLog does not exist. Use JCCO for JC change orders or SLCO for SL",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_changeorderlog_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the ChangeOrderLog table",
+    "ground_truth": "REJECT - ChangeOrderLog does not exist. Use JCCO for JC change orders or SLCO for SL",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_budgetvariance_cols",
+    "category": "hallucination",
+    "question": "What columns are in the BudgetVariance table?",
+    "ground_truth": "REJECT - BudgetVariance does not exist. Compare JCCP.CurrEstCost to JCCP.ActualCost",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_budgetvariance_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the BudgetVariance table",
+    "ground_truth": "REJECT - BudgetVariance does not exist. Compare JCCP.CurrEstCost to JCCP.ActualCost",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_appaymentregister_cols",
+    "category": "hallucination",
+    "question": "What columns are in the APPaymentRegister table?",
+    "ground_truth": "REJECT - APPaymentRegister does not exist. Use APTD for payment details",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_appaymentregister_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the APPaymentRegister table",
+    "ground_truth": "REJECT - APPaymentRegister does not exist. Use APTD for payment details",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_arreceiptsregister_cols",
+    "category": "hallucination",
+    "question": "What columns are in the ARReceiptsRegister table?",
+    "ground_truth": "REJECT - ARReceiptsRegister does not exist. Use ARTH for AR receipts",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_arreceiptsregister_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the ARReceiptsRegister table",
+    "ground_truth": "REJECT - ARReceiptsRegister does not exist. Use ARTH for AR receipts",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_jobprofitability_cols",
+    "category": "hallucination",
+    "question": "What columns are in the JobProfitability table?",
+    "ground_truth": "REJECT - JobProfitability does not exist. Calculate from JCCP budget vs actual",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_jobprofitability_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the JobProfitability table",
+    "ground_truth": "REJECT - JobProfitability does not exist. Calculate from JCCP budget vs actual",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_subcontractstatus_cols",
+    "category": "hallucination",
+    "question": "What columns are in the SubcontractStatus table?",
+    "ground_truth": "REJECT - SubcontractStatus does not exist. Use SLHD and SLIT for subcontract status",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_subcontractstatus_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the SubcontractStatus table",
+    "ground_truth": "REJECT - SubcontractStatus does not exist. Use SLHD and SLIT for subcontract status",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  },
+  {
+    "id": "halluc_equipmentutilization_cols",
+    "category": "hallucination",
+    "question": "What columns are in the EquipmentUtilization table?",
+    "ground_truth": "REJECT - EquipmentUtilization does not exist. Use EMEM and EMRD for equipment data",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "not a real table"
+    ]
+  },
+  {
+    "id": "halluc_equipmentutilization_sql",
+    "category": "hallucination",
+    "question": "Write SQL to query the EquipmentUtilization table",
+    "ground_truth": "REJECT - EquipmentUtilization does not exist. Use EMEM and EMRD for equipment data",
+    "key_elements": [
+      "does not exist",
+      "not a valid",
+      "cannot query"
+    ]
+  }
+]

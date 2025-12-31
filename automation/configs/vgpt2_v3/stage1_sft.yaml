@@ -47,7 +47,7 @@ gradient_checkpointing: true         # Enable for memory efficiency
 output_dir: saves/vgpt2_v3/sft
 logging_steps: 10
 save_steps: 250                      # Save every 250 steps (~10-15 min)
-save_total_limit: 5                  # Keep last 5 checkpoints
+save_total_limit: null               # Keep ALL checkpoints until training complete
 plot_loss: true
 overwrite_output_dir: false          # Don't overwrite - append
 save_only_model: false
