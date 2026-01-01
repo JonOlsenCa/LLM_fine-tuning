@@ -5,6 +5,14 @@
   "ap_wizard_sample": {
     "file_name": "ap_wizard_sample.json"
   },
+  "vgpt2_v4_sft": {
+    "file_name": "vgpt2_v4_sft.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
   "vgpt2_v2": {
     "file_name": "vgpt2_training_v2.json",
     "columns": {
