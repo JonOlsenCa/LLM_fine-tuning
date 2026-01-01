@@ -18,7 +18,7 @@ from typing import Dict, List, Optional
 
 from .config import V4Config, TrainingCategory
 from .ddl_extractor import DDLExtractor
-from .sql_generator import SQLExampleGenerator, TrainingExample
+from .sql_generator_v2 import SQLExampleGeneratorV2, TrainingExample
 from .negative_generator import NegativeExampleGenerator
 
 logger = logging.getLogger(__name__)
@@ -53,7 +53,7 @@ class V4Pipeline:
         
         # Initialize components
         self.ddl_extractor = DDLExtractor(vgpt2_path)
-        self.sql_generator: Optional[SQLExampleGenerator] = None
+        self.sql_generator: Optional[SQLExampleGeneratorV2] = None
         self.negative_generator: Optional[NegativeExampleGenerator] = None
         
         # Results
@@ -138,12 +138,16 @@ class V4Pipeline:
             logger.info(f"    {module}: {len(module_tables)} tables")
     
     def _generate_sql_examples(self) -> None:
-        """Generate SQL training examples."""
-        self.sql_generator = SQLExampleGenerator(self.config, self.ddl_extractor)
-        sql_examples = self.sql_generator.generate_all()
+        """Generate SQL training examples with proper variation."""
+        # Target count based on config, but ensure uniqueness
+        target_count = sum(cat.target_count for cat in self.config.categories.values())
+        target_count = min(target_count, 800)  # Cap for quality
+        
+        self.sql_generator = SQLExampleGeneratorV2(self.config, self.ddl_extractor)
+        sql_examples = self.sql_generator.generate_all(target_count=target_count)
         
         self.examples.extend(sql_examples)
-        logger.info(f"  Generated {len(sql_examples)} SQL examples")
+        logger.info(f"  Generated {len(sql_examples)} unique SQL examples")
         
         # Log by category
         category_counts = {}
@@ -162,10 +166,26 @@ class V4Pipeline:
         logger.info(f"  Generated {len(negative_examples)} negative examples")
     
     def _combine_examples(self) -> None:
-        """Shuffle examples for better training."""
+        """Deduplicate and shuffle examples for better training."""
         import random
+        import hashlib
+        
+        # Deduplicate by instruction hash
+        seen = set()
+        unique_examples = []
+        for ex in self.examples:
+            hash_id = hashlib.md5(ex.instruction.encode()).hexdigest()[:16]
+            if hash_id not in seen:
+                seen.add(hash_id)
+                unique_examples.append(ex)
+        
+        removed = len(self.examples) - len(unique_examples)
+        if removed > 0:
+            logger.info(f"  Removed {removed} duplicate examples")
+        
+        self.examples = unique_examples
         random.shuffle(self.examples)
-        logger.info(f"  Total examples: {len(self.examples)}")
+        logger.info(f"  Total unique examples: {len(self.examples)}")
     
     def _save_output(self) -> None:
         """Save examples to output file."""

@@ -30,6 +30,7 @@ __author__ = "Viewpoint AI Team"
 from .config import V4Config, TrainingCategory
 from .ddl_extractor import DDLExtractor
 from .sql_generator import SQLExampleGenerator
+from .sql_generator_v2 import SQLExampleGeneratorV2
 from .negative_generator import NegativeExampleGenerator
 from .pipeline import V4Pipeline
 
@@ -38,6 +39,7 @@ __all__ = [
     "TrainingCategory",
     "DDLExtractor",
     "SQLExampleGenerator",
+    "SQLExampleGeneratorV2",
     "NegativeExampleGenerator",
     "V4Pipeline",
 ]
