@@ -124,22 +124,43 @@ def run_quick_training(config_path: str) -> bool:
     print("STEP 1: Quick Training (1 epoch on 100 examples)")
     print("=" * 60)
     
-    cmd = ["llamafactory-cli", "train", config_path]
+    # Try different ways to invoke LLaMA Factory
+    # 1. Direct CLI (if in PATH)
+    # 2. Python module invocation
+    # 3. Using the LLaMA-Factory repo directly
     
-    try:
-        result = subprocess.run(
-            cmd,
-            capture_output=False,
-            text=True,
-            timeout=600  # 10 minute timeout
-        )
-        return result.returncode == 0
-    except subprocess.TimeoutExpired:
-        print("ERROR: Training timed out after 10 minutes")
-        return False
-    except Exception as e:
-        print(f"ERROR: Training failed with {e}")
-        return False
+    commands_to_try = [
+        ["llamafactory-cli", "train", config_path],
+        [sys.executable, "-m", "llamafactory.cli", "train", config_path],
+        ["python", "-m", "llamafactory.cli", "train", config_path],
+    ]
+    
+    for cmd in commands_to_try:
+        print(f"  Trying: {' '.join(cmd[:3])}...")
+        try:
+            result = subprocess.run(
+                cmd,
+                capture_output=False,
+                text=True,
+                timeout=600  # 10 minute timeout
+            )
+            if result.returncode == 0:
+                return True
+        except FileNotFoundError:
+            continue
+        except subprocess.TimeoutExpired:
+            print("ERROR: Training timed out after 10 minutes")
+            return False
+        except Exception as e:
+            print(f"  Failed: {e}")
+            continue
+    
+    print("\nERROR: Could not find LLaMA Factory installation")
+    print("Please ensure LLaMA Factory is installed:")
+    print("  pip install llamafactory")
+    print("Or run training manually:")
+    print(f"  llamafactory-cli train {config_path}")
+    return False
 
 
 def test_model_inference(

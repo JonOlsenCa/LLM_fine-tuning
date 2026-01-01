@@ -1,0 +1,74 @@
+# VGPT2 v4 Stage 1: Supervised Fine-Tuning (SFT)
+# ==============================================
+# OPTIMAL APPROACH: SQLCoder base model + Schema-in-Prompt format
+#
+# Key Changes from v3:
+# 1. Base model: defog/llama-3-sqlcoder-8b (SQL-specialized)
+# 2. Dataset: vgpt2_v4_sft (SQLCoder-style DDL-in-prompt)
+# 3. Quality over quantity: ~3,000 curated examples vs 67K auto-generated
+#
+# Hardware: RTX A6000 (48GB) + 128GB RAM + Threadripper 7960X
+# Expected training time: 2-4 hours for 3 epochs
+#
+# Evidence base:
+# - SQLCoder outperforms GPT-4 on text-to-SQL tasks
+# - Trained on 20K human-curated examples (similar to our V4 approach)
+# - Schema-in-prompt eliminates memorization issues
+# - Same architecture fits on A6000 with LoRA
+#
+# Usage:
+#   llamafactory-cli train automation/configs/vgpt2_v4/stage1_sft.yaml
+
+### Model Settings ###
+model_name_or_path: defog/llama-3-sqlcoder-8b
+trust_remote_code: true
+
+### Fine-tuning Method ###
+finetuning_type: lora
+lora_rank: 128                       # Sufficient for 3K examples
+lora_alpha: 256                      # 2x lora_rank
+lora_dropout: 0.05
+lora_target: all                     # Target all linear layers
+
+### Dataset Settings ###
+dataset: vgpt2_v4_sft_expanded       # SQLCoder-style DDL-in-prompt format (expanded)
+template: llama3                     # LLaMA 3 template for SQLCoder
+cutoff_len: 4096                     # SQLCoder uses 4K context
+max_samples: 10000                   # Allow full dataset + expansion
+overwrite_cache: true
+preprocessing_num_workers: 16        # Utilize Threadripper cores
+dataloader_num_workers: 0            # Must be 0 on Windows
+packing: false                       # Disabled for consistent examples
+
+### Training Settings ###
+stage: sft
+do_train: true
+per_device_train_batch_size: 4       # Larger batch for smaller dataset
+gradient_accumulation_steps: 4       # Effective batch size = 16
+learning_rate: 2e-4                  # Standard for LoRA fine-tuning
+num_train_epochs: 3.0                # 3 epochs for small curated dataset
+lr_scheduler_type: cosine
+warmup_ratio: 0.1                    # 10% warmup for small dataset
+bf16: true
+ddp_timeout: 180000000
+gradient_checkpointing: true         # Enable for memory efficiency
+
+### Output Settings ###
+output_dir: saves/vgpt2_v4/sft
+logging_steps: 10
+save_steps: 100                      # Save every 100 steps
+save_total_limit: 5                  # Keep last 5 checkpoints
+plot_loss: true
+overwrite_output_dir: false
+save_only_model: false
+report_to: none
+
+### Resume Training ###
+resume_from_checkpoint: true         # Resume if checkpoints exist
+
+### Evaluation ###
+val_size: 0.1                        # 10% holdout (~300 samples)
+do_eval: true
+eval_strategy: steps
+eval_steps: 100
+per_device_eval_batch_size: 4

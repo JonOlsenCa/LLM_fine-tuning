@@ -114,6 +114,14 @@ Read technical notes:
 
 **Current Status:** Schema questions work well ✅ | SQL generation has hallucination issues ⚠️
 
+### VGPT2 v4 (SQLCoder) Quick Start
+
+- Run all training scripts from the repo root: `C:\Github\LLM_fine-tuning`
+- SFT (v4) dry run: `pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -File training/01_start_sft_v4.ps1 -DryRun`
+- SFT (v4) start/resume: `pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -File training/01_start_sft_v4.ps1 [-Resume]`
+- Monitoring: `training/monitor_gpu.ps1` (GPU), `training/monitor_checkpoints.ps1` (checkpoint saves)
+- Docs: see `training/V4_TRAINING.md` for full step-by-step, dataset, and recovery guidance
+
 ---
 
 ## Table of Contents

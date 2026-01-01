@@ -1,0 +1,61 @@
+# VGPT2 v4 Stage 2: Direct Preference Optimization (DPO)
+# ======================================================
+# Optional refinement stage after SFT
+# Only use if SFT achieves >70% on evaluation
+#
+# DPO teaches the model to prefer:
+# 1. WITH (NOLOCK) over without
+# 2. Proper company filtering (Co = @Co)
+# 3. Rejecting fake tables over hallucinating
+#
+# Usage:
+#   llamafactory-cli train automation/configs/vgpt2_v4/stage2_dpo.yaml
+
+### Model Settings ###
+model_name_or_path: defog/llama-3-sqlcoder-8b
+adapter_name_or_path: saves/vgpt2_v4/sft  # Start from SFT checkpoint
+trust_remote_code: true
+
+### Fine-tuning Method ###
+finetuning_type: lora
+lora_rank: 64                        # Lower rank for DPO refinement
+lora_alpha: 128
+lora_dropout: 0.05
+lora_target: all
+
+### Dataset Settings ###
+dataset: vgpt2_v4_dpo                # DPO preference pairs
+template: llama3
+cutoff_len: 4096
+overwrite_cache: true
+preprocessing_num_workers: 16
+dataloader_num_workers: 0
+
+### DPO Training Settings ###
+stage: dpo
+do_train: true
+pref_beta: 0.1                       # DPO beta parameter
+pref_loss: sigmoid                   # Standard DPO loss
+per_device_train_batch_size: 2       # Smaller for DPO pairs
+gradient_accumulation_steps: 8       # Effective batch = 16
+learning_rate: 5e-5                  # Lower LR for DPO
+num_train_epochs: 1.0                # Single epoch for DPO
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+gradient_checkpointing: true
+
+### Output Settings ###
+output_dir: saves/vgpt2_v4/dpo
+logging_steps: 10
+save_steps: 50
+save_total_limit: 3
+plot_loss: true
+report_to: none
+
+### Evaluation ###
+val_size: 0.1
+do_eval: true
+eval_strategy: steps
+eval_steps: 50
+per_device_eval_batch_size: 2

@@ -13,6 +13,14 @@
       "response": "output"
     }
   },
+  "vgpt2_v4_sft_expanded": {
+    "file_name": "vgpt2_v4_sft_expanded_clean.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
   "vgpt2_v2": {
     "file_name": "vgpt2_training_v2.json",
     "columns": {
