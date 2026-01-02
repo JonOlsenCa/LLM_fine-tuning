@@ -114,6 +114,11 @@ Read technical notes:
 
 **Current Status:** Schema questions work well ✅ | SQL generation has hallucination issues ⚠️
 
+#### External API credential check (2026-01-02)
+- OpenAI key validated via model listing (target: gpt-5.2).
+- xAI Grok key validated via OpenAI-compatible endpoint at https://api.x.ai/v1 (model listing).
+- W&B login and Hugging Face whoami succeeded with tokens loaded from local .env (gitignored; do not commit).
+
 ### VGPT2 v4 (SQLCoder) Quick Start
 
 - Run all training scripts from the repo root: `C:\Github\LLM_fine-tuning`
